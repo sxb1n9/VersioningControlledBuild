@@ -23,20 +23,16 @@
  * 3. This notice may not be removed or altered from any source distribution.
  */
 using System;
-using System.Collections;
-using System.ComponentModel;
-using System.ComponentModel.Design;
 using System.Diagnostics;
 using System.Drawing;
-using System.IO;
 using System.Resources;
-using System.Runtime.Serialization;
 using System.Windows.Forms;
-using System.Xml.Serialization;
 
-namespace BuildAutoIncrement {
+namespace BuildAutoIncrement
+{
 
-    public class MainForm : System.Windows.Forms.Form {
+    public class MainForm : System.Windows.Forms.Form
+    {
 
         #region Controls
 
@@ -57,7 +53,7 @@ namespace BuildAutoIncrement {
         private System.Windows.Forms.Label label1;
         private BuildAutoIncrement.VersionUpDown m_versionEditBoxHighestVersion;
         private System.Windows.Forms.Button m_buttonApplyToVersion;
-        
+
         private System.Windows.Forms.GroupBox m_groupBoxGetVersion;
         private System.Windows.Forms.Button m_buttonGetSelected;
         private System.Windows.Forms.Button m_buttonGetHighestMarked;
@@ -82,13 +78,14 @@ namespace BuildAutoIncrement {
         private System.Windows.Forms.Button m_buttonInvertChecks;
 
         #endregion // Controls
-        
+
         private System.ComponentModel.IContainer components = null;
 
         /// <summary>
         ///   Hides the empty constructor.
         /// </summary>
-        private MainForm() {
+        private MainForm()
+        {
             InitializeComponent();
             VisualStyles.SetButtonFlatStyleSystem(this);
             m_configuration = ConfigurationPersister.Instance.Configuration;
@@ -103,7 +100,8 @@ namespace BuildAutoIncrement {
         /// <param name="devEnvApplicationObject">
         ///   <c>DTE</c> object representing the enclosing development environment.
         /// </param>
-        public MainForm(ISolutionBrowser solutionBrowser) : this() {
+        public MainForm(ISolutionBrowser solutionBrowser) : this()
+        {
             Debug.Assert(solutionBrowser != null);
             m_projectBrowser = solutionBrowser;
             Debug.Assert(m_projectBrowser != null);
@@ -114,22 +112,26 @@ namespace BuildAutoIncrement {
         /// <summary>
         ///   Gets the string of the command to perform after form is closed.
         /// </summary>
-        public string CommandToPerform {
+        public string CommandToPerform
+        {
             get { return m_commandToPerform; }
         }
 
         /// <summary>
         ///   Gets an array of <c>ProjectInfo</c> objects for projects marked for update.
         /// </summary>
-        public ProjectInfo[] MarkedProjects {
+        public ProjectInfo[] MarkedProjects
+        {
             get { return m_assemblyInfoListViewsControl.GetMarkedProjectsInformation(m_checkBoxApplyToAllTabs.Checked); }
         }
 
         /// <summary>
         ///   Sets visibility of Build and Rebuild buttons. Used by command line tool.
         /// </summary>
-        public bool BuildButtonsVisible {
-            set {
+        public bool BuildButtonsVisible
+        {
+            set
+            {
                 m_buttonBuild.Visible = value;
                 m_buttonRebuildAll.Visible = value;
             }
@@ -142,7 +144,8 @@ namespace BuildAutoIncrement {
         /// <summary>
         ///   Saves versions of checked projects to corresponding <c>AssemblyInfo</c> files.
         /// </summary>
-        public void SaveVersions() {
+        public void SaveVersions()
+        {
             Debug.Assert(m_assemblyInfoListViewsControl != null);
             Debug.Assert(m_checkBoxApplyToAllTabs != null);
             m_assemblyInfoListViewsControl.SaveVersions(m_checkBoxApplyToAllTabs.Checked);
@@ -155,22 +158,27 @@ namespace BuildAutoIncrement {
         /// <summary>
         ///   Stores data to configuration file.
         /// </summary>
-        private void StoreConfiguration() {
+        private void StoreConfiguration()
+        {
             m_configuration.MainFormSize = this.Size;
             m_configuration.StoreListViewColumnWidths(m_assemblyInfoListViewsControl.ListViewColumnWidths);
             m_configuration.ApplyToAllTabsChecked = m_checkBoxApplyToAllTabs.Checked;
-            try {
+            try
+            {
                 ConfigurationPersister.Instance.StoreConfiguration();
             }
-            catch (Exception exception) {
+            catch (Exception exception)
+            {
                 string message = s_txtCannotSaveConfiguration + Environment.NewLine + exception.Message + Environment.NewLine + exception.StackTrace.ToString();
                 MessageBox.Show(message, this.Text, MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
         }
-        
-        private void ShowConfigureDialog() {
+
+        private void ShowConfigureDialog()
+        {
             ConfigurationForm configurationForm = new ConfigurationForm();
-            if (configurationForm.ShowDialog(this) == DialogResult.OK) {
+            if (configurationForm.ShowDialog(this) == DialogResult.OK)
+            {
                 this.Update();
                 m_configuration = configurationForm.GetConfiguration();
                 ConfigurationPersister.Instance.Configuration.DisplayOptions = m_configuration.DisplayOptions;
@@ -195,7 +203,8 @@ namespace BuildAutoIncrement {
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void m_buttonBuild_Click(object sender, System.EventArgs e) {
+        private void m_buttonBuild_Click(object sender, System.EventArgs e)
+        {
             //CheckOutAssemblyInfos();
             m_commandToPerform = "Build.BuildSolution";
             this.DialogResult = DialogResult.OK;
@@ -208,7 +217,8 @@ namespace BuildAutoIncrement {
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void m_buttonBuildAll_Click(object sender, System.EventArgs e) {
+        private void m_buttonBuildAll_Click(object sender, System.EventArgs e)
+        {
             //CheckOutAssemblyInfos();
             m_commandToPerform = "Build.RebuildSolution";
             this.DialogResult = DialogResult.OK;
@@ -221,21 +231,23 @@ namespace BuildAutoIncrement {
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void m_buttonSave_Click(object sender, System.EventArgs e) {
+        private void m_buttonSave_Click(object sender, System.EventArgs e)
+        {
             Cursor.Current = Cursors.WaitCursor;
             //CheckOutAssemblyInfos();
             m_commandToPerform = "";
             this.DialogResult = DialogResult.OK;
             this.Close();
         }
-        
+
         /// <summary>
         ///     SelectAll button click handler. Marks all projects in the 
         ///     projects listview.
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void m_buttonSelectAllProjects_Click(object sender, System.EventArgs e) {
+        private void m_buttonSelectAllProjects_Click(object sender, System.EventArgs e)
+        {
             m_assemblyInfoListViewsControl.MarkAllProjects(m_checkBoxApplyToAllTabs.Checked);
         }
 
@@ -245,16 +257,18 @@ namespace BuildAutoIncrement {
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void m_buttonDeselectAll_Click(object sender, System.EventArgs e) {
+        private void m_buttonDeselectAll_Click(object sender, System.EventArgs e)
+        {
             m_assemblyInfoListViewsControl.UnmarkAllProjects(m_checkBoxApplyToAllTabs.Checked);
-		}
+        }
 
         /// <summary>
         ///   Inverts checkmark states in listviews.
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void m_buttonInvertChecks_Click(object sender, System.EventArgs e) {
+        private void m_buttonInvertChecks_Click(object sender, System.EventArgs e)
+        {
             m_assemblyInfoListViewsControl.InvertProjectMarks(m_checkBoxApplyToAllTabs.Checked);
         }
 
@@ -264,9 +278,10 @@ namespace BuildAutoIncrement {
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void m_buttonResetVersions_Click(object sender, System.EventArgs e) {
+        private void m_buttonResetVersions_Click(object sender, System.EventArgs e)
+        {
             m_assemblyInfoListViewsControl.ResetVersions(m_checkBoxApplyToAllTabs.Checked);
-		}
+        }
 
         /// <summary>
         /// ResetListView button click handler. Resets the projects listview to 
@@ -274,7 +289,8 @@ namespace BuildAutoIncrement {
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void m_buttonResetListView_Click(object sender, System.EventArgs e) {
+        private void m_buttonResetListView_Click(object sender, System.EventArgs e)
+        {
             m_assemblyInfoListViewsControl.ResetListView(m_checkBoxApplyToAllTabs.Checked);
             UpdateControlsStates();
         }
@@ -285,7 +301,8 @@ namespace BuildAutoIncrement {
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void m_buttonResetChecks_Click(object sender, System.EventArgs e) {
+        private void m_buttonResetChecks_Click(object sender, System.EventArgs e)
+        {
             m_assemblyInfoListViewsControl.ResetMarks(m_checkBoxApplyToAllTabs.Checked);
         }
 
@@ -296,7 +313,8 @@ namespace BuildAutoIncrement {
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="toBeVersionPattern">Pattern in the "to be version" textbox.</param>
-        protected void OnToBeVersionChanged(object sender, string toBeVersionPattern) {
+        protected void OnToBeVersionChanged(object sender, string toBeVersionPattern)
+        {
             Debug.Assert(toBeVersionPattern != null && toBeVersionPattern.Length > 0);
             m_assemblyInfoListViewsControl.ProposeToBeVersion(toBeVersionPattern);
         }
@@ -306,10 +324,12 @@ namespace BuildAutoIncrement {
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void ListViewProjectsItemCheck(object sender, System.Windows.Forms.ItemCheckEventArgs e) {
+        private void ListViewProjectsItemCheck(object sender, System.Windows.Forms.ItemCheckEventArgs e)
+        {
             Debug.Assert(m_configuration != null && m_configuration.NumberingOptions != null);
             // process only if state has changed (i.e. prevent processing after click on disabled item)
-            if (e.NewValue != e.CurrentValue) {
+            if (e.NewValue != e.CurrentValue)
+            {
                 int delta = e.NewValue == CheckState.Checked ? +1 : -1;
                 bool somethingChecked = m_assemblyInfoListViewsControl.GetMarkedItemsCount(m_checkBoxApplyToAllTabs.Checked) + delta > 0;
                 UpdateMarksDependantControlStates(somethingChecked);
@@ -322,7 +342,8 @@ namespace BuildAutoIncrement {
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void ListViewProjectsSelectedIndexChanged(object sender, System.EventArgs e) {
+        private void ListViewProjectsSelectedIndexChanged(object sender, System.EventArgs e)
+        {
             m_buttonGetSelected.Enabled = m_assemblyInfoListViewsControl.IsSingleSelectionWithValidAssemblyVersion;
         }
 
@@ -332,7 +353,8 @@ namespace BuildAutoIncrement {
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void SelectedTabIndexChanged(object sender, System.EventArgs e) {
+        private void SelectedTabIndexChanged(object sender, System.EventArgs e)
+        {
             UpdateControlsStates();
         }
 
@@ -342,8 +364,10 @@ namespace BuildAutoIncrement {
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void m_buttonApplyToVersion_Click(object sender, System.EventArgs e) {
-            if (HaveAllListViewItemsLowerCurrentVersion(false) == false) {
+        private void m_buttonApplyToVersion_Click(object sender, System.EventArgs e)
+        {
+            if (HaveAllListViewItemsLowerCurrentVersion(false) == false)
+            {
                 if (MessageBox.Show(this, s_txtHigherVersionWarning + Environment.NewLine + s_txtAreYouSureToContinue, this.Text, MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.No)
                     return;
             }
@@ -356,7 +380,8 @@ namespace BuildAutoIncrement {
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void m_buttonGetSelected_Click(object sender, System.EventArgs e) {
+        private void m_buttonGetSelected_Click(object sender, System.EventArgs e)
+        {
             m_versionEditBoxHighestVersion.Text = m_assemblyInfoListViewsControl.SelectedVersion.ToString(true);
         }
 
@@ -366,15 +391,18 @@ namespace BuildAutoIncrement {
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void m_buttonGetHighest_Click(object sender, System.EventArgs e) {
+        private void m_buttonGetHighest_Click(object sender, System.EventArgs e)
+        {
             m_versionEditBoxHighestVersion.Text = m_assemblyInfoListViewsControl.GetHighestToBecomeVersion(m_checkBoxApplyToAllTabs.Checked).ToString(true);
         }
 
-        private void m_buttonGetHighestAll_Click(object sender, System.EventArgs e) {
+        private void m_buttonGetHighestAll_Click(object sender, System.EventArgs e)
+        {
             m_versionEditBoxHighestVersion.Text = m_assemblyInfoListViewsControl.GetHighestToBecomeVersion(true).ToString(true);
         }
 
-        private void m_buttonGetHighestMarked_Click(object sender, System.EventArgs e) {
+        private void m_buttonGetHighestMarked_Click(object sender, System.EventArgs e)
+        {
             m_versionEditBoxHighestVersion.Text = m_assemblyInfoListViewsControl.GetHighestMarkedVersion(m_checkBoxApplyToAllTabs.Checked).ToString(true);
         }
 
@@ -383,7 +411,8 @@ namespace BuildAutoIncrement {
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void m_buttonIncrementBuildVersion_Click(object sender, System.EventArgs e) {
+        private void m_buttonIncrementBuildVersion_Click(object sender, System.EventArgs e)
+        {
             IncrementVersions(ProjectVersion.VersionComponent.Build);
         }
 
@@ -392,7 +421,8 @@ namespace BuildAutoIncrement {
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void m_buttonIncrementRevision_Click(object sender, System.EventArgs e) {
+        private void m_buttonIncrementRevision_Click(object sender, System.EventArgs e)
+        {
             IncrementVersions(ProjectVersion.VersionComponent.Revision);
         }
 
@@ -401,7 +431,8 @@ namespace BuildAutoIncrement {
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void m_buttonIncrementMajorVersion_Click(object sender, System.EventArgs e) {
+        private void m_buttonIncrementMajorVersion_Click(object sender, System.EventArgs e)
+        {
             IncrementVersions(ProjectVersion.VersionComponent.Major);
         }
 
@@ -410,7 +441,8 @@ namespace BuildAutoIncrement {
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void m_buttonIncrementMinorVersion_Click(object sender, System.EventArgs e) {
+        private void m_buttonIncrementMinorVersion_Click(object sender, System.EventArgs e)
+        {
             IncrementVersions(ProjectVersion.VersionComponent.Minor);
         }
 
@@ -420,45 +452,53 @@ namespace BuildAutoIncrement {
         /// <param name="toIncrement">
         ///   Object defining which part of version to increment.
         /// </param>
-        private void IncrementVersions(ProjectVersion.VersionComponent toIncrement) {
+        private void IncrementVersions(ProjectVersion.VersionComponent toIncrement)
+        {
             m_assemblyInfoListViewsControl.IncrementVersions(toIncrement, m_checkBoxApplyToAllTabs.Checked);
         }
 
-        private void m_buttonAllToLargest_Click(object sender, System.EventArgs e) {
+        private void m_buttonAllToLargest_Click(object sender, System.EventArgs e)
+        {
             m_assemblyInfoListViewsControl.SynchronizeAllVersions(false, m_checkBoxApplyToAllTabs.Checked);
         }
 
-        private void m_buttonAllProjectsIncrementAndSynchronize_Click(object sender, System.EventArgs e) {
+        private void m_buttonAllProjectsIncrementAndSynchronize_Click(object sender, System.EventArgs e)
+        {
             m_assemblyInfoListViewsControl.SynchronizeAllVersions(true, m_checkBoxApplyToAllTabs.Checked);
         }
 
-        private void m_checkBoxApplyToAllTabs_CheckedChanged(object sender, System.EventArgs e) {
+        private void m_checkBoxApplyToAllTabs_CheckedChanged(object sender, System.EventArgs e)
+        {
             bool somethingChecked = m_assemblyInfoListViewsControl.GetMarkedItemsCount(m_checkBoxApplyToAllTabs.Checked) > 0;
             UpdateMarksDependantControlStates(somethingChecked);
         }
 
-        private void m_buttonExport_Click(object sender, System.EventArgs e) {
+        private void m_buttonExport_Click(object sender, System.EventArgs e)
+        {
             m_contextMenuExport.Show(m_buttonExport, new Point(0, m_buttonExport.Height));
         }
 
-        private void m_menuItemExportPrint_Click(object sender, System.EventArgs e) {
+        private void m_menuItemExportPrint_Click(object sender, System.EventArgs e)
+        {
             ListPrinter lp = new ListPrinter(this);
             lp.Print(string.Empty, m_projectBrowser.SolutionName, m_projectBrowser.ProjectInfoList);
         }
 
-        private void m_menuItemExportFile_Click(object sender, System.EventArgs e) {
+        private void m_menuItemExportFile_Click(object sender, System.EventArgs e)
+        {
             ListExporterToFile lef = null;
-            switch (ConfigurationPersister.Instance.Configuration.ExportConfiguration.ExportFileFormat) {
-            case ExportFileFormat.PlainText:
-                lef = new ListExporterToPlainTextFile();
-                break;
-            case ExportFileFormat.CSV:
-                lef = new ListExporterToCsvFile();
-                lef.Separator = ConfigurationPersister.Instance.Configuration.ExportConfiguration.CsvSeparator;
-                break;
-            default:
-                Debug.Assert(false, "Not supported ExportFileFormat");
-                break;
+            switch (ConfigurationPersister.Instance.Configuration.ExportConfiguration.ExportFileFormat)
+            {
+                case ExportFileFormat.PlainText:
+                    lef = new ListExporterToPlainTextFile();
+                    break;
+                case ExportFileFormat.CSV:
+                    lef = new ListExporterToCsvFile();
+                    lef.Separator = ConfigurationPersister.Instance.Configuration.ExportConfiguration.CsvSeparator;
+                    break;
+                default:
+                    Debug.Assert(false, "Not supported ExportFileFormat");
+                    break;
             }
             lef.Export(m_projectBrowser.SolutionName, m_projectBrowser.SolutionFilename, m_projectBrowser.ProjectInfoList);
         }
@@ -470,48 +510,59 @@ namespace BuildAutoIncrement {
         /// <summary>
 		///   Clean up any resources being used.
 		/// </summary>
-		protected override void Dispose(bool disposing) {
-            if (!m_disposed) {
-                try {
-                    if (disposing) {
+		protected override void Dispose(bool disposing)
+        {
+            if (!m_disposed)
+            {
+                try
+                {
+                    if (disposing)
+                    {
                         DetachEventListeners();
-                        if (components != null) {
+                        if (components != null)
+                        {
                             components.Dispose();
                         }
                     }
                     m_disposed = true;
                 }
-                finally {
+                finally
+                {
                     base.Dispose(disposing);
                 }
             }
-		}
+        }
 
         /// <summary>
         ///   Overrides <c>WndProc</c> to detect if "About" item in the system 
         ///   menu has been selected.
         /// </summary>
         /// <param name="msg"></param>
-        protected override void WndProc(ref Message msg) {
+        protected override void WndProc(ref Message msg)
+        {
             base.WndProc(ref msg);
-            switch (msg.Msg) {
-            case (int)Win32Api.WM.SYSCOMMAND:
-                if ((uint)msg.WParam == Win32Api.IDM_CUSTOM) {
-                    ShowConfigureDialog();
-                }
-                else if ((uint)msg.WParam == (Win32Api.IDM_CUSTOM + 1)) {
-                    AboutBox.Show(this);
-                }
-                break;
+            switch (msg.Msg)
+            {
+                case (int)Win32Api.WM.SYSCOMMAND:
+                    if ((uint)msg.WParam == Win32Api.IDM_CUSTOM)
+                    {
+                        ShowConfigureDialog();
+                    }
+                    else if ((uint)msg.WParam == (Win32Api.IDM_CUSTOM + 1))
+                    {
+                        AboutBox.Show(this);
+                    }
+                    break;
             }
         }
-        
+
         /// <summary>
         ///   Load form event handler. Adds "About..." item to the system menu.
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        protected override void OnLoad(System.EventArgs e) {
+        protected override void OnLoad(System.EventArgs e)
+        {
             Debug.Assert(m_configuration != null);
             if (!m_configuration.ConfigurationFileRead)
                 MessageBox.Show(this, s_txtFailedToLoadConfiguration + Environment.NewLine + s_txtUsingDefaultConfiguration, this.Text, MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -532,7 +583,8 @@ namespace BuildAutoIncrement {
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        protected override void OnClosing(System.ComponentModel.CancelEventArgs e) {
+        protected override void OnClosing(System.ComponentModel.CancelEventArgs e)
+        {
             StoreConfiguration();
             base.OnClosing(e);
         }
@@ -542,7 +594,8 @@ namespace BuildAutoIncrement {
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        protected override void OnClosed(EventArgs e) {
+        protected override void OnClosed(EventArgs e)
+        {
             base.OnClosed(e);
         }
 
@@ -552,16 +605,19 @@ namespace BuildAutoIncrement {
         /// <param name="msg"></param>
         /// <param name="keyData"></param>
         /// <returns></returns>
-        protected override bool ProcessCmdKey(ref Message msg, Keys keyData) {
-            if (keyData == (Keys.Control | Keys.Tab)) {
+        protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
+        {
+            if (keyData == (Keys.Control | Keys.Tab))
+            {
                 m_assemblyInfoListViewsControl.SelectNextListView(true);
                 return true;
             }
-            else if (keyData == (Keys.Control | Keys.Shift | Keys.Tab)) {
+            else if (keyData == (Keys.Control | Keys.Shift | Keys.Tab))
+            {
                 m_assemblyInfoListViewsControl.SelectNextListView(false);
                 return true;
             }
-            return base.ProcessCmdKey (ref msg, keyData);
+            return base.ProcessCmdKey(ref msg, keyData);
         }
 
         #endregion // Form class overrides
@@ -571,7 +627,8 @@ namespace BuildAutoIncrement {
         /// <summary>
         ///   Fills form controls with current solution data.
         /// </summary>
-        private void FillControls() {
+        private void FillControls()
+        {
             Debug.Assert(m_projectBrowser != null);
             Cursor.Current = Cursors.WaitCursor;
             m_assemblyInfoListViewsControl.BeginUpdate();
@@ -581,20 +638,24 @@ namespace BuildAutoIncrement {
             else
                 m_versionEditBoxHighestVersion.Text = pv.ToString(true);
             m_assemblyInfoListViewsControl.EndUpdate();
-            if (m_configuration.NumberingOptions.ApplyToAllTypes) {
+            if (m_configuration.NumberingOptions.ApplyToAllTypes)
+            {
                 m_checkBoxApplyToAllTabs.Checked = true;
             }
             m_checkBoxApplyToAllTabs.Enabled = !m_configuration.NumberingOptions.ApplyToAllTypes;
             UpdateControlsStates();
         }
 
-        private void AdjustSizeAndPosition() {
+        private void AdjustSizeAndPosition()
+        {
             this.Size = m_configuration.MainFormSize;
             // shrink the form if too large 
-            if (this.Width > Screen.GetWorkingArea(this).Width) {
+            if (this.Width > Screen.GetWorkingArea(this).Width)
+            {
                 this.Width = Screen.GetWorkingArea(this).Width * 8 / 10;
             }
-            if (this.Height > Screen.GetWorkingArea(this).Height) {
+            if (this.Height > Screen.GetWorkingArea(this).Height)
+            {
                 this.Height = Screen.GetWorkingArea(this).Height * 8 / 10;
             }
             /*
@@ -606,7 +667,8 @@ namespace BuildAutoIncrement {
             m_assemblyInfoListViewsControl.ListViewColumnWidths = m_configuration.RetrieveListViewColumnWidths();
         }
 
-        private void SelectDefaultTab() {
+        private void SelectDefaultTab()
+        {
             m_assemblyInfoListViewsControl.SelectListView(m_configuration.NumberingOptions.DefaultVersionType);
         }
 
@@ -614,46 +676,49 @@ namespace BuildAutoIncrement {
         ///   Update (enabled/disabled) status of buttons depending on the
         ///   number of selected items in the listview.
         /// </summary>
-        private void UpdateControlsStates() {
+        private void UpdateControlsStates()
+        {
             bool anyValidVersion = m_assemblyInfoListViewsControl.GetValidVersionsCount(m_checkBoxApplyToAllTabs.Checked) > 0;
-            m_buttonDeselectAll.Enabled              = anyValidVersion;
-            m_buttonResetChecks.Enabled              = anyValidVersion;
-            m_buttonInvertChecks.Enabled             = anyValidVersion;
-            m_buttonResetListView.Enabled            = anyValidVersion;
-            m_buttonSelectAllProjects.Enabled        = anyValidVersion;
+            m_buttonDeselectAll.Enabled = anyValidVersion;
+            m_buttonResetChecks.Enabled = anyValidVersion;
+            m_buttonInvertChecks.Enabled = anyValidVersion;
+            m_buttonResetListView.Enabled = anyValidVersion;
+            m_buttonSelectAllProjects.Enabled = anyValidVersion;
 
-            m_buttonGetSelected.Enabled              = m_assemblyInfoListViewsControl.IsSingleSelectionWithValidAssemblyVersion;
-            m_buttonGetHighest.Enabled               = anyValidVersion;
-            m_versionEditBoxHighestVersion.Enabled   = anyValidVersion;
-            m_buttonGetHighestAll.Enabled            = m_assemblyInfoListViewsControl.GetValidVersionsCount(true) > 0;
+            m_buttonGetSelected.Enabled = m_assemblyInfoListViewsControl.IsSingleSelectionWithValidAssemblyVersion;
+            m_buttonGetHighest.Enabled = anyValidVersion;
+            m_versionEditBoxHighestVersion.Enabled = anyValidVersion;
+            m_buttonGetHighestAll.Enabled = m_assemblyInfoListViewsControl.GetValidVersionsCount(true) > 0;
 
-            m_buttonAllToHighest.Enabled             = anyValidVersion && m_assemblyInfoListViewsControl.ItemsCount > 1;
+            m_buttonAllToHighest.Enabled = anyValidVersion && m_assemblyInfoListViewsControl.ItemsCount > 1;
             m_buttonAllProjectsIncrementAndSynchronize.Enabled = anyValidVersion && m_assemblyInfoListViewsControl.ItemsCount > 1;
 
-            m_buttonBuild.Enabled                    = m_assemblyInfoListViewsControl.ItemsCount > 0;
-            m_buttonRebuildAll.Enabled               = m_assemblyInfoListViewsControl.ItemsCount > 0;
+            m_buttonBuild.Enabled = m_assemblyInfoListViewsControl.ItemsCount > 0;
+            m_buttonRebuildAll.Enabled = m_assemblyInfoListViewsControl.ItemsCount > 0;
 
             bool somethingChecked = m_assemblyInfoListViewsControl.GetMarkedItemsCount(m_checkBoxApplyToAllTabs.Checked) > 0;
             UpdateMarksDependantControlStates(somethingChecked);
         }
 
-        private void UpdateMarksDependantControlStates(bool somethingChecked) {
-            m_buttonResetVersions.Enabled               = somethingChecked;
+        private void UpdateMarksDependantControlStates(bool somethingChecked)
+        {
+            m_buttonResetVersions.Enabled = somethingChecked;
 
-            m_buttonIncrementMajorVersion.Enabled       = somethingChecked;
-            m_buttonIncrementMinorVersion.Enabled       = somethingChecked;
-            m_buttonIncrementBuildVersion.Enabled       = somethingChecked && !m_configuration.NumberingOptions.UseDateTimeBasedBuildAndRevisionNumbering;
-            m_buttonIncrementRevisionVersion.Enabled    = somethingChecked && !m_configuration.NumberingOptions.UseDateTimeBasedBuildAndRevisionNumbering;
+            m_buttonIncrementMajorVersion.Enabled = somethingChecked;
+            m_buttonIncrementMinorVersion.Enabled = somethingChecked;
+            m_buttonIncrementBuildVersion.Enabled = somethingChecked && !m_configuration.NumberingOptions.UseDateTimeBasedBuildAndRevisionNumbering;
+            m_buttonIncrementRevisionVersion.Enabled = somethingChecked && !m_configuration.NumberingOptions.UseDateTimeBasedBuildAndRevisionNumbering;
 
-            m_buttonApplyToVersion.Enabled              = somethingChecked;
-            m_buttonGetHighestMarked.Enabled            = somethingChecked;
-            m_buttonSave.Enabled                        = somethingChecked;
+            m_buttonApplyToVersion.Enabled = somethingChecked;
+            m_buttonGetHighestMarked.Enabled = somethingChecked;
+            m_buttonSave.Enabled = somethingChecked;
         }
 
         /// <summary>
         ///   Fills the project listview with corresponding data.
         /// </summary>
-        private ProjectVersion FillProjectsListView() {
+        private ProjectVersion FillProjectsListView()
+        {
             Debug.Assert(m_projectBrowser != null);
             ProjectInfoList pil = m_projectBrowser.ProjectInfoList;
             m_assemblyInfoListViewsControl.FillProjectsListView(pil);
@@ -663,27 +728,30 @@ namespace BuildAutoIncrement {
         /// <summary>
         ///   Adds "Customize" and "About" items to the system menu.
         /// </summary>
-        private void AddAboutSystemMenuItem() {
+        private void AddAboutSystemMenuItem()
+        {
             Int32 hSystemMenu = Win32Api.GetSystemMenu(this.Handle, false);
             Win32Api.AppendMenu(hSystemMenu, (int)Win32Api.MF.SEPARATOR, 0, null);
 #if DEBUG
             Win32Api.AppendMenu(hSystemMenu, (int)Win32Api.MF.STRING, Win32Api.IDM_CUSTOM, s_txtSettings);
 #endif
-            Win32Api.AppendMenu(hSystemMenu, (int)Win32Api.MF.STRING, Win32Api.IDM_CUSTOM+1, s_txtAbout);
+            Win32Api.AppendMenu(hSystemMenu, (int)Win32Api.MF.STRING, Win32Api.IDM_CUSTOM + 1, s_txtAbout);
         }
 
-        private void AttachEventListeners() {
-            m_assemblyInfoListViewsControl.ItemCheck                    += new ItemCheckEventHandler(this.ListViewProjectsItemCheck);
-            m_assemblyInfoListViewsControl.SelectedIndexChanged         += new EventHandler(this.ListViewProjectsSelectedIndexChanged);
-            m_assemblyInfoListViewsControl.SelectedTabIndexChanged      += new EventHandler(this.SelectedTabIndexChanged);
-            m_versionEditBoxHighestVersion.ToBeVersionChanged           += new ToBeVersionChangedHandler(OnToBeVersionChanged);
+        private void AttachEventListeners()
+        {
+            m_assemblyInfoListViewsControl.ItemCheck += new ItemCheckEventHandler(this.ListViewProjectsItemCheck);
+            m_assemblyInfoListViewsControl.SelectedIndexChanged += new EventHandler(this.ListViewProjectsSelectedIndexChanged);
+            m_assemblyInfoListViewsControl.SelectedTabIndexChanged += new EventHandler(this.SelectedTabIndexChanged);
+            m_versionEditBoxHighestVersion.ToBeVersionChanged += new ToBeVersionChangedHandler(OnToBeVersionChanged);
         }
 
-        private void DetachEventListeners() {
-            m_assemblyInfoListViewsControl.ItemCheck                    -= new ItemCheckEventHandler(this.ListViewProjectsItemCheck);
-            m_assemblyInfoListViewsControl.SelectedIndexChanged         -= new EventHandler(this.ListViewProjectsSelectedIndexChanged);
-            m_assemblyInfoListViewsControl.SelectedTabIndexChanged      -= new EventHandler(this.SelectedTabIndexChanged);
-            m_versionEditBoxHighestVersion.ToBeVersionChanged           -= new ToBeVersionChangedHandler(OnToBeVersionChanged);
+        private void DetachEventListeners()
+        {
+            m_assemblyInfoListViewsControl.ItemCheck -= new ItemCheckEventHandler(this.ListViewProjectsItemCheck);
+            m_assemblyInfoListViewsControl.SelectedIndexChanged -= new EventHandler(this.ListViewProjectsSelectedIndexChanged);
+            m_assemblyInfoListViewsControl.SelectedTabIndexChanged -= new EventHandler(this.SelectedTabIndexChanged);
+            m_versionEditBoxHighestVersion.ToBeVersionChanged -= new ToBeVersionChangedHandler(OnToBeVersionChanged);
         }
 
         /// <summary>
@@ -696,19 +764,20 @@ namespace BuildAutoIncrement {
         /// <returns>
         ///   <c>true</c> if all projects have larger version.
         /// </returns>
-        private bool HaveAllListViewItemsLowerCurrentVersion(bool includeNotMarked) {
+        private bool HaveAllListViewItemsLowerCurrentVersion(bool includeNotMarked)
+        {
             return m_assemblyInfoListViewsControl.HaveAllListViewItemsLowerCurrentVersion(includeNotMarked, m_versionEditBoxHighestVersion.Text, m_checkBoxApplyToAllTabs.Checked);
         }
 
         #endregion // Private methods
 
-		#region Windows Form Designer generated code
-		/// <summary>
-		/// Required method for Designer support - do not modify
-		/// the contents of this method with the code editor.
-		/// </summary>
-		private void InitializeComponent()
-		{
+        #region Windows Form Designer generated code
+        /// <summary>
+        /// Required method for Designer support - do not modify
+        /// the contents of this method with the code editor.
+        /// </summary>
+        private void InitializeComponent()
+        {
             System.Resources.ResourceManager resources = new System.Resources.ResourceManager(typeof(MainForm));
             this.m_buttonBuild = new System.Windows.Forms.Button();
             this.m_buttonCancel = new System.Windows.Forms.Button();
@@ -995,8 +1064,8 @@ namespace BuildAutoIncrement {
             // 
             // m_groupBoxProjects
             // 
-            this.m_groupBoxProjects.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-                | System.Windows.Forms.AnchorStyles.Left) 
+            this.m_groupBoxProjects.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                | System.Windows.Forms.AnchorStyles.Left)
                 | System.Windows.Forms.AnchorStyles.Right)));
             this.m_groupBoxProjects.Controls.Add(this.m_buttonExport);
             this.m_groupBoxProjects.Controls.Add(this.m_assemblyInfoListViewsControl);
@@ -1026,8 +1095,8 @@ namespace BuildAutoIncrement {
             // 
             // m_assemblyInfoListViewsControl
             // 
-            this.m_assemblyInfoListViewsControl.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-                | System.Windows.Forms.AnchorStyles.Left) 
+            this.m_assemblyInfoListViewsControl.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                | System.Windows.Forms.AnchorStyles.Left)
                 | System.Windows.Forms.AnchorStyles.Right)));
             this.m_assemblyInfoListViewsControl.ListViewColumnWidths = new int[] {
                                                                                      174,
@@ -1137,7 +1206,7 @@ namespace BuildAutoIncrement {
             this.ResumeLayout(false);
 
         }
-		#endregion
+        #endregion
 
         #region Private fields
 
@@ -1164,19 +1233,20 @@ namespace BuildAutoIncrement {
         /// <summary>
         ///   Static constructor.
         /// </summary>
-        static MainForm() {
+        static MainForm()
+        {
             ResourceManager resources = new System.Resources.ResourceManager("BuildAutoIncrement.Resources.Shared", typeof(ResourceAccessor).Assembly);
             Debug.Assert(resources != null);
-            s_txtTitle                      = resources.GetString("Title");
-            s_txtEmpty                      = resources.GetString("Empty");
-            s_txtSettings                   = resources.GetString("Settings menu");
-            s_txtAbout                      = resources.GetString("About menu");
-            s_txtCheckPermissions           = resources.GetString("Check permissions");
-            s_txtHigherVersionWarning       = resources.GetString("Higher version warning");
-            s_txtAreYouSureToContinue       = resources.GetString("Are you sure to continue");
-            s_txtCannotSaveConfiguration    = resources.GetString("Cannot save configuration file");
-            s_txtFailedToLoadConfiguration  = resources.GetString("Failed to load configuration file");
-            s_txtUsingDefaultConfiguration  = resources.GetString("Using default configuration");
+            s_txtTitle = resources.GetString("Title");
+            s_txtEmpty = resources.GetString("Empty");
+            s_txtSettings = resources.GetString("Settings menu");
+            s_txtAbout = resources.GetString("About menu");
+            s_txtCheckPermissions = resources.GetString("Check permissions");
+            s_txtHigherVersionWarning = resources.GetString("Higher version warning");
+            s_txtAreYouSureToContinue = resources.GetString("Are you sure to continue");
+            s_txtCannotSaveConfiguration = resources.GetString("Cannot save configuration file");
+            s_txtFailedToLoadConfiguration = resources.GetString("Failed to load configuration file");
+            s_txtUsingDefaultConfiguration = resources.GetString("Using default configuration");
 
             Debug.Assert(s_txtTitle != null);
             Debug.Assert(s_txtEmpty != null);

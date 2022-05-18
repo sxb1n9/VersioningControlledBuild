@@ -27,29 +27,34 @@ using System;
 using System.Collections;
 using System.Diagnostics;
 
-namespace BuildAutoIncrement {
+namespace BuildAutoIncrement
+{
 
-	/// <summary>
-	///   Class encapsulating AssemblyVersion, AssemblyFileVersion and 
-	///   AssemblyInformationalVersion.
-	/// </summary>
-	public class AssemblyVersions : ICloneable {
+    /// <summary>
+    ///   Class encapsulating AssemblyVersion, AssemblyFileVersion and 
+    ///   AssemblyInformationalVersion.
+    /// </summary>
+    public class AssemblyVersions : ICloneable
+    {
 
         #region Constructors
 
-		private AssemblyVersions() : this(ProjectVersion.Empty, ProjectVersion.Empty, ProjectVersion.Empty) {
-		}
-
-        public AssemblyVersions(AssemblyVersions assemblyVersions) 
-            : this(assemblyVersions[AssemblyVersionType.AssemblyVersion].Clone(), 
-                   assemblyVersions[AssemblyVersionType.AssemblyFileVersion].Clone(),
-                   assemblyVersions[AssemblyVersionType.AssemblyInformationalVersion].Clone()) {
+        private AssemblyVersions() : this(ProjectVersion.Empty, ProjectVersion.Empty, ProjectVersion.Empty)
+        {
         }
 
-        public AssemblyVersions(ProjectVersion assemblyVersion, ProjectVersion assemblyFileVersion, ProjectVersion assemblyInformationalVersion) {
+        public AssemblyVersions(AssemblyVersions assemblyVersions)
+            : this(assemblyVersions[AssemblyVersionType.AssemblyVersion].Clone(),
+                   assemblyVersions[AssemblyVersionType.AssemblyFileVersion].Clone(),
+                   assemblyVersions[AssemblyVersionType.AssemblyInformationalVersion].Clone())
+        {
+        }
+
+        public AssemblyVersions(ProjectVersion assemblyVersion, ProjectVersion assemblyFileVersion, ProjectVersion assemblyInformationalVersion)
+        {
             m_versions = new Hashtable();
-            m_versions[AssemblyVersionType.AssemblyVersion]              = assemblyVersion;
-            m_versions[AssemblyVersionType.AssemblyFileVersion]          = assemblyFileVersion;
+            m_versions[AssemblyVersionType.AssemblyVersion] = assemblyVersion;
+            m_versions[AssemblyVersionType.AssemblyFileVersion] = assemblyFileVersion;
             m_versions[AssemblyVersionType.AssemblyInformationalVersion] = assemblyInformationalVersion;
         }
 
@@ -57,10 +62,13 @@ namespace BuildAutoIncrement {
 
         #region Public properties
 
-        public ProjectVersion HighestProjectVersion {
-            get {
+        public ProjectVersion HighestProjectVersion
+        {
+            get
+            {
                 ProjectVersion highest = ProjectVersion.MinValue;
-                foreach (ProjectVersion pv in m_versions.Values) {
+                foreach (ProjectVersion pv in m_versions.Values)
+                {
                     if (highest < pv)
                         highest = pv;
                 }
@@ -68,13 +76,16 @@ namespace BuildAutoIncrement {
             }
         }
 
-        public bool AreVersionsSynchronized {
-            get {
+        public bool AreVersionsSynchronized
+        {
+            get
+            {
                 AssemblyVersionType[] validVersionTypes = GetValidVersionTypes();
                 if (validVersionTypes.Length < 1)
                     return true;
                 ProjectVersion reference = (ProjectVersion)m_versions[validVersionTypes[0]];
-                for (int i = 1; i < validVersionTypes.Length; i++) {
+                for (int i = 1; i < validVersionTypes.Length; i++)
+                {
                     if (reference != (ProjectVersion)m_versions[validVersionTypes[i]])
                         return false;
                 }
@@ -82,21 +93,26 @@ namespace BuildAutoIncrement {
             }
         }
 
-        public AssemblyVersionType[] GetValidVersionTypes() {
+        public AssemblyVersionType[] GetValidVersionTypes()
+        {
             ArrayList types = new ArrayList();
-            foreach (AssemblyVersionType avt in AssemblyVersionTypes) {
+            foreach (AssemblyVersionType avt in AssemblyVersionTypes)
+            {
                 if (this[avt] != ProjectVersion.Empty)
                     types.Add(avt);
             }
             return (AssemblyVersionType[])types.ToArray(typeof(AssemblyVersionType));
         }
 
-        public ProjectVersion this[AssemblyVersionType type] {
-            get {
+        public ProjectVersion this[AssemblyVersionType type]
+        {
+            get
+            {
                 Debug.Assert(type != AssemblyVersionType.All);
                 return (ProjectVersion)m_versions[type];
             }
-            set {
+            set
+            {
                 Debug.Assert(type != AssemblyVersionType.All);
                 m_versions[type] = value;
             }
@@ -106,21 +122,27 @@ namespace BuildAutoIncrement {
 
         #region Public methods
 
-        public void Increment(AssemblyVersionType typeToIncrement, NumberingOptions numberingOptions) {
-            if ((typeToIncrement & AssemblyVersionType.AssemblyVersion) != 0) {
+        public void Increment(AssemblyVersionType typeToIncrement, NumberingOptions numberingOptions)
+        {
+            if ((typeToIncrement & AssemblyVersionType.AssemblyVersion) != 0)
+            {
                 this[AssemblyVersionType.AssemblyVersion].Increment(numberingOptions);
             }
-            if ((typeToIncrement & AssemblyVersionType.AssemblyFileVersion) != 0) {
+            if ((typeToIncrement & AssemblyVersionType.AssemblyFileVersion) != 0)
+            {
                 this[AssemblyVersionType.AssemblyFileVersion].Increment(numberingOptions);
             }
-            if ((typeToIncrement & AssemblyVersionType.AssemblyInformationalVersion) != 0) {
+            if ((typeToIncrement & AssemblyVersionType.AssemblyInformationalVersion) != 0)
+            {
                 this[AssemblyVersionType.AssemblyInformationalVersion].Increment(numberingOptions);
             }
         }
 
-        public void SynchronizeVersionsToHighest() {
+        public void SynchronizeVersionsToHighest()
+        {
             ProjectVersion highestProjectVersion = HighestProjectVersion;
-            if (highestProjectVersion != ProjectVersion.MinValue) {
+            if (highestProjectVersion != ProjectVersion.MinValue)
+            {
                 if ((ProjectVersion)m_versions[AssemblyVersionType.AssemblyVersion] != ProjectVersion.Empty)
                     m_versions[AssemblyVersionType.AssemblyVersion] = highestProjectVersion;
                 if ((ProjectVersion)m_versions[AssemblyVersionType.AssemblyFileVersion] != ProjectVersion.Empty)
@@ -130,7 +152,8 @@ namespace BuildAutoIncrement {
             }
         }
 
-        public bool ContainsVersion(AssemblyVersionType assemblyVersionType) {
+        public bool ContainsVersion(AssemblyVersionType assemblyVersionType)
+        {
             Debug.Assert(assemblyVersionType != AssemblyVersionType.All && assemblyVersionType != AssemblyVersionType.None);
             return Array.IndexOf(GetValidVersionTypes(), assemblyVersionType) > -1;
         }
@@ -139,11 +162,13 @@ namespace BuildAutoIncrement {
 
         #region ICloneable implementation
 
-        object ICloneable.Clone() {
+        object ICloneable.Clone()
+        {
             return Clone();
         }
 
-        public AssemblyVersions Clone() {
+        public AssemblyVersions Clone()
+        {
             return new AssemblyVersions(this);
         }
 
@@ -153,18 +178,21 @@ namespace BuildAutoIncrement {
 
         #region Static methods
 
-        public static AssemblyVersions Max(AssemblyVersions assemblyVersions1, AssemblyVersions assemblyVersions2) {
-            ProjectVersion assemblyVersion              = ProjectVersion.Max(assemblyVersions1[AssemblyVersionType.AssemblyVersion], assemblyVersions2[AssemblyVersionType.AssemblyVersion]).Clone();
-            ProjectVersion assemblyFileVersion          = ProjectVersion.Max(assemblyVersions1[AssemblyVersionType.AssemblyFileVersion], assemblyVersions2[AssemblyVersionType.AssemblyFileVersion]).Clone();
+        public static AssemblyVersions Max(AssemblyVersions assemblyVersions1, AssemblyVersions assemblyVersions2)
+        {
+            ProjectVersion assemblyVersion = ProjectVersion.Max(assemblyVersions1[AssemblyVersionType.AssemblyVersion], assemblyVersions2[AssemblyVersionType.AssemblyVersion]).Clone();
+            ProjectVersion assemblyFileVersion = ProjectVersion.Max(assemblyVersions1[AssemblyVersionType.AssemblyFileVersion], assemblyVersions2[AssemblyVersionType.AssemblyFileVersion]).Clone();
             ProjectVersion assemblyInformationalVersion = ProjectVersion.Max(assemblyVersions1[AssemblyVersionType.AssemblyInformationalVersion], assemblyVersions2[AssemblyVersionType.AssemblyInformationalVersion]).Clone();
             return new AssemblyVersions(assemblyVersion, assemblyFileVersion, assemblyInformationalVersion);
         }
 
-        public static AssemblyVersions Max(AssemblyVersions assemblyVersions, ProjectInfo projectInfo) {
+        public static AssemblyVersions Max(AssemblyVersions assemblyVersions, ProjectInfo projectInfo)
+        {
             return Max(assemblyVersions, projectInfo.ToBecomeAssemblyVersions);
         }
 
-        public static AssemblyVersions MaxProposed(AssemblyVersions assemblyVersions, ProjectInfo projectInfo) {
+        public static AssemblyVersions MaxProposed(AssemblyVersions assemblyVersions, ProjectInfo projectInfo)
+        {
             if (projectInfo.Modified)
                 return Max(assemblyVersions, projectInfo.ToBecomeAssemblyVersions);
             return Max(assemblyVersions, projectInfo.CurrentAssemblyVersions);
@@ -174,7 +202,7 @@ namespace BuildAutoIncrement {
 
         #region Static fields
 
-        public static readonly AssemblyVersions Empty    = new AssemblyVersions();
+        public static readonly AssemblyVersions Empty = new AssemblyVersions();
 
         public static readonly AssemblyVersions MinValue = new AssemblyVersions(ProjectVersion.MinValue, ProjectVersion.MinValue, ProjectVersion.MinValue);
 

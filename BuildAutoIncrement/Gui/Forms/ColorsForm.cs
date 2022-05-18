@@ -24,45 +24,50 @@
  */
 using System;
 using System.Drawing;
-using System.Collections;
-using System.ComponentModel;
 using System.Windows.Forms;
 
 using System.Windows.Forms.ColorPicker;
 
-namespace BuildAutoIncrement {
-	/// <summary>
-	/// Summary description for FormColors.
-	/// </summary>
-	public class ColorsForm : System.Windows.Forms.Form {
+namespace BuildAutoIncrement
+{
+    /// <summary>
+    /// Summary description for FormColors.
+    /// </summary>
+    public class ColorsForm : System.Windows.Forms.Form
+    {
 
         public event ColorSelectedEventHandler ColorSelected;
 
-		/// <summary>
-		/// Required designer variable.
-		/// </summary>
-		private System.ComponentModel.Container components = null;
+        /// <summary>
+        /// Required designer variable.
+        /// </summary>
+        private System.ComponentModel.Container components = null;
 
-		public ColorsForm() {
-			InitializeComponent();
+        public ColorsForm()
+        {
+            InitializeComponent();
             m_colorSelector.ColorSelected += new System.Windows.Forms.ColorPicker.ColorSelectedEventHandler(this.OnColorSelected);
-		}
+        }
 
         private System.Windows.Forms.Panel m_panelBorder;
 
         private System.Windows.Forms.ColorPicker.MultiTabColorPicker m_colorSelector;
 
-        public Color Color {
-            set {
+        public Color Color
+        {
+            set
+            {
                 m_colorSelector.Color = value;
             }
         }
 
-		/// <summary>
-		/// Clean up any resources being used.
-		/// </summary>
-        protected override void Dispose(bool disposing) {
-            if (disposing) {
+        /// <summary>
+        /// Clean up any resources being used.
+        /// </summary>
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
                 m_colorSelector.ColorSelected -= new ColorSelectedEventHandler(this.OnColorSelected);
                 if (components != null)
                     components.Dispose();
@@ -74,7 +79,8 @@ namespace BuildAutoIncrement {
         ///   Resizes the window to fit the ColorTabControl
         /// </summary>
         /// <param name="levent"></param>
-        protected override void OnLayout(LayoutEventArgs levent) {
+        protected override void OnLayout(LayoutEventArgs levent)
+        {
             base.OnLayout(levent);
             int dHeight = this.m_colorSelector.Height - m_panelBorder.ClientRectangle.Height;
             int dWidth = this.m_colorSelector.Width - m_panelBorder.ClientRectangle.Width;
@@ -86,7 +92,8 @@ namespace BuildAutoIncrement {
         ///   Window is closed automatically if it loses focus.
         /// </summary>
         /// <param name="e"></param>
-        protected override void OnDeactivate(EventArgs e) {
+        protected override void OnDeactivate(EventArgs e)
+        {
             base.OnDeactivate(e);
             this.Hide();
         }
@@ -96,8 +103,10 @@ namespace BuildAutoIncrement {
         /// </summary>
         /// <param name="keyData"></param>
         /// <returns></returns>
-        protected override bool ProcessDialogKey(Keys keyData) {
-            if (keyData == Keys.Escape) {
+        protected override bool ProcessDialogKey(Keys keyData)
+        {
+            if (keyData == Keys.Escape)
+            {
                 this.Hide();
                 return true;
             }
@@ -110,19 +119,20 @@ namespace BuildAutoIncrement {
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        protected virtual void OnColorSelected(object sender, ColorSelectedEventArgs e) {
+        protected virtual void OnColorSelected(object sender, ColorSelectedEventArgs e)
+        {
             this.Hide();
             if (ColorSelected != null)
                 ColorSelected(sender, e);
         }
 
-		#region Windows Form Designer generated code
-		/// <summary>
-		/// Required method for Designer support - do not modify
-		/// the contents of this method with the code editor.
-		/// </summary>
-		private void InitializeComponent()
-		{
+        #region Windows Form Designer generated code
+        /// <summary>
+        /// Required method for Designer support - do not modify
+        /// the contents of this method with the code editor.
+        /// </summary>
+        private void InitializeComponent()
+        {
             this.m_colorSelector = new System.Windows.Forms.ColorPicker.MultiTabColorPicker();
             this.m_panelBorder = new System.Windows.Forms.Panel();
             this.m_panelBorder.SuspendLayout();
@@ -161,7 +171,7 @@ namespace BuildAutoIncrement {
             this.ResumeLayout(false);
 
         }
-		#endregion
+        #endregion
 
-	}
+    }
 }

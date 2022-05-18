@@ -25,16 +25,19 @@
 using System;
 using System.Collections;
 
-namespace BuildAutoIncrement {
-	/// <summary>
-	///   Abstract class inherited by <c>ListPrinter</c> and <c>ListExporterToFile</c>.
-	/// </summary>
-	public abstract class ListExporter {
+namespace BuildAutoIncrement
+{
+    /// <summary>
+    ///   Abstract class inherited by <c>ListPrinter</c> and <c>ListExporterToFile</c>.
+    /// </summary>
+    public abstract class ListExporter
+    {
 
         /// <summary>
         ///   Column types.
         /// </summary>
-        protected enum ColumnName {
+        protected enum ColumnName
+        {
             ProjectName,
             Version,
         }
@@ -42,7 +45,8 @@ namespace BuildAutoIncrement {
         /// <summary>
         ///   Initializes <c>ListExporter</c> using configuration settings.
         /// </summary>
-        public ListExporter() {
+        public ListExporter()
+        {
             ExportConfiguration ec = ConfigurationPersister.Instance.Configuration.ExportConfiguration;
             m_dontExportNonversionable = ec.ExcludeNonversionableItems;
             m_indentBy = ec.IndentSubItems ? ec.IndentSubItemsBy : 0;
@@ -52,8 +56,10 @@ namespace BuildAutoIncrement {
         /// <summary>
         ///   Sets indentation depth.
         /// </summary>
-        public int IndentBy {
-            set {
+        public int IndentBy
+        {
+            set
+            {
                 m_indentBy = value;
             }
         }
@@ -61,8 +67,10 @@ namespace BuildAutoIncrement {
         /// <summary>
         ///   Sets the flag if nonversionable items should be exported.
         /// </summary>
-        public bool DontExportNonversionableItems {
-            set {
+        public bool DontExportNonversionableItems
+        {
+            set
+            {
                 m_dontExportNonversionable = value;
             }
         }
@@ -91,19 +99,20 @@ namespace BuildAutoIncrement {
         /// <summary>
         ///   Column titles.
         /// </summary>
-        protected const string HeaderProjectName      = "Project Name";
-        protected const string HeaderAssemblyVersion  = "Assembly Version";
-        protected const string HeaderFileVersion      = "File Version";
-        protected const string HeaderProductVersion   = "Product Version";
+        protected const string HeaderProjectName = "Project Name";
+        protected const string HeaderAssemblyVersion = "Assembly Version";
+        protected const string HeaderFileVersion = "File Version";
+        protected const string HeaderProductVersion = "Product Version";
 
         protected static readonly Hashtable m_headings;
-        
-        static ListExporter() {
+
+        static ListExporter()
+        {
             m_headings = new Hashtable();
             m_headings[AssemblyVersionType.AssemblyVersion] = HeaderAssemblyVersion;
             m_headings[AssemblyVersionType.AssemblyFileVersion] = HeaderFileVersion;
             m_headings[AssemblyVersionType.AssemblyInformationalVersion] = HeaderProductVersion;
         }
-        
-	}
+
+    }
 }

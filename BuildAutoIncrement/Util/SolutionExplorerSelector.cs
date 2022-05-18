@@ -24,20 +24,19 @@
  * 3. This notice may not be removed or altered from any source distribution.
  */
 using EnvDTE;
-
-using System;
-using System.Collections;
 using System.Diagnostics;
-using System.Windows.Forms;
 
-namespace BuildAutoIncrement {
-	/// <summary>
+namespace BuildAutoIncrement
+{
+    /// <summary>
     ///     Helper object used to select items via Visual Studio IDE.
     ///     Used primarily for checkout of items under SSC.
     /// </summary>
-	public sealed class SolutionExplorerSelector {
+    public sealed class SolutionExplorerSelector
+    {
 
-        private SolutionExplorerSelector() {
+        private SolutionExplorerSelector()
+        {
             m_selectedItemsCount = 0;
         }
 
@@ -46,7 +45,9 @@ namespace BuildAutoIncrement {
         ///   attached VS IDE object.
         /// </summary>
         /// <param name="environment"></param>
-        public SolutionExplorerSelector(DTE environment) : this() {
+        public SolutionExplorerSelector(DTE environment) : this()
+        {
+            Microsoft.VisualStudio.Shell.ThreadHelper.ThrowIfNotOnUIThread();
             UIHierarchy solutionExplorer = (UIHierarchy)environment.Windows.Item(EnvDTE.Constants.vsWindowKindSolutionExplorer).Object;
             m_rootItem = solutionExplorer.UIHierarchyItems.Item(1);
         }
@@ -62,20 +63,25 @@ namespace BuildAutoIncrement {
         ///   Array of filenames to select. If array is empty or <c>null</c> then
         ///   the root (i.e. node corresponding to the project is selected.
         /// </param>
-        public void SelectItem(ProjectInfo projectInfo, string[] filenames) {
+        public void SelectItem(ProjectInfo projectInfo, string[] filenames)
+        {
+            Microsoft.VisualStudio.Shell.ThreadHelper.ThrowIfNotOnUIThread();
             Debug.Assert(m_rootItem != null);
             Debug.Assert(projectInfo.UIPath.Length > 0);
             string[] pathToProjectRoot = projectInfo.UIPath.Split('\\');
             UIHierarchyItem projectRoot = m_rootItem;
-            foreach (string pathComponent in pathToProjectRoot) {
+            foreach (string pathComponent in pathToProjectRoot)
+            {
                 projectRoot = projectRoot.UIHierarchyItems.Item(pathComponent);
                 Debug.Assert(projectRoot != null);
             }
-            if (filenames == null || filenames.Length == 0) {
+            if (filenames == null || filenames.Length == 0)
+            {
                 SelectUIHierarchyItem(projectRoot);
                 return;
             }
-            foreach (string filename in filenames) {
+            foreach (string filename in filenames)
+            {
                 RecurseProjectTree(projectRoot, filename);
             }
         }
@@ -99,13 +105,18 @@ namespace BuildAutoIncrement {
         ///   Returns <c>true</c> if file has been found and selected; used to
         ///   break recursion if file has been found.
         /// </returns>
-        private UIHierarchyItem RecurseProjectTree(UIHierarchyItem parentNode, string filename2select) {
+        private UIHierarchyItem RecurseProjectTree(UIHierarchyItem parentNode, string filename2select)
+        {
+            Microsoft.VisualStudio.Shell.ThreadHelper.ThrowIfNotOnUIThread();
             Debug.Assert(parentNode != null);
-            foreach (UIHierarchyItem child in parentNode.UIHierarchyItems) {
+            foreach (UIHierarchyItem child in parentNode.UIHierarchyItems)
+            {
                 ProjectItem projectItem = child.Object as ProjectItem;
-                if (projectItem != null) {
+                if (projectItem != null)
+                {
                     string fullPath = ProjectItemInfo.GetItemFullPath(projectItem);
-                    if (string.Compare(fullPath, filename2select, true) == 0) {
+                    if (string.Compare(fullPath, filename2select, true) == 0)
+                    {
                         SelectUIHierarchyItem(child);
                         return child;
                     }
@@ -123,7 +134,9 @@ namespace BuildAutoIncrement {
         /// <param name="item">
         ///   Item to select.
         /// </param>
-        private void SelectUIHierarchyItem(UIHierarchyItem item) {
+        private void SelectUIHierarchyItem(UIHierarchyItem item)
+        {
+            Microsoft.VisualStudio.Shell.ThreadHelper.ThrowIfNotOnUIThread();
             m_selectedItemsCount++;
             if (m_selectedItemsCount > 1)
                 item.Select(vsUISelectionType.vsUISelectionTypeToggle);
@@ -134,7 +147,7 @@ namespace BuildAutoIncrement {
 
         private UIHierarchyItem m_rootItem = null;
 
-        private int             m_selectedItemsCount = 0;
+        private int m_selectedItemsCount = 0;
 
     }
 }

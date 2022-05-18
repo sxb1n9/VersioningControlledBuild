@@ -25,16 +25,15 @@
 using EnvDTE;
 
 #if !FX1_1
-using EnvDTE80;
-using DTE = EnvDTE80.DTE2;
 #endif
 
-using System;
 using System.Diagnostics;
 
-namespace BuildAutoIncrement {
+namespace BuildAutoIncrement
+{
 
-    public sealed class ProjectItemInfo {
+    public sealed class ProjectItemInfo
+    {
         /// <summary>
         ///   Gets the "FullPath" property for the <c>ProjectItem</c> provided.
         /// </summary>
@@ -44,15 +43,18 @@ namespace BuildAutoIncrement {
         /// <returns>
         ///   Full path (for a file) or <c>null</c>.
         /// </returns>
-        public static string GetItemFullPath(ProjectItem projectItem) {
-            try {
+        public static string GetItemFullPath(ProjectItem projectItem)
+        {
+            try
+            {
                 Property property = projectItem.Properties.Item("FullPath");
                 Debug.Assert(property != null);
                 return (string)property.Value;
             }
-            catch {
+            catch
+            {
             }
             return null;
         }
-	}
+    }
 }

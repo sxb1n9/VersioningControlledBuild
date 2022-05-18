@@ -26,24 +26,27 @@ using System;
 using System.Diagnostics;
 using System.Drawing;
 using System.Xml.Serialization;
-using System.Windows.Forms;
 
-namespace BuildAutoIncrement {
+namespace BuildAutoIncrement
+{
 
     #region FontStyleWrapper
-	/// <summary>
-	///   Class used for textual presentation of font style.
-	/// </summary>
-    public class FontStyleWrapper {
+    /// <summary>
+    ///   Class used for textual presentation of font style.
+    /// </summary>
+    public class FontStyleWrapper
+    {
 
         #region Constructors
 
-        private FontStyleWrapper() {
+        private FontStyleWrapper()
+        {
         }
 
-		public FontStyleWrapper(FontStyle fontStyle) {
-			m_fontStyle = fontStyle;
-		}
+        public FontStyleWrapper(FontStyle fontStyle)
+        {
+            m_fontStyle = fontStyle;
+        }
 
         #endregion // Constructors
 
@@ -55,36 +58,40 @@ namespace BuildAutoIncrement {
         /// <returns>
         ///   String presentation.
         /// </returns>
-		public override string ToString() {
-			string result = m_fontStyle.ToString();
-			int n = result.IndexOf(',');
-			if (n != -1)
-				return result.Remove(n, 1);
-			return result;
-		}
+		public override string ToString()
+        {
+            string result = m_fontStyle.ToString();
+            int n = result.IndexOf(',');
+            if (n != -1)
+                return result.Remove(n, 1);
+            return result;
+        }
 
         #endregion // Overrides
 
         #region Conversion operators
 
-        public static implicit operator FontStyleWrapper(FontStyle fontStyle) {
-            switch (fontStyle) {
-            case FontStyle.Regular:
-                return FontStyleWrapper.Regular;
-            case FontStyle.Italic:
-                return FontStyleWrapper.Italic;
-            case FontStyle.Bold:
-                return FontStyleWrapper.Bold;
-            case FontStyle.Bold | FontStyle.Italic:
-                return FontStyleWrapper.BoldItalic;
-            default:
-                Debug.Assert(false, "Not supported font style");
-                break;
+        public static implicit operator FontStyleWrapper(FontStyle fontStyle)
+        {
+            switch (fontStyle)
+            {
+                case FontStyle.Regular:
+                    return FontStyleWrapper.Regular;
+                case FontStyle.Italic:
+                    return FontStyleWrapper.Italic;
+                case FontStyle.Bold:
+                    return FontStyleWrapper.Bold;
+                case FontStyle.Bold | FontStyle.Italic:
+                    return FontStyleWrapper.BoldItalic;
+                default:
+                    Debug.Assert(false, "Not supported font style");
+                    break;
             }
             return new FontStyleWrapper(fontStyle);
         }
 
-        public static explicit operator FontStyle(FontStyleWrapper fontStyleWrapper) {
+        public static explicit operator FontStyle(FontStyleWrapper fontStyleWrapper)
+        {
             return fontStyleWrapper.m_fontStyle;
         }
 
@@ -106,68 +113,81 @@ namespace BuildAutoIncrement {
 
     #region FontDescription
 
-	/// <summary>
-	///   Class used for textual presentation of a font.
-	/// </summary>
-	[Serializable]
-	public class FontDescription {
+    /// <summary>
+    ///   Class used for textual presentation of a font.
+    /// </summary>
+    [Serializable]
+    public class FontDescription
+    {
 
         #region Constructors
 
         /// <summary>
         ///   Default constructor.
         /// </summary>
-        public FontDescription() {
+        public FontDescription()
+        {
             FontFamily = "Arial";
             m_fontStyleWrapper = FontStyleWrapper.Regular;
             Size = 9.75f;
         }
 
-		public FontDescription(string fontFamily, FontStyle fontStyle, float fontSize) {
-			FontFamily = fontFamily;
-			m_fontStyleWrapper = fontStyle;
-			Size = fontSize;
-		}
+        public FontDescription(string fontFamily, FontStyle fontStyle, float fontSize)
+        {
+            FontFamily = fontFamily;
+            m_fontStyleWrapper = fontStyle;
+            Size = fontSize;
+        }
 
         #endregion // Constructors
 
         #region Public properties
 
         [XmlText]
-        public string FontFamily {
-            get {
+        public string FontFamily
+        {
+            get
+            {
                 return m_fontFamily;
             }
-            set {
+            set
+            {
                 m_fontFamily = value;
             }
         }
 
         [XmlAttribute]
-        public FontStyle FontStyle {
-            get {
+        public FontStyle FontStyle
+        {
+            get
+            {
                 return (FontStyle)m_fontStyleWrapper;
             }
-            set {
+            set
+            {
                 m_fontStyleWrapper = value;
             }
         }
 
         [XmlAttribute]
-        public float Size {
-            get {
+        public float Size
+        {
+            get
+            {
                 return m_size;
             }
-            set {
+            set
+            {
                 m_size = value;
             }
         }
-        
+
         #endregion // Public properties
-        
+
         #region Conversion operators
 
-        public static implicit operator Font(FontDescription fontDescription) {
+        public static implicit operator Font(FontDescription fontDescription)
+        {
             return new Font(fontDescription.FontFamily, fontDescription.Size, fontDescription.FontStyle);
         }
 
@@ -175,7 +195,8 @@ namespace BuildAutoIncrement {
 
         #region Overrides
 
-        public override string ToString() {
+        public override string ToString()
+        {
             if (m_fontStyleWrapper == FontStyleWrapper.Regular)
                 return string.Format("{0}, {1} pt", FontFamily, Size);
             return string.Format("{0}, {1}, {2} pt", FontFamily, m_fontStyleWrapper.ToString(), Size);
@@ -185,8 +206,8 @@ namespace BuildAutoIncrement {
 
         #region Private fields
 
-		private string m_fontFamily;
-		private float m_size;
+        private string m_fontFamily;
+        private float m_size;
         private FontStyleWrapper m_fontStyleWrapper;
 
         #endregion // Private fields

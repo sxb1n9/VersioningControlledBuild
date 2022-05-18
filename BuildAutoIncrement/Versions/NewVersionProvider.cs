@@ -26,20 +26,23 @@ using System;
 using System.Diagnostics;
 using System.Globalization;
 
-namespace BuildAutoIncrement {
-	/// <summary>
-	///   Class responsible to provide a new version for project.
-	/// </summary>
-	public class NewVersionProvider {
+namespace BuildAutoIncrement
+{
+    /// <summary>
+    ///   Class responsible to provide a new version for project.
+    /// </summary>
+    public class NewVersionProvider
+    {
 
         #region Constructors
 
         /// <summary>
         ///   Hidden default constructor.
         /// </summary>
-		protected NewVersionProvider() {
+		protected NewVersionProvider()
+        {
             UpdateAutomaticBuildAndRevision();
-		}
+        }
 
         /// <summary>
         ///   Creates <c>NewVersionProvider</c> object with given numbering 
@@ -48,7 +51,8 @@ namespace BuildAutoIncrement {
         /// <param name="numberingOptions">
         ///   Numbering options used for version increment.
         /// </param>
-        public NewVersionProvider(NumberingOptions numberingOptions) : this() {
+        public NewVersionProvider(NumberingOptions numberingOptions) : this()
+        {
             m_numberingOptions = numberingOptions;
         }
 
@@ -67,9 +71,10 @@ namespace BuildAutoIncrement {
         /// <returns>
         ///   <c>AssemblyVersions</c> set with proposed versions.
         /// </returns>
-        public AssemblyVersions ProposeNewVersions(AssemblyVersions currentAssemblyVersions) {
-            ProjectVersion toBecomeAssemblyVersion              = GetToBecomeProjectVersion(currentAssemblyVersions[AssemblyVersionType.AssemblyVersion]);
-            ProjectVersion toBecomeAssemblyFileVersion          = GetToBecomeProjectVersion(currentAssemblyVersions[AssemblyVersionType.AssemblyFileVersion]);
+        public AssemblyVersions ProposeNewVersions(AssemblyVersions currentAssemblyVersions)
+        {
+            ProjectVersion toBecomeAssemblyVersion = GetToBecomeProjectVersion(currentAssemblyVersions[AssemblyVersionType.AssemblyVersion]);
+            ProjectVersion toBecomeAssemblyFileVersion = GetToBecomeProjectVersion(currentAssemblyVersions[AssemblyVersionType.AssemblyFileVersion]);
             ProjectVersion toBecomeAssemblyInformationalVersion = GetToBecomeProjectVersion(currentAssemblyVersions[AssemblyVersionType.AssemblyInformationalVersion]);
             AssemblyVersions toBecomeAssemblyVersions = new AssemblyVersions(toBecomeAssemblyVersion, toBecomeAssemblyFileVersion, toBecomeAssemblyInformationalVersion);
             if (m_numberingOptions.SynchronizeAllVersionTypes)
@@ -94,14 +99,19 @@ namespace BuildAutoIncrement {
         /// <returns>
         ///   <c>true</c> if version should be incremented.
         /// </returns>
-        public bool ShouldUpdate(ProjectInfo projectInfo, AssemblyVersionType assemblyVersionType, ProjectVersion highestProjectVersion) {
-            if (m_numberingOptions.SynchronizeAllVersionTypes) {
-                if (!projectInfo.CurrentAssemblyVersions.AreVersionsSynchronized) {
+        public bool ShouldUpdate(ProjectInfo projectInfo, AssemblyVersionType assemblyVersionType, ProjectVersion highestProjectVersion)
+        {
+            if (m_numberingOptions.SynchronizeAllVersionTypes)
+            {
+                if (!projectInfo.CurrentAssemblyVersions.AreVersionsSynchronized)
+                {
                     return true;
                 }
             }
-            foreach (AssemblyVersionType at in AssemblyVersions.AssemblyVersionTypes) {
-                if ((assemblyVersionType & at) == at) {
+            foreach (AssemblyVersionType at in AssemblyVersions.AssemblyVersionTypes)
+            {
+                if ((assemblyVersionType & at) == at)
+                {
                     if (ShouldUpdateOneOfAssemblyVersionTypes(projectInfo, at, highestProjectVersion))
                         return true;
                 }
@@ -124,18 +134,20 @@ namespace BuildAutoIncrement {
         /// <returns>
         ///   New version as a string.
         /// </returns>
-        public string ProvideNewVersion(ProjectInfo projectInfo, AssemblyVersionType assemblyVersionType, ProjectVersion highestProjectVersion) {
+        public string ProvideNewVersion(ProjectInfo projectInfo, AssemblyVersionType assemblyVersionType, ProjectVersion highestProjectVersion)
+        {
             Debug.Assert(assemblyVersionType != AssemblyVersionType.All);
-            switch (m_numberingOptions.BatchCommandIncrementScheme) {
-            case BatchCommandIncrementScheme.IncrementModifiedIndependently:
-            case BatchCommandIncrementScheme.IncrementAllIndependently:
-                if (m_numberingOptions.SynchronizeAllVersionTypes && !projectInfo.ToUpdate)
-                    return projectInfo.CurrentAssemblyVersions.HighestProjectVersion.ToString();
-                return projectInfo.ToBecomeAssemblyVersions[assemblyVersionType].ToString();
-            case (BatchCommandIncrementScheme.IncrementAllAndSynchronize):
-            case (BatchCommandIncrementScheme.IncrementModifiedOnlyAndSynchronize):
-                int resetBuildAndRevisionValues = (int)m_numberingOptions.ResetBuildAndRevisionTo;
-                return ProjectVersion.ApplyVersionPattern(highestProjectVersion.ToString(), projectInfo.CurrentAssemblyVersions[assemblyVersionType].ToString(), resetBuildAndRevisionValues);// highestProjectVersion.ToString();
+            switch (m_numberingOptions.BatchCommandIncrementScheme)
+            {
+                case BatchCommandIncrementScheme.IncrementModifiedIndependently:
+                case BatchCommandIncrementScheme.IncrementAllIndependently:
+                    if (m_numberingOptions.SynchronizeAllVersionTypes && !projectInfo.ToUpdate)
+                        return projectInfo.CurrentAssemblyVersions.HighestProjectVersion.ToString();
+                    return projectInfo.ToBecomeAssemblyVersions[assemblyVersionType].ToString();
+                case (BatchCommandIncrementScheme.IncrementAllAndSynchronize):
+                case (BatchCommandIncrementScheme.IncrementModifiedOnlyAndSynchronize):
+                    int resetBuildAndRevisionValues = (int)m_numberingOptions.ResetBuildAndRevisionTo;
+                    return ProjectVersion.ApplyVersionPattern(highestProjectVersion.ToString(), projectInfo.CurrentAssemblyVersions[assemblyVersionType].ToString(), resetBuildAndRevisionValues);// highestProjectVersion.ToString();
             }
             Debug.Assert(false, "Not supported option");
             return null;
@@ -155,13 +167,17 @@ namespace BuildAutoIncrement {
         /// <returns>
         ///   Next version.
         /// </returns>
-        private ProjectVersion GetToBecomeProjectVersion(ProjectVersion currentProjectVersion) {
+        private ProjectVersion GetToBecomeProjectVersion(ProjectVersion currentProjectVersion)
+        {
             ProjectVersion toBecomeProjectVersion = ProjectVersion.Empty;
-            if (currentProjectVersion != ProjectVersion.Empty) {
-                if (m_numberingOptions.UseDateTimeBasedBuildAndRevisionNumbering) {
+            if (currentProjectVersion != ProjectVersion.Empty)
+            {
+                if (m_numberingOptions.UseDateTimeBasedBuildAndRevisionNumbering)
+                {
                     toBecomeProjectVersion = currentProjectVersion.Clone(m_autoBuildVersion, m_autoRevisionVersion, m_numberingOptions.ReplaceAsteriskWithVersionComponents);
                 }
-                else {
+                else
+                {
                     toBecomeProjectVersion = currentProjectVersion.Clone();
                     toBecomeProjectVersion.Increment(m_numberingOptions);
                 }
@@ -189,23 +205,25 @@ namespace BuildAutoIncrement {
         /// <returns>
         ///   <c>true</c> if version should be incremented.
         /// </returns>
-        private bool ShouldUpdateOneOfAssemblyVersionTypes(ProjectInfo projectInfo, AssemblyVersionType assemblyVersionType, ProjectVersion highestProjectVersion) {
+        private bool ShouldUpdateOneOfAssemblyVersionTypes(ProjectInfo projectInfo, AssemblyVersionType assemblyVersionType, ProjectVersion highestProjectVersion)
+        {
             Debug.Assert(assemblyVersionType == AssemblyVersionType.AssemblyVersion || assemblyVersionType == AssemblyVersionType.AssemblyFileVersion || assemblyVersionType == AssemblyVersionType.AssemblyInformationalVersion);
             // first check if corresponding assembly version type exists at all
             if (projectInfo.CurrentAssemblyVersions[assemblyVersionType] == ProjectVersion.Empty)
                 return false;
             // else, depending on settings
-            switch (m_numberingOptions.BatchCommandIncrementScheme) {
-            case (BatchCommandIncrementScheme.IncrementModifiedIndependently):
-                return projectInfo.IsMarkedForUpdate(assemblyVersionType);
-            case (BatchCommandIncrementScheme.IncrementAllIndependently):
-                return true;
-            case (BatchCommandIncrementScheme.IncrementModifiedOnlyAndSynchronize):
-                int resetBuildAndRevisionValues = (int)m_numberingOptions.ResetBuildAndRevisionTo;
-                return projectInfo.Modified || ProjectVersion.ApplyVersionPattern(highestProjectVersion.ToString(), projectInfo.CurrentAssemblyVersions[assemblyVersionType].ToString(), resetBuildAndRevisionValues) != projectInfo.CurrentAssemblyVersions[assemblyVersionType].ToString();//projectInfo.CurrentAssemblyVersions[assemblyVersionType] < highestProjectVersion;
-            case (BatchCommandIncrementScheme.IncrementAllAndSynchronize):
-                int buildAndRevisionResetValue = (int)m_numberingOptions.ResetBuildAndRevisionTo;
-                return ProjectVersion.ApplyVersionPattern(highestProjectVersion.ToString(), projectInfo.CurrentAssemblyVersions[assemblyVersionType].ToString(), buildAndRevisionResetValue) != projectInfo.CurrentAssemblyVersions[assemblyVersionType].ToString(); // projectInfo.CurrentAssemblyVersions[assemblyVersionType] < highestProjectVersion;
+            switch (m_numberingOptions.BatchCommandIncrementScheme)
+            {
+                case (BatchCommandIncrementScheme.IncrementModifiedIndependently):
+                    return projectInfo.IsMarkedForUpdate(assemblyVersionType);
+                case (BatchCommandIncrementScheme.IncrementAllIndependently):
+                    return true;
+                case (BatchCommandIncrementScheme.IncrementModifiedOnlyAndSynchronize):
+                    int resetBuildAndRevisionValues = (int)m_numberingOptions.ResetBuildAndRevisionTo;
+                    return projectInfo.Modified || ProjectVersion.ApplyVersionPattern(highestProjectVersion.ToString(), projectInfo.CurrentAssemblyVersions[assemblyVersionType].ToString(), resetBuildAndRevisionValues) != projectInfo.CurrentAssemblyVersions[assemblyVersionType].ToString();//projectInfo.CurrentAssemblyVersions[assemblyVersionType] < highestProjectVersion;
+                case (BatchCommandIncrementScheme.IncrementAllAndSynchronize):
+                    int buildAndRevisionResetValue = (int)m_numberingOptions.ResetBuildAndRevisionTo;
+                    return ProjectVersion.ApplyVersionPattern(highestProjectVersion.ToString(), projectInfo.CurrentAssemblyVersions[assemblyVersionType].ToString(), buildAndRevisionResetValue) != projectInfo.CurrentAssemblyVersions[assemblyVersionType].ToString(); // projectInfo.CurrentAssemblyVersions[assemblyVersionType] < highestProjectVersion;
             }
             Debug.Assert(false, "Not supported option");
             return false;
@@ -215,9 +233,11 @@ namespace BuildAutoIncrement {
         ///   Initializes Build and Revision numbers to be used if automatic
         ///   (Microsoft's) scheme is selected.
         /// </summary>
-        private void UpdateAutomaticBuildAndRevision() {
+        private void UpdateAutomaticBuildAndRevision()
+        {
             DateTime currentDateTime = DateTime.UtcNow;
-            if (TimeZone.CurrentTimeZone.IsDaylightSavingTime(currentDateTime)) {
+            if (TimeZone.CurrentTimeZone.IsDaylightSavingTime(currentDateTime))
+            {
                 DaylightTime dt = TimeZone.CurrentTimeZone.GetDaylightChanges(currentDateTime.Year);
                 currentDateTime += dt.Delta;
             }
@@ -228,7 +248,7 @@ namespace BuildAutoIncrement {
         }
 
         #endregion // Private methods
-        
+
         /// <summary>
         ///   Configured numbering options.
         /// </summary>

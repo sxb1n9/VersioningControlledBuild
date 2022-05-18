@@ -26,7 +26,6 @@
 using EnvDTE;
 
 #if !FX1_1
-using EnvDTE80;
 using DTE = EnvDTE80.DTE2;
 #endif
 
@@ -39,12 +38,14 @@ using Microsoft.VisualStudio.CommandBars;
 using System;
 using System.Diagnostics;
 
-namespace BuildAutoIncrement {
-	/// <summary>
-	///   Utility class that removes add-in commands and toolbar during 
+namespace BuildAutoIncrement
+{
+    /// <summary>
+    ///   Utility class that removes add-in commands and toolbar during 
     ///   uninstallation. Called by Installer class.
-	/// </summary>
-	public class PermanentUIRemover {
+    /// </summary>
+    public class PermanentUIRemover
+    {
 
         /// <summary>
         ///   Removes VCB toolbar and menu from Visual Studio.
@@ -52,18 +53,22 @@ namespace BuildAutoIncrement {
         /// <param name="progId">
         ///   ID of the Visual Studio.
         /// </param>
-        public static void Remove(string progId) {
+        public static void Remove(string progId)
+        {
             DTE dte = null;
-            try {
+            try
+            {
                 Type t = Type.GetTypeFromProgID(progId);
-                if (t != null) {
+                if (t != null)
+                {
                     dte = (DTE)Activator.CreateInstance(t);
                     Debug.Assert(dte != null);
                     DeleteCommands(dte);
                     DeleteBars(dte);
                 }
             }
-            finally {
+            finally
+            {
                 if (dte != null)
                     dte.Quit();
             }
@@ -75,8 +80,11 @@ namespace BuildAutoIncrement {
         /// <param name="dte">
         ///   <c>DTE</c> object (VS environment) to remove from.
         /// </param>
-        private static void DeleteCommands(DTE dte) {
-            if (dte.Version == "7.10") {
+        private static void DeleteCommands(DTE dte)
+        {
+            Microsoft.VisualStudio.Shell.ThreadHelper.ThrowIfNotOnUIThread();
+            if (dte.Version == "7.10")
+            {
                 // hack for VS2003: to remove commands entirely, commands are added
                 // to and removed from Tools menu. Otherwise, they remain in
                 // the command cache and are displayed even after add-in 
@@ -92,7 +100,8 @@ namespace BuildAutoIncrement {
                 AddAndRemoveToTools(dte, "BuildAutoIncrement.Connect." + Constants.Commands.About);
                 return;
             }
-            foreach (Command command in dte.Commands) {
+            foreach (Command command in dte.Commands)
+            {
                 if (command.Name.StartsWith("BuildAutoIncrement.Connect.") || command.Name.StartsWith("BuildAutoIncrement.Connect2."))
                     command.Delete();
             }
@@ -104,25 +113,32 @@ namespace BuildAutoIncrement {
         /// <param name="dte">
         ///   <c>DTE</c> object (VS environment) to remove from.
         /// </param>
-        private static void DeleteBars(DTE dte) {
-            try {
+        private static void DeleteBars(DTE dte)
+        {
+            try
+            {
                 CommandBar toolbar = ((CommandBars)dte.CommandBars)[Constants.CommandBarName];
                 if (toolbar != null)
                     dte.Commands.RemoveCommandBar(toolbar);
             }
-            catch { 
+            catch
+            {
             }
             // remove menu main entry
-            try {
-                for (int i = ((CommandBars)dte.CommandBars).ActiveMenuBar.Controls.Count; i > 0 ; i--) {
+            try
+            {
+                for (int i = ((CommandBars)dte.CommandBars).ActiveMenuBar.Controls.Count; i > 0; i--)
+                {
                     CommandBarControl cbc = (CommandBarControl)((CommandBars)dte.CommandBars).ActiveMenuBar.Controls[i].Control;
-                    if (cbc.Caption == Constants.MenuName) {
+                    if (cbc.Caption == Constants.MenuName)
+                    {
                         cbc.Delete(false);
                         break;
                     }
                 }
             }
-            catch {
+            catch
+            {
             }
         }
 
@@ -136,17 +152,21 @@ namespace BuildAutoIncrement {
         /// <param name="commandName">
         ///   Name of the command to add and remove.
         /// </param>
-        private static void AddAndRemoveToTools(DTE dte, string commandName) {
+        private static void AddAndRemoveToTools(DTE dte, string commandName)
+        {
             Debug.Assert(dte.Version == "7.10");
-            try {
+            try
+            {
                 Command command = dte.Commands.Item(commandName, -1);
-                if (command != null) {
+                if (command != null)
+                {
                     CommandBar toolBar = ((CommandBars)dte.CommandBars)["Tools"];
                     command.AddControl(toolBar, 1);
                     command.Delete();
                 }
             }
-            catch (Exception e) {
+            catch (Exception e)
+            {
                 Trace.WriteLine(string.Format("Command {0} not found.", commandName));
             }
         }

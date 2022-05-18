@@ -23,40 +23,46 @@
  * 3. This notice may not be removed or altered from any source distribution.
  */
 using System;
-using System.Xml.Serialization;
 
-namespace BuildAutoIncrement {
+namespace BuildAutoIncrement
+{
 
     [Serializable]
-    public class ListViewColumnWidths {
+    public class ListViewColumnWidths
+    {
 
-        public ListViewColumnWidths() {
-            m_projectName    = 175;
+        public ListViewColumnWidths()
+        {
+            m_projectName = 175;
             m_currentVersion = 85;
-            m_modified       = 120;
-            m_toBeVersion    = 85;
+            m_modified = 120;
+            m_toBeVersion = 85;
         }
 
-        public int ProjectName {
+        public int ProjectName
+        {
             get { return m_projectName; }
             set { m_projectName = value; }
         }
 
-        public int CurrentVersion {
+        public int CurrentVersion
+        {
             get { return m_currentVersion; }
             set { m_currentVersion = value; }
         }
 
-        public int Modified {
+        public int Modified
+        {
             get { return m_modified; }
             set { m_modified = value; }
         }
 
-        public int ToBeVersion {
+        public int ToBeVersion
+        {
             get { return m_toBeVersion; }
             set { m_toBeVersion = value; }
         }
-    
+
         private int m_projectName;
         private int m_currentVersion;
         private int m_modified;

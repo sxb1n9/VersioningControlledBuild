@@ -27,11 +27,12 @@ using System.Collections;
 using System.Diagnostics;
 using System.Text.RegularExpressions;
 
-namespace BuildAutoIncrement {
-	/// <summary>
-	///   Base class for Setup (.vd or .cab) and InstallShield projects.
-	/// </summary>
-	public abstract class VersionStreamWGuid : VersionStream
+namespace BuildAutoIncrement
+{
+    /// <summary>
+    ///   Base class for Setup (.vd or .cab) and InstallShield projects.
+    /// </summary>
+    public abstract class VersionStreamWGuid : VersionStream
     {
 
         #region Constructors
@@ -72,7 +73,8 @@ namespace BuildAutoIncrement {
 
         #endregion // Public methods
 
-        protected override string GetVersionString(AssemblyVersionType versionType) {
+        protected override string GetVersionString(AssemblyVersionType versionType)
+        {
             Debug.Assert(versionType != AssemblyVersionType.AssemblyVersion && versionType != AssemblyVersionType.All);
             int pos = GetMatchPosition(ProductVersionLinePattern, 0);
             Regex regex = new Regex(VersionPattern);
@@ -100,5 +102,5 @@ namespace BuildAutoIncrement {
         }
 
         protected const string GuidPattern = "{[0-9,A-F]{8}-[0-9,A-F]{4}-[0-9,A-F]{4}-[0-9,A-F]{4}-[0-9,A-F]{12}}";
-	}
+    }
 }

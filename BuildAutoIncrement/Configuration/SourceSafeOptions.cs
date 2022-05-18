@@ -26,45 +26,47 @@ using System;
 
 namespace BuildAutoIncrement
 {
-	/// <summary>
-	///	  SourceSafe related settings.
-	/// </summary>
-	[Serializable]
-	public class SourceSafeOptions : ICloneable {
+    /// <summary>
+    ///	  SourceSafe related settings.
+    /// </summary>
+    [Serializable]
+    public class SourceSafeOptions : ICloneable
+    {
 
-		public SourceSafeOptions() {
-			m_getLatestVersionBefore = false;
-			m_checkinModifiedAfter = false;
-		}
+        public SourceSafeOptions()
+        {
+            m_getLatestVersionBefore = false;
+            m_checkinModifiedAfter = false;
+        }
 
-		public bool GetLatestVersionsBeforeRunningAddinCommand 
-		{
-			get { return m_getLatestVersionBefore; }
-			set { m_getLatestVersionBefore = value; }
-		}
+        public bool GetLatestVersionsBeforeRunningAddinCommand
+        {
+            get { return m_getLatestVersionBefore; }
+            set { m_getLatestVersionBefore = value; }
+        }
 
-		public bool CheckinModifiedAfterAddinCommand 
-		{
-			get { return m_checkinModifiedAfter; }
-			set { m_checkinModifiedAfter = value; }
-		}
+        public bool CheckinModifiedAfterAddinCommand
+        {
+            get { return m_checkinModifiedAfter; }
+            set { m_checkinModifiedAfter = value; }
+        }
 
-		#region ICloneable implementation
+        #region ICloneable implementation
 
-		object ICloneable.Clone() 
-		{
-			return Clone();
-		}
+        object ICloneable.Clone()
+        {
+            return Clone();
+        }
 
-		public SourceSafeOptions Clone() 
-		{
-			return (SourceSafeOptions)this.MemberwiseClone();
-		}
+        public SourceSafeOptions Clone()
+        {
+            return (SourceSafeOptions)this.MemberwiseClone();
+        }
 
-		#endregion // ICloneable implementation
+        #endregion // ICloneable implementation
 
-		private bool m_getLatestVersionBefore;
+        private bool m_getLatestVersionBefore;
 
-		private bool m_checkinModifiedAfter;
-	}
+        private bool m_checkinModifiedAfter;
+    }
 }

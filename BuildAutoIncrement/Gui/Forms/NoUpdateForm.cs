@@ -22,17 +22,16 @@
  *    misrepresented as being the original software.
  * 3. This notice may not be removed or altered from any source distribution.
  */
-using System;
 using System.Drawing;
-using System.Collections;
-using System.ComponentModel;
 using System.Windows.Forms;
 
-namespace BuildAutoIncrement {
-	/// <summary>
-	/// Summary description for NoUpdateForm.
-	/// </summary>
-	public class NoUpdateForm : System.Windows.Forms.Form {
+namespace BuildAutoIncrement
+{
+    /// <summary>
+    /// Summary description for NoUpdateForm.
+    /// </summary>
+    public class NoUpdateForm : System.Windows.Forms.Form
+    {
 
         #region Controls
         private System.Windows.Forms.Label m_labelMessage;
@@ -47,30 +46,34 @@ namespace BuildAutoIncrement {
 		/// </summary>
 		private System.ComponentModel.Container components = null;
 
-		private NoUpdateForm() {
-			InitializeComponent();
+        private NoUpdateForm()
+        {
+            InitializeComponent();
             m_pictureBoxIcon.Image = SystemIcons.Information.ToBitmap();
-		}
+        }
 
-		/// <summary>
-		/// Clean up any resources being used.
-		/// </summary>
-        protected override void Dispose(bool disposing) {
-            if (disposing) {
-                if (components != null) {
+        /// <summary>
+        /// Clean up any resources being used.
+        /// </summary>
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                if (components != null)
+                {
                     components.Dispose();
                 }
             }
             base.Dispose(disposing);
         }
 
-		#region Windows Form Designer generated code
-		/// <summary>
-		/// Required method for Designer support - do not modify
-		/// the contents of this method with the code editor.
-		/// </summary>
-		private void InitializeComponent()
-		{
+        #region Windows Form Designer generated code
+        /// <summary>
+        /// Required method for Designer support - do not modify
+        /// the contents of this method with the code editor.
+        /// </summary>
+        private void InitializeComponent()
+        {
             this.m_labelMessage = new System.Windows.Forms.Label();
             this.m_buttonYes = new System.Windows.Forms.Button();
             this.m_buttonNo = new System.Windows.Forms.Button();
@@ -140,13 +143,13 @@ namespace BuildAutoIncrement {
             this.ResumeLayout(false);
 
         }
-    #endregion
+        #endregion
 
 #pragma warning disable CS0108 // Member hides inherited member; missing new keyword
-    public static DialogResult Show(IWin32Window owner)
-    {
+        public static DialogResult Show(IWin32Window owner)
+        {
 #pragma warning restore CS0108 // Member hides inherited member; missing new keyword
-      NoUpdateForm nuf = new NoUpdateForm();
+            NoUpdateForm nuf = new NoUpdateForm();
             nuf.StartPosition = FormStartPosition.CenterParent;
             return nuf.ShowDialog(owner);
         }

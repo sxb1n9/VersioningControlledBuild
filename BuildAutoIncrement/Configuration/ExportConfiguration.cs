@@ -2,9 +2,11 @@ using System;
 using System.Diagnostics;
 using System.Xml.Serialization;
 
-namespace BuildAutoIncrement {
+namespace BuildAutoIncrement
+{
 
-    public enum ExportFileFormat {
+    public enum ExportFileFormat
+    {
         PlainText,
         CSV,
         XML
@@ -15,14 +17,16 @@ namespace BuildAutoIncrement {
     /// <summary>
     ///   Export options related to printing.
     /// </summary>
-    public class PrintOptions {
+    public class PrintOptions
+    {
 
         #region Constructors
 
         /// <summary>
         ///   Creates <c>PrintOptions</c> object.
         /// </summary>
-        public PrintOptions() {
+        public PrintOptions()
+        {
             m_printProjectIcons = true;
             m_itemFont = new FontDescription();
             m_itemFont.Size = 9.0f;
@@ -39,11 +43,14 @@ namespace BuildAutoIncrement {
         /// <summary>
         ///   Gets or sets flag indicating if project icons are printed.
         /// </summary>
-        public bool PrintProjectIcons {
-            get {
+        public bool PrintProjectIcons
+        {
+            get
+            {
                 return m_printProjectIcons;
             }
-            set {
+            set
+            {
                 m_printProjectIcons = value;
             }
         }
@@ -51,11 +58,14 @@ namespace BuildAutoIncrement {
         /// <summary>
         ///   Gets or sets <c>FontDescription</c> of the font used for items.
         /// </summary>
-        public FontDescription ItemFont {
-            get {
+        public FontDescription ItemFont
+        {
+            get
+            {
                 return m_itemFont;
             }
-            set {
+            set
+            {
                 m_itemFont = value;
             }
         }
@@ -63,11 +73,14 @@ namespace BuildAutoIncrement {
         /// <summary>
         ///   Gets or sets <c>FontDescription</c> of the font used for heading.
         /// </summary>
-        public FontDescription HeadingFont {
-            get {
+        public FontDescription HeadingFont
+        {
+            get
+            {
                 return m_headingFont;
             }
-            set {
+            set
+            {
                 m_headingFont = value;
             }
         }
@@ -75,11 +88,14 @@ namespace BuildAutoIncrement {
         /// <summary>
         ///   Gets or sets <c>FontDescription</c> of the font used for header.
         /// </summary>
-        public FontDescription HeaderFont {
-            get {
+        public FontDescription HeaderFont
+        {
+            get
+            {
                 return m_headerFont;
             }
-            set {
+            set
+            {
                 m_headerFont = value;
             }
         }
@@ -105,14 +121,16 @@ namespace BuildAutoIncrement {
     ///   exported.
     /// </summary>
     [Serializable]
-    public class AssemblyVersionTypeSelection {
+    public class AssemblyVersionTypeSelection
+    {
 
         #region Constructors
 
         /// <summary>
         ///   Creates empty <c>AssemblyVersionTypeSelection</c> object.
         /// </summary>
-        public AssemblyVersionTypeSelection() {
+        public AssemblyVersionTypeSelection()
+        {
             m_isSelected = true;
         }
 
@@ -123,7 +141,8 @@ namespace BuildAutoIncrement {
         /// <param name="assemblyVersionType">
         ///   <c>AssemblyVersionType</c> to initialize with.
         /// </param>
-        public AssemblyVersionTypeSelection(AssemblyVersionType assemblyVersionType) : this() {
+        public AssemblyVersionTypeSelection(AssemblyVersionType assemblyVersionType) : this()
+        {
             m_assemblyVersionType = assemblyVersionType;
         }
 
@@ -135,11 +154,14 @@ namespace BuildAutoIncrement {
         ///   Gets or sets <c>AssemblyVersionType</c> flag.
         /// </summary>
         [XmlText]
-        public AssemblyVersionType AssemblyVersionType {
-            get {
+        public AssemblyVersionType AssemblyVersionType
+        {
+            get
+            {
                 return m_assemblyVersionType;
             }
-            set {
+            set
+            {
                 m_assemblyVersionType = value;
             }
         }
@@ -148,11 +170,14 @@ namespace BuildAutoIncrement {
         ///   Gets or sets flag indicating if current type is selected.
         /// </summary>
         [XmlAttribute]
-        public bool IsSelected {
-            get {
+        public bool IsSelected
+        {
+            get
+            {
                 return m_isSelected;
             }
-            set {
+            set
+            {
                 m_isSelected = value;
             }
         }
@@ -166,11 +191,11 @@ namespace BuildAutoIncrement {
         /// <summary>
         ///   Default array of <c>AssemblyVersionTypeSelection</c> with all types selected.
         /// </summary>
-        public static AssemblyVersionTypeSelection[] DefaultSelection 
-            = new AssemblyVersionTypeSelection[] { 
+        public static AssemblyVersionTypeSelection[] DefaultSelection
+            = new AssemblyVersionTypeSelection[] {
                                                     new AssemblyVersionTypeSelection(AssemblyVersionType.AssemblyVersion),
                                                     new AssemblyVersionTypeSelection(AssemblyVersionType.AssemblyFileVersion),
-                                                    new AssemblyVersionTypeSelection(AssemblyVersionType.AssemblyInformationalVersion) 
+                                                    new AssemblyVersionTypeSelection(AssemblyVersionType.AssemblyInformationalVersion)
                                                  };
 
     }
@@ -179,15 +204,17 @@ namespace BuildAutoIncrement {
 
     #region ExportConfiguration
 
-	/// <summary>
-	///   Configuration used for exporting.
-	/// </summary>
-	[Serializable]
-	public class ExportConfiguration {
-		
+    /// <summary>
+    ///   Configuration used for exporting.
+    /// </summary>
+    [Serializable]
+    public class ExportConfiguration
+    {
+
         #region Constructors
 
-        public ExportConfiguration() {
+        public ExportConfiguration()
+        {
             m_assemblyVersionTypes = AssemblyVersionTypeSelection.DefaultSelection;
             m_indentSubItems = true;
             m_indentSubItemsBy = 1;
@@ -197,71 +224,92 @@ namespace BuildAutoIncrement {
             m_csvSeparator = System.Globalization.CultureInfo.CurrentCulture.TextInfo.ListSeparator;
             Debug.Assert(m_assemblyVersionTypes != null && m_assemblyVersionTypes.Length == 3);
             Debug.Assert(m_printOptions != null);
-		}
+        }
 
         #endregion // Constructors
 
         #region Public properties
 
-        public AssemblyVersionTypeSelection[] AssemblyVersionTypes {
-            get {
+        public AssemblyVersionTypeSelection[] AssemblyVersionTypes
+        {
+            get
+            {
                 return m_assemblyVersionTypes;
             }
-            set {
+            set
+            {
                 m_assemblyVersionTypes = value;
             }
         }
 
-        public bool IndentSubItems {
-            get {
+        public bool IndentSubItems
+        {
+            get
+            {
                 return m_indentSubItems;
             }
-            set {
+            set
+            {
                 m_indentSubItems = value;
             }
         }
 
-        public int IndentSubItemsBy {
-            get {
+        public int IndentSubItemsBy
+        {
+            get
+            {
                 return m_indentSubItemsBy;
             }
-            set {
+            set
+            {
                 m_indentSubItemsBy = value;
             }
         }
 
-        public bool ExcludeNonversionableItems {
-            get {
+        public bool ExcludeNonversionableItems
+        {
+            get
+            {
                 return m_excludeNonversionableItems;
             }
-            set {
+            set
+            {
                 m_excludeNonversionableItems = value;
             }
         }
 
-        public PrintOptions PrintOptions {
-            get {
+        public PrintOptions PrintOptions
+        {
+            get
+            {
                 return m_printOptions;
             }
-            set {
+            set
+            {
                 m_printOptions = value;
             }
         }
 
-        public ExportFileFormat ExportFileFormat {
-            get {
+        public ExportFileFormat ExportFileFormat
+        {
+            get
+            {
                 return m_exportFileFormat;
             }
-            set {
+            set
+            {
                 m_exportFileFormat = value;
             }
         }
 
-        public string CsvSeparator {
-            get {
+        public string CsvSeparator
+        {
+            get
+            {
                 return m_csvSeparator;
             }
-            set {
+            set
+            {
                 m_csvSeparator = value;
             }
         }

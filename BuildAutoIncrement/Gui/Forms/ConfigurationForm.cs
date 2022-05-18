@@ -23,7 +23,6 @@
  * 3. This notice may not be removed or altered from any source distribution.
  */
 using System;
-using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
@@ -31,14 +30,17 @@ using System.Windows.Forms;
 
 using System.Windows.Forms.ColorPicker;
 
-namespace BuildAutoIncrement {
+namespace BuildAutoIncrement
+{
 
-	/// <summary>
-	///   Application settings form.
-	/// </summary>
-    public class ConfigurationForm : System.Windows.Forms.Form {
+    /// <summary>
+    ///   Application settings form.
+    /// </summary>
+    public class ConfigurationForm : System.Windows.Forms.Form
+    {
 
-        private enum ProjectListViewItemTypes {
+        private enum ProjectListViewItemTypes
+        {
             NotModifiedMarked,
             NotModifiedNotMarked,
             ModifiedMarked,
@@ -136,7 +138,8 @@ namespace BuildAutoIncrement {
 
         #region Constructor
 
-        public ConfigurationForm() {
+        public ConfigurationForm()
+        {
             InitializeComponent();
             VisualStyles.SetUseVisualStyleBackColor(m_tabControlSettings);
             VisualStyles.SetButtonFlatStyleSystem(this);
@@ -149,36 +152,41 @@ namespace BuildAutoIncrement {
 
         #region Public methods 
 
-        public VcbConfiguration GetConfiguration() {
+        public VcbConfiguration GetConfiguration()
+        {
             GetControlValues();
-            return m_configuration; 
+            return m_configuration;
         }
 
-        public bool NumberingSchemeHasChanged(NumberingOptions numberingOptions) {
-            return numberingOptions.UseDateTimeBasedBuildAndRevisionNumbering   != UseDateTimeBasedBuildAndRevisionNumbering
-                || numberingOptions.IncludeVCppResourceFiles                    != IncludeVCppResourceFiles
-                || numberingOptions.IncludeSetupProjects                        != IncludeSetupProjects
-                || numberingOptions.ApplyToAllTypes                             != ApplyToAllTabs
-                || numberingOptions.SynchronizeAllVersionTypes                  != SynchronizeAllVersionTypes
-                || numberingOptions.IncrementScheme                             != IncrementScheme
-                || numberingOptions.ResetBuildOnMajorIncrement                  != ResetBuildOnMajor
-                || numberingOptions.ResetBuildOnMinorIncrement                  != ResetBuildOnMinor
-                || numberingOptions.ResetRevisionOnMajorIncrement               != ResetRevisionOnMajor
-                || numberingOptions.ResetRevisionOnMinorIncrement               != ResetRevisionOnMinor
-                || numberingOptions.ResetRevisionOnBuildIncrement               != ResetRevisionOnBuild
-                || numberingOptions.ResetBuildAndRevisionTo                     != ResetBuildAndRevisionTo
-                || numberingOptions.ReplaceAsteriskWithVersionComponents        != ReplaceAsteriskWithComponentVersions;
+        public bool NumberingSchemeHasChanged(NumberingOptions numberingOptions)
+        {
+            return numberingOptions.UseDateTimeBasedBuildAndRevisionNumbering != UseDateTimeBasedBuildAndRevisionNumbering
+                || numberingOptions.IncludeVCppResourceFiles != IncludeVCppResourceFiles
+                || numberingOptions.IncludeSetupProjects != IncludeSetupProjects
+                || numberingOptions.ApplyToAllTypes != ApplyToAllTabs
+                || numberingOptions.SynchronizeAllVersionTypes != SynchronizeAllVersionTypes
+                || numberingOptions.IncrementScheme != IncrementScheme
+                || numberingOptions.ResetBuildOnMajorIncrement != ResetBuildOnMajor
+                || numberingOptions.ResetBuildOnMinorIncrement != ResetBuildOnMinor
+                || numberingOptions.ResetRevisionOnMajorIncrement != ResetRevisionOnMajor
+                || numberingOptions.ResetRevisionOnMinorIncrement != ResetRevisionOnMinor
+                || numberingOptions.ResetRevisionOnBuildIncrement != ResetRevisionOnBuild
+                || numberingOptions.ResetBuildAndRevisionTo != ResetBuildAndRevisionTo
+                || numberingOptions.ReplaceAsteriskWithVersionComponents != ReplaceAsteriskWithComponentVersions;
         }
 
-        public bool ListViewOptionsChanged(DisplayOptions options) {
+        public bool ListViewOptionsChanged(DisplayOptions options)
+        {
             return IndentSubProjectItems != options.IndentSubProjectItems || SubProjectsIndentation != options.SubProjectIndentation;
         }
 
-        public bool ProjectItemsToDisplayChanged(DisplayOptions options) {
+        public bool ProjectItemsToDisplayChanged(DisplayOptions options)
+        {
             return ShowSubProjectRoots != options.ShowSubProjectRoot || ShowEnterpriseTemplateProjectRoot != options.ShowEnterpriseTemplateProjectRoot || ShowNonVersionableProjects != options.ShowNonVersionableProjects || ShowEmptyFolders != options.ShowEmptyFolders;
         }
 
-        public bool ListViewColorsHasChanged(ProjectsListViewColorsConfiguration colors) {
+        public bool ListViewColorsHasChanged(ProjectsListViewColorsConfiguration colors)
+        {
             return m_configuration.DisplayOptions.Colors != colors;
         }
 
@@ -189,18 +197,22 @@ namespace BuildAutoIncrement {
         /// <summary>
         /// Clean up any resources being used.
         /// </summary>
-        protected override void Dispose(bool disposing) {
-            if (disposing) {
-                if (components != null) {
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                if (components != null)
+                {
                     components.Dispose();
                 }
             }
-            base.Dispose( disposing );
+            base.Dispose(disposing);
         }
 
-        protected override void OnLoad(EventArgs e) {
+        protected override void OnLoad(EventArgs e)
+        {
             base.OnLoad(e);
-            if (m_listBoxProjectListViewItems.SelectedIndex == -1) 
+            if (m_listBoxProjectListViewItems.SelectedIndex == -1)
                 m_listBoxProjectListViewItems.SelectedIndex = 0;
         }
 
@@ -211,7 +223,8 @@ namespace BuildAutoIncrement {
         /// Required method for Designer support - do not modify
         /// the contents of this method with the code editor.
         /// </summary>
-        private void InitializeComponent() {
+        private void InitializeComponent()
+        {
             System.Resources.ResourceManager resources = new System.Resources.ResourceManager(typeof(ConfigurationForm));
             this.m_checkBoxResetBuildOnMinor = new System.Windows.Forms.CheckBox();
             this.m_checkBoxResetRevisionOnBuild = new System.Windows.Forms.CheckBox();
@@ -300,7 +313,7 @@ namespace BuildAutoIncrement {
             // 
             // m_checkBoxResetBuildOnMinor
             // 
-            this.m_checkBoxResetBuildOnMinor.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.m_checkBoxResetBuildOnMinor.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                 | System.Windows.Forms.AnchorStyles.Right)));
             this.m_checkBoxResetBuildOnMinor.Location = new System.Drawing.Point(16, 38);
             this.m_checkBoxResetBuildOnMinor.Name = "m_checkBoxResetBuildOnMinor";
@@ -310,7 +323,7 @@ namespace BuildAutoIncrement {
             // 
             // m_checkBoxResetRevisionOnBuild
             // 
-            this.m_checkBoxResetRevisionOnBuild.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.m_checkBoxResetRevisionOnBuild.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                 | System.Windows.Forms.AnchorStyles.Right)));
             this.m_checkBoxResetRevisionOnBuild.Location = new System.Drawing.Point(16, 60);
             this.m_checkBoxResetRevisionOnBuild.Name = "m_checkBoxResetRevisionOnBuild";
@@ -320,7 +333,7 @@ namespace BuildAutoIncrement {
             // 
             // m_panelNumberingStyle
             // 
-            this.m_panelNumberingStyle.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.m_panelNumberingStyle.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                 | System.Windows.Forms.AnchorStyles.Right)));
             this.m_panelNumberingStyle.Controls.Add(this.m_numericUpDownIncrementBy);
             this.m_panelNumberingStyle.Controls.Add(this.label4);
@@ -361,7 +374,7 @@ namespace BuildAutoIncrement {
             // 
             // m_radioButtonMicrosoftScheme
             // 
-            this.m_radioButtonMicrosoftScheme.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.m_radioButtonMicrosoftScheme.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                 | System.Windows.Forms.AnchorStyles.Right)));
             this.m_radioButtonMicrosoftScheme.Location = new System.Drawing.Point(0, 64);
             this.m_radioButtonMicrosoftScheme.Name = "m_radioButtonMicrosoftScheme";
@@ -372,7 +385,7 @@ namespace BuildAutoIncrement {
             // 
             // m_comboBoxIncrement
             // 
-            this.m_comboBoxIncrement.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.m_comboBoxIncrement.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                 | System.Windows.Forms.AnchorStyles.Right)));
             this.m_comboBoxIncrement.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.m_comboBoxIncrement.Items.AddRange(new object[] {
@@ -397,7 +410,7 @@ namespace BuildAutoIncrement {
             // 
             // m_checkBoxResetRevisionOnMinor
             // 
-            this.m_checkBoxResetRevisionOnMinor.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.m_checkBoxResetRevisionOnMinor.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                 | System.Windows.Forms.AnchorStyles.Right)));
             this.m_checkBoxResetRevisionOnMinor.Location = new System.Drawing.Point(16, 38);
             this.m_checkBoxResetRevisionOnMinor.Name = "m_checkBoxResetRevisionOnMinor";
@@ -407,7 +420,7 @@ namespace BuildAutoIncrement {
             // 
             // m_checkBoxResetRevisionOnMajor
             // 
-            this.m_checkBoxResetRevisionOnMajor.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.m_checkBoxResetRevisionOnMajor.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                 | System.Windows.Forms.AnchorStyles.Right)));
             this.m_checkBoxResetRevisionOnMajor.Location = new System.Drawing.Point(16, 16);
             this.m_checkBoxResetRevisionOnMajor.Name = "m_checkBoxResetRevisionOnMajor";
@@ -417,7 +430,7 @@ namespace BuildAutoIncrement {
             // 
             // m_checkBoxResetBuildOnMajor
             // 
-            this.m_checkBoxResetBuildOnMajor.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.m_checkBoxResetBuildOnMajor.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                 | System.Windows.Forms.AnchorStyles.Right)));
             this.m_checkBoxResetBuildOnMajor.Location = new System.Drawing.Point(16, 16);
             this.m_checkBoxResetBuildOnMajor.Name = "m_checkBoxResetBuildOnMajor";
@@ -446,7 +459,7 @@ namespace BuildAutoIncrement {
             // 
             // m_checkBoxApplyToAllTabs
             // 
-            this.m_checkBoxApplyToAllTabs.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.m_checkBoxApplyToAllTabs.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                 | System.Windows.Forms.AnchorStyles.Right)));
             this.m_checkBoxApplyToAllTabs.Location = new System.Drawing.Point(16, 80);
             this.m_checkBoxApplyToAllTabs.Name = "m_checkBoxApplyToAllTabs";
@@ -456,7 +469,7 @@ namespace BuildAutoIncrement {
             // 
             // m_comboBoxDefaulVersionAttribute
             // 
-            this.m_comboBoxDefaulVersionAttribute.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.m_comboBoxDefaulVersionAttribute.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                 | System.Windows.Forms.AnchorStyles.Right)));
             this.m_comboBoxDefaulVersionAttribute.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.m_comboBoxDefaulVersionAttribute.Items.AddRange(new object[] {
@@ -479,8 +492,8 @@ namespace BuildAutoIncrement {
             // 
             // m_tabControlSettings
             // 
-            this.m_tabControlSettings.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-                | System.Windows.Forms.AnchorStyles.Left) 
+            this.m_tabControlSettings.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                | System.Windows.Forms.AnchorStyles.Left)
                 | System.Windows.Forms.AnchorStyles.Right)));
             this.m_tabControlSettings.Controls.Add(this.m_tabPageGeneral);
             this.m_tabControlSettings.Controls.Add(this.m_tabPageNumberingScheme);
@@ -525,7 +538,7 @@ namespace BuildAutoIncrement {
             // 
             // m_checkBoxSaveFilesBeforeRunningAddinCommand
             // 
-            this.m_checkBoxSaveFilesBeforeRunningAddinCommand.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.m_checkBoxSaveFilesBeforeRunningAddinCommand.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                 | System.Windows.Forms.AnchorStyles.Right)));
             this.m_checkBoxSaveFilesBeforeRunningAddinCommand.Checked = true;
             this.m_checkBoxSaveFilesBeforeRunningAddinCommand.CheckState = System.Windows.Forms.CheckState.Checked;
@@ -537,7 +550,7 @@ namespace BuildAutoIncrement {
             // 
             // m_labelAdditionalVersionFiles
             // 
-            this.m_labelAdditionalVersionFiles.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.m_labelAdditionalVersionFiles.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                 | System.Windows.Forms.AnchorStyles.Right)));
             this.m_labelAdditionalVersionFiles.Location = new System.Drawing.Point(8, 182);
             this.m_labelAdditionalVersionFiles.Name = "m_labelAdditionalVersionFiles";
@@ -547,7 +560,7 @@ namespace BuildAutoIncrement {
             // 
             // m_labelSetupProjects
             // 
-            this.m_labelSetupProjects.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.m_labelSetupProjects.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                 | System.Windows.Forms.AnchorStyles.Right)));
             this.m_labelSetupProjects.Location = new System.Drawing.Point(8, 244);
             this.m_labelSetupProjects.Name = "m_labelSetupProjects";
@@ -557,7 +570,7 @@ namespace BuildAutoIncrement {
             // 
             // m_checkBoxGenerateProductAndPackageCode
             // 
-            this.m_checkBoxGenerateProductAndPackageCode.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.m_checkBoxGenerateProductAndPackageCode.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                 | System.Windows.Forms.AnchorStyles.Right)));
             this.m_checkBoxGenerateProductAndPackageCode.Enabled = false;
             this.m_checkBoxGenerateProductAndPackageCode.Location = new System.Drawing.Point(16, 300);
@@ -568,7 +581,7 @@ namespace BuildAutoIncrement {
             // 
             // m_checkBoxIncludeSetupProjects
             // 
-            this.m_checkBoxIncludeSetupProjects.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.m_checkBoxIncludeSetupProjects.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                 | System.Windows.Forms.AnchorStyles.Right)));
             this.m_checkBoxIncludeSetupProjects.Location = new System.Drawing.Point(16, 268);
             this.m_checkBoxIncludeSetupProjects.Name = "m_checkBoxIncludeSetupProjects";
@@ -579,7 +592,7 @@ namespace BuildAutoIncrement {
             // 
             // m_checkBoxIncludeVcppResources
             // 
-            this.m_checkBoxIncludeVcppResources.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.m_checkBoxIncludeVcppResources.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                 | System.Windows.Forms.AnchorStyles.Right)));
             this.m_checkBoxIncludeVcppResources.Location = new System.Drawing.Point(16, 204);
             this.m_checkBoxIncludeVcppResources.Name = "m_checkBoxIncludeVcppResources";
@@ -589,7 +602,7 @@ namespace BuildAutoIncrement {
             // 
             // m_checkBoxSynchronizeAllTypes
             // 
-            this.m_checkBoxSynchronizeAllTypes.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.m_checkBoxSynchronizeAllTypes.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                 | System.Windows.Forms.AnchorStyles.Right)));
             this.m_checkBoxSynchronizeAllTypes.Location = new System.Drawing.Point(16, 112);
             this.m_checkBoxSynchronizeAllTypes.Name = "m_checkBoxSynchronizeAllTypes";
@@ -648,7 +661,7 @@ namespace BuildAutoIncrement {
             // 
             // m_groupBoxResetRevision
             // 
-            this.m_groupBoxResetRevision.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.m_groupBoxResetRevision.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                 | System.Windows.Forms.AnchorStyles.Right)));
             this.m_groupBoxResetRevision.Controls.Add(this.m_checkBoxResetRevisionOnMajor);
             this.m_groupBoxResetRevision.Controls.Add(this.m_checkBoxResetRevisionOnMinor);
@@ -662,7 +675,7 @@ namespace BuildAutoIncrement {
             // 
             // m_groupBoxResetBuild
             // 
-            this.m_groupBoxResetBuild.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.m_groupBoxResetBuild.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                 | System.Windows.Forms.AnchorStyles.Right)));
             this.m_groupBoxResetBuild.Controls.Add(this.m_checkBoxResetBuildOnMajor);
             this.m_groupBoxResetBuild.Controls.Add(this.m_checkBoxResetBuildOnMinor);
@@ -764,8 +777,8 @@ namespace BuildAutoIncrement {
             // 
             // m_groupBoxColors
             // 
-            this.m_groupBoxColors.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-                | System.Windows.Forms.AnchorStyles.Left) 
+            this.m_groupBoxColors.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                | System.Windows.Forms.AnchorStyles.Left)
                 | System.Windows.Forms.AnchorStyles.Right)));
             this.m_groupBoxColors.Controls.Add(this.m_listBoxProjectListViewItems);
             this.m_groupBoxColors.Controls.Add(this.m_labelSample);
@@ -780,8 +793,8 @@ namespace BuildAutoIncrement {
             // 
             // m_listBoxProjectListViewItems
             // 
-            this.m_listBoxProjectListViewItems.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-                | System.Windows.Forms.AnchorStyles.Left) 
+            this.m_listBoxProjectListViewItems.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                | System.Windows.Forms.AnchorStyles.Left)
                 | System.Windows.Forms.AnchorStyles.Right)));
             this.m_listBoxProjectListViewItems.Items.AddRange(new object[] {
                                                                                "Not modified project marked",
@@ -842,7 +855,7 @@ namespace BuildAutoIncrement {
             // 
             // m_checkBoxFinalNotification
             // 
-            this.m_checkBoxFinalNotification.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.m_checkBoxFinalNotification.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                 | System.Windows.Forms.AnchorStyles.Right)));
             this.m_checkBoxFinalNotification.Location = new System.Drawing.Point(16, 192);
             this.m_checkBoxFinalNotification.Name = "m_checkBoxFinalNotification";
@@ -865,7 +878,7 @@ namespace BuildAutoIncrement {
             // 
             // m_radioButtonIncrementAllIndependently
             // 
-            this.m_radioButtonIncrementAllIndependently.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.m_radioButtonIncrementAllIndependently.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                 | System.Windows.Forms.AnchorStyles.Right)));
             this.m_radioButtonIncrementAllIndependently.Location = new System.Drawing.Point(16, 56);
             this.m_radioButtonIncrementAllIndependently.Name = "m_radioButtonIncrementAllIndependently";
@@ -875,7 +888,7 @@ namespace BuildAutoIncrement {
             // 
             // m_radioButtonSynchronizeToHighestValue
             // 
-            this.m_radioButtonSynchronizeToHighestValue.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.m_radioButtonSynchronizeToHighestValue.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                 | System.Windows.Forms.AnchorStyles.Right)));
             this.m_radioButtonSynchronizeToHighestValue.Location = new System.Drawing.Point(16, 88);
             this.m_radioButtonSynchronizeToHighestValue.Name = "m_radioButtonSynchronizeToHighestValue";
@@ -885,7 +898,7 @@ namespace BuildAutoIncrement {
             // 
             // m_radioButtonIncrementAndSynchronize
             // 
-            this.m_radioButtonIncrementAndSynchronize.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.m_radioButtonIncrementAndSynchronize.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                 | System.Windows.Forms.AnchorStyles.Right)));
             this.m_radioButtonIncrementAndSynchronize.Location = new System.Drawing.Point(16, 120);
             this.m_radioButtonIncrementAndSynchronize.Name = "m_radioButtonIncrementAndSynchronize";
@@ -895,7 +908,7 @@ namespace BuildAutoIncrement {
             // 
             // m_radioButtonIncrementModifiedIndependently
             // 
-            this.m_radioButtonIncrementModifiedIndependently.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.m_radioButtonIncrementModifiedIndependently.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                 | System.Windows.Forms.AnchorStyles.Right)));
             this.m_radioButtonIncrementModifiedIndependently.Checked = true;
             this.m_radioButtonIncrementModifiedIndependently.Location = new System.Drawing.Point(16, 24);
@@ -1072,80 +1085,96 @@ namespace BuildAutoIncrement {
 
         #region Private properties
 
-        private bool SaveFilesBeforeRunningAddinCommand {
+        private bool SaveFilesBeforeRunningAddinCommand
+        {
             get { return m_checkBoxSaveFilesBeforeRunningAddinCommand.Checked; }
             set { m_checkBoxSaveFilesBeforeRunningAddinCommand.Checked = value; }
         }
 
-        private AssemblyVersionType DefaultVersionType {
-            get { 
-                switch (m_comboBoxDefaulVersionAttribute.SelectedIndex) {
-                case 0:
-                    return AssemblyVersionType.AssemblyVersion;
-                case 1:
-                    return AssemblyVersionType.AssemblyFileVersion;
-                case 2:
-                    return AssemblyVersionType.AssemblyInformationalVersion;
+        private AssemblyVersionType DefaultVersionType
+        {
+            get
+            {
+                switch (m_comboBoxDefaulVersionAttribute.SelectedIndex)
+                {
+                    case 0:
+                        return AssemblyVersionType.AssemblyVersion;
+                    case 1:
+                        return AssemblyVersionType.AssemblyFileVersion;
+                    case 2:
+                        return AssemblyVersionType.AssemblyInformationalVersion;
                 }
                 return AssemblyVersionType.All;
             }
-            set { 
-                switch (value) {
-                case AssemblyVersionType.AssemblyVersion:
-                    m_comboBoxDefaulVersionAttribute.SelectedIndex = 0;
-                    break;
-                case AssemblyVersionType.AssemblyFileVersion:
-                    m_comboBoxDefaulVersionAttribute.SelectedIndex = 1;
-                    break;
-                case AssemblyVersionType.AssemblyInformationalVersion:
-                    m_comboBoxDefaulVersionAttribute.SelectedIndex = 2;
-                    break;
+            set
+            {
+                switch (value)
+                {
+                    case AssemblyVersionType.AssemblyVersion:
+                        m_comboBoxDefaulVersionAttribute.SelectedIndex = 0;
+                        break;
+                    case AssemblyVersionType.AssemblyFileVersion:
+                        m_comboBoxDefaulVersionAttribute.SelectedIndex = 1;
+                        break;
+                    case AssemblyVersionType.AssemblyInformationalVersion:
+                        m_comboBoxDefaulVersionAttribute.SelectedIndex = 2;
+                        break;
                 }
             }
         }
 
-        private int IncrementBy {
+        private int IncrementBy
+        {
             get { return (int)m_numericUpDownIncrementBy.Value; }
             set { m_numericUpDownIncrementBy.Value = value; }
         }
 
-        private bool ApplyToAllTabs {
+        private bool ApplyToAllTabs
+        {
             get { return m_checkBoxApplyToAllTabs.Checked; }
             set { m_checkBoxApplyToAllTabs.Checked = value; }
         }
 
-        private bool SynchronizeAllVersionTypes {
+        private bool SynchronizeAllVersionTypes
+        {
             get { return m_checkBoxSynchronizeAllTypes.Checked; }
             set { m_checkBoxSynchronizeAllTypes.Checked = value; }
         }
 
-        private bool DontWarnInvalidInformationalVersion {
+        private bool DontWarnInvalidInformationalVersion
+        {
             get { return m_checkBoxDontWarnInvalidInformationalVersion.Checked; }
             set { m_checkBoxDontWarnInvalidInformationalVersion.Checked = value; }
         }
 
-        private bool IncludeVCppResourceFiles {
+        private bool IncludeVCppResourceFiles
+        {
             get { return m_checkBoxIncludeVcppResources.Checked; }
             set { m_checkBoxIncludeVcppResources.Checked = value; }
         }
 
-        private bool IncludeSetupProjects {
+        private bool IncludeSetupProjects
+        {
             get { return m_checkBoxIncludeSetupProjects.Checked; }
             set { m_checkBoxIncludeSetupProjects.Checked = value; }
         }
 
-        private bool GeneratePackageAndProductCodes {
+        private bool GeneratePackageAndProductCodes
+        {
             get { return m_checkBoxGenerateProductAndPackageCode.Checked; }
             set { m_checkBoxGenerateProductAndPackageCode.Checked = value; }
         }
 
-        private IncrementScheme IncrementScheme {
+        private IncrementScheme IncrementScheme
+        {
             get { return (IncrementScheme)m_comboBoxIncrement.SelectedIndex; }
             set { m_comboBoxIncrement.SelectedIndex = (int)value; }
         }
 
-        private BatchCommandIncrementScheme BatchCommandIncrementScheme {
-            get {
+        private BatchCommandIncrementScheme BatchCommandIncrementScheme
+        {
+            get
+            {
                 if (m_radioButtonIncrementModifiedIndependently.Checked)
                     return BatchCommandIncrementScheme.IncrementModifiedIndependently;
                 if (m_radioButtonIncrementAllIndependently.Checked)
@@ -1157,248 +1186,283 @@ namespace BuildAutoIncrement {
                 Debug.Assert(false, "Not supported option");
                 return BatchCommandIncrementScheme.IncrementModifiedIndependently;
             }
-            set {
-                switch (value) {
-                case BatchCommandIncrementScheme.IncrementModifiedIndependently:
-                    m_radioButtonIncrementModifiedIndependently.Checked = true;
-                    break;
-                case BatchCommandIncrementScheme.IncrementAllIndependently:
-                    m_radioButtonIncrementAllIndependently.Checked = true;
-                    break;
-                case BatchCommandIncrementScheme.IncrementModifiedOnlyAndSynchronize:
-                    m_radioButtonSynchronizeToHighestValue.Checked = true;
-                    break;
-                case BatchCommandIncrementScheme.IncrementAllAndSynchronize:
-                    m_radioButtonIncrementAndSynchronize.Checked = true;
-                    break;
-                default:
-                    Debug.Assert(false, "Not supported option");
-                    break;
+            set
+            {
+                switch (value)
+                {
+                    case BatchCommandIncrementScheme.IncrementModifiedIndependently:
+                        m_radioButtonIncrementModifiedIndependently.Checked = true;
+                        break;
+                    case BatchCommandIncrementScheme.IncrementAllIndependently:
+                        m_radioButtonIncrementAllIndependently.Checked = true;
+                        break;
+                    case BatchCommandIncrementScheme.IncrementModifiedOnlyAndSynchronize:
+                        m_radioButtonSynchronizeToHighestValue.Checked = true;
+                        break;
+                    case BatchCommandIncrementScheme.IncrementAllAndSynchronize:
+                        m_radioButtonIncrementAndSynchronize.Checked = true;
+                        break;
+                    default:
+                        Debug.Assert(false, "Not supported option");
+                        break;
                 }
             }
         }
 
-        private bool ShowSuccessDialog {
+        private bool ShowSuccessDialog
+        {
             get { return m_checkBoxFinalNotification.Checked; }
             set { m_checkBoxFinalNotification.Checked = value; }
         }
 
-        private bool UseDateTimeBasedBuildAndRevisionNumbering {
+        private bool UseDateTimeBasedBuildAndRevisionNumbering
+        {
             get { return m_radioButtonMicrosoftScheme.Checked; }
             set { m_radioButtonMicrosoftScheme.Checked = value; }
         }
 
-        private bool ResetBuildOnMajor {
+        private bool ResetBuildOnMajor
+        {
             get { return m_checkBoxResetBuildOnMajor.Checked; }
             set { m_checkBoxResetBuildOnMajor.Checked = value; }
         }
 
-        private bool ResetBuildOnMinor {
+        private bool ResetBuildOnMinor
+        {
             get { return m_checkBoxResetBuildOnMinor.Checked; }
             set { m_checkBoxResetBuildOnMinor.Checked = value; }
         }
 
-        private bool ResetRevisionOnMajor {
+        private bool ResetRevisionOnMajor
+        {
             get { return m_checkBoxResetRevisionOnMajor.Checked; }
             set { m_checkBoxResetRevisionOnMajor.Checked = value; }
         }
 
-        private bool ResetRevisionOnMinor {
+        private bool ResetRevisionOnMinor
+        {
             get { return m_checkBoxResetRevisionOnMinor.Checked; }
             set { m_checkBoxResetRevisionOnMinor.Checked = value; }
         }
 
-        private bool ResetRevisionOnBuild {
+        private bool ResetRevisionOnBuild
+        {
             get { return m_checkBoxResetRevisionOnBuild.Checked; }
             set { m_checkBoxResetRevisionOnBuild.Checked = value; }
         }
 
-        private ResetBuildAndRevision ResetBuildAndRevisionTo {
+        private ResetBuildAndRevision ResetBuildAndRevisionTo
+        {
             get { return m_radioButtonResetTo0.Checked ? ResetBuildAndRevision.ToZero : ResetBuildAndRevision.ToOne; }
-            set { 
-                m_radioButtonResetTo0.Checked = value == ResetBuildAndRevision.ToZero; 
-                m_radioButtonResetTo1.Checked = value == ResetBuildAndRevision.ToOne; 
+            set
+            {
+                m_radioButtonResetTo0.Checked = value == ResetBuildAndRevision.ToZero;
+                m_radioButtonResetTo1.Checked = value == ResetBuildAndRevision.ToOne;
             }
         }
 
-        private bool ReplaceAsteriskWithComponentVersions {
+        private bool ReplaceAsteriskWithComponentVersions
+        {
             get { return m_checkBoxReplaceWildcards.Checked; }
             set { m_checkBoxReplaceWildcards.Checked = value; }
         }
 
-        private bool IndentSubProjectItems {
+        private bool IndentSubProjectItems
+        {
             get { return m_checkBoxIndentSubProjects.Checked; }
             set { m_checkBoxIndentSubProjects.Checked = value; }
         }
 
-        private int SubProjectsIndentation {
+        private int SubProjectsIndentation
+        {
             get { return (int)m_numericUpDownSubProjectIndentation.Value; }
             set { m_numericUpDownSubProjectIndentation.Value = value; }
         }
 
-        private bool ShowSubProjectRoots {
+        private bool ShowSubProjectRoots
+        {
             get { return m_checkBoxShowSubProjectRoot.Checked; }
-            set { 
-                m_checkBoxShowSubProjectRoot.Checked = value; 
+            set
+            {
+                m_checkBoxShowSubProjectRoot.Checked = value;
                 EnableShowEmptySubfolderCheckbox();
             }
         }
 
-        private bool ShowEnterpriseTemplateProjectRoot {
+        private bool ShowEnterpriseTemplateProjectRoot
+        {
             get { return m_checkBoxShowEnterpriseTemplateRoot.Checked; }
-            set { 
-                m_checkBoxShowEnterpriseTemplateRoot.Checked = value; 
+            set
+            {
+                m_checkBoxShowEnterpriseTemplateRoot.Checked = value;
                 EnableShowEmptySubfolderCheckbox();
             }
         }
 
-        private bool ShowEmptyFolders {
+        private bool ShowEmptyFolders
+        {
             get { return m_checkBoxShowEmptyFolder.Checked; }
             set { m_checkBoxShowEmptyFolder.Checked = value; }
         }
 
-        private bool ShowNonVersionableProjects {
+        private bool ShowNonVersionableProjects
+        {
             get { return m_checkBoxShowNonVersionableProjects.Checked; }
             set { m_checkBoxShowNonVersionableProjects.Checked = value; }
         }
 
-        private FolderConfiguration SourceSafeFolderConfiguration {
-            get {
+        private FolderConfiguration SourceSafeFolderConfiguration
+        {
+            get
+            {
                 FolderConfiguration fc = new FolderConfiguration();
                 fc.IsAvailable = m_checkBoxSourceSafeInstalled.Checked;
                 fc.Folder = m_textBoxSourceSafePath.Text;
-                return fc; 
+                return fc;
             }
-            set {
+            set
+            {
                 m_checkBoxSourceSafeInstalled.Checked = value.IsAvailable;
                 m_textBoxSourceSafePath.Text = value.Folder;
             }
         }
-        
-        private FolderConfiguration IisFolderConfiguration {
-            get {
+
+        private FolderConfiguration IisFolderConfiguration
+        {
+            get
+            {
                 FolderConfiguration fc = new FolderConfiguration();
                 fc.IsAvailable = m_checkBoxIisInstalled.Checked;
                 fc.Folder = m_textBoxIisRoot.Text;
-                return fc; 
+                return fc;
             }
-            set {
+            set
+            {
                 m_checkBoxIisInstalled.Checked = value.IsAvailable;
                 m_textBoxIisRoot.Text = value.Folder;
             }
         }
 
-        private ExportConfiguration ExportConfiguration {
-            get {
+        private ExportConfiguration ExportConfiguration
+        {
+            get
+            {
                 return m_userControlExportOptions.ExportConfiguration;
             }
-            set {
+            set
+            {
                 m_userControlExportOptions.ExportConfiguration = value;
             }
         }
-        
+
         #endregion // Private properties
 
         #region Control event handlers 
 
-        private void m_radioButtonMicrosoftScheme_CheckedChanged(object sender, System.EventArgs e) {
-            m_comboBoxIncrement.Enabled             = !m_radioButtonMicrosoftScheme.Checked;
-            m_numericUpDownIncrementBy.Enabled      = !m_radioButtonMicrosoftScheme.Checked;
-            m_checkBoxResetBuildOnMajor.Enabled     = !m_radioButtonMicrosoftScheme.Checked;
-            m_checkBoxResetBuildOnMinor.Enabled     = !m_radioButtonMicrosoftScheme.Checked;
-            m_checkBoxResetRevisionOnMajor.Enabled  = !m_radioButtonMicrosoftScheme.Checked;
-            m_checkBoxResetRevisionOnMinor.Enabled  = !m_radioButtonMicrosoftScheme.Checked;
-            m_checkBoxResetRevisionOnBuild.Enabled  = !m_radioButtonMicrosoftScheme.Checked;
-            m_radioButtonResetTo0.Enabled           = !m_radioButtonMicrosoftScheme.Checked;
-            m_radioButtonResetTo1.Enabled           = !m_radioButtonMicrosoftScheme.Checked;
+        private void m_radioButtonMicrosoftScheme_CheckedChanged(object sender, System.EventArgs e)
+        {
+            m_comboBoxIncrement.Enabled = !m_radioButtonMicrosoftScheme.Checked;
+            m_numericUpDownIncrementBy.Enabled = !m_radioButtonMicrosoftScheme.Checked;
+            m_checkBoxResetBuildOnMajor.Enabled = !m_radioButtonMicrosoftScheme.Checked;
+            m_checkBoxResetBuildOnMinor.Enabled = !m_radioButtonMicrosoftScheme.Checked;
+            m_checkBoxResetRevisionOnMajor.Enabled = !m_radioButtonMicrosoftScheme.Checked;
+            m_checkBoxResetRevisionOnMinor.Enabled = !m_radioButtonMicrosoftScheme.Checked;
+            m_checkBoxResetRevisionOnBuild.Enabled = !m_radioButtonMicrosoftScheme.Checked;
+            m_radioButtonResetTo0.Enabled = !m_radioButtonMicrosoftScheme.Checked;
+            m_radioButtonResetTo1.Enabled = !m_radioButtonMicrosoftScheme.Checked;
         }
 
-        private void OnColorSelected(object sender, ColorSelectedEventArgs e) {
+        private void OnColorSelected(object sender, ColorSelectedEventArgs e)
+        {
             Debug.Assert(m_configuration.DisplayOptions.Colors != null);
-            switch (m_listBoxProjectListViewItems.SelectedIndex) {
-            case (int)ProjectListViewItemTypes.NotModifiedMarked:
-                m_labelSample.ForeColor = m_configuration.DisplayOptions.Colors.NotModifiedMarked = e.ColorSelected;
-                break;
-            case (int)ProjectListViewItemTypes.NotModifiedNotMarked:
-                m_labelSample.ForeColor = m_configuration.DisplayOptions.Colors.NotModifiedNotMarked = e.ColorSelected;
-                break;
-            case (int)ProjectListViewItemTypes.ModifiedMarked:
-                m_labelSample.ForeColor = m_configuration.DisplayOptions.Colors.ModifiedMarked = e.ColorSelected;
-                break;
-            case (int)ProjectListViewItemTypes.ModifiedNotMarked:
-                m_labelSample.ForeColor = m_configuration.DisplayOptions.Colors.ModifiedNotMarked = e.ColorSelected;
-                break;
-            case (int)ProjectListViewItemTypes.IllegalVersionMarked:
-                m_labelSample.ForeColor = m_configuration.DisplayOptions.Colors.InvalidVersionMarked = e.ColorSelected;
-                break;
-            case (int)ProjectListViewItemTypes.IllegalVersionUnmarked:
-                m_labelSample.ForeColor = m_configuration.DisplayOptions.Colors.InvalidVersionNotMarked = e.ColorSelected;
-                break;
-            case (int)ProjectListViewItemTypes.NoVersion:
-                m_labelSample.ForeColor = m_configuration.DisplayOptions.Colors.NoVersion = e.ColorSelected;
-                break;
-            case (int)ProjectListViewItemTypes.SubProjectRoot:
-                m_labelSample.ForeColor = m_configuration.DisplayOptions.Colors.SubProjectRoot = e.ColorSelected;
-                break;
-            case (int)ProjectListViewItemTypes.ReportVersionUpdated:
-                m_labelSample.ForeColor = m_configuration.DisplayOptions.Colors.ReportUpdatedVersion = e.ColorSelected;
-                break;
-            case (int)ProjectListViewItemTypes.ReportNoVersionChange:
-                m_labelSample.ForeColor = m_configuration.DisplayOptions.Colors.ReportVersionNotChanged = e.ColorSelected;
-                break;
-            case (int)ProjectListViewItemTypes.ReportVersionUpdateFailed:
-                m_labelSample.ForeColor = m_configuration.DisplayOptions.Colors.ReportVersionUpdateFailed = e.ColorSelected;
-                break;
-            default:
-                Debug.Assert(false, "Not supported color configuration.");
-                break;
+            switch (m_listBoxProjectListViewItems.SelectedIndex)
+            {
+                case (int)ProjectListViewItemTypes.NotModifiedMarked:
+                    m_labelSample.ForeColor = m_configuration.DisplayOptions.Colors.NotModifiedMarked = e.ColorSelected;
+                    break;
+                case (int)ProjectListViewItemTypes.NotModifiedNotMarked:
+                    m_labelSample.ForeColor = m_configuration.DisplayOptions.Colors.NotModifiedNotMarked = e.ColorSelected;
+                    break;
+                case (int)ProjectListViewItemTypes.ModifiedMarked:
+                    m_labelSample.ForeColor = m_configuration.DisplayOptions.Colors.ModifiedMarked = e.ColorSelected;
+                    break;
+                case (int)ProjectListViewItemTypes.ModifiedNotMarked:
+                    m_labelSample.ForeColor = m_configuration.DisplayOptions.Colors.ModifiedNotMarked = e.ColorSelected;
+                    break;
+                case (int)ProjectListViewItemTypes.IllegalVersionMarked:
+                    m_labelSample.ForeColor = m_configuration.DisplayOptions.Colors.InvalidVersionMarked = e.ColorSelected;
+                    break;
+                case (int)ProjectListViewItemTypes.IllegalVersionUnmarked:
+                    m_labelSample.ForeColor = m_configuration.DisplayOptions.Colors.InvalidVersionNotMarked = e.ColorSelected;
+                    break;
+                case (int)ProjectListViewItemTypes.NoVersion:
+                    m_labelSample.ForeColor = m_configuration.DisplayOptions.Colors.NoVersion = e.ColorSelected;
+                    break;
+                case (int)ProjectListViewItemTypes.SubProjectRoot:
+                    m_labelSample.ForeColor = m_configuration.DisplayOptions.Colors.SubProjectRoot = e.ColorSelected;
+                    break;
+                case (int)ProjectListViewItemTypes.ReportVersionUpdated:
+                    m_labelSample.ForeColor = m_configuration.DisplayOptions.Colors.ReportUpdatedVersion = e.ColorSelected;
+                    break;
+                case (int)ProjectListViewItemTypes.ReportNoVersionChange:
+                    m_labelSample.ForeColor = m_configuration.DisplayOptions.Colors.ReportVersionNotChanged = e.ColorSelected;
+                    break;
+                case (int)ProjectListViewItemTypes.ReportVersionUpdateFailed:
+                    m_labelSample.ForeColor = m_configuration.DisplayOptions.Colors.ReportVersionUpdateFailed = e.ColorSelected;
+                    break;
+                default:
+                    Debug.Assert(false, "Not supported color configuration.");
+                    break;
             }
         }
 
-        private void m_listBoxProjectListViewItems_SelectedIndexChanged(object sender, System.EventArgs e) {
+        private void m_listBoxProjectListViewItems_SelectedIndexChanged(object sender, System.EventArgs e)
+        {
             Debug.Assert(m_configuration.DisplayOptions.Colors != null);
             Debug.Assert(m_listBoxProjectListViewItems.SelectedIndex < Enum.GetValues(typeof(ProjectListViewItemTypes)).Length);
-            switch (m_listBoxProjectListViewItems.SelectedIndex) {
-            case (int)ProjectListViewItemTypes.NotModifiedMarked:
-                m_labelSample.ForeColor = m_configuration.DisplayOptions.Colors.NotModifiedMarked;
-                break;
-            case (int)ProjectListViewItemTypes.NotModifiedNotMarked:
-                m_labelSample.ForeColor = m_configuration.DisplayOptions.Colors.NotModifiedNotMarked;
-                break;
-            case (int)ProjectListViewItemTypes.ModifiedMarked:
-                m_labelSample.ForeColor = m_configuration.DisplayOptions.Colors.ModifiedMarked;
-                break;
-            case (int)ProjectListViewItemTypes.ModifiedNotMarked:
-                m_labelSample.ForeColor = m_configuration.DisplayOptions.Colors.ModifiedNotMarked;
-                break;
-            case (int)ProjectListViewItemTypes.IllegalVersionMarked:
-                m_labelSample.ForeColor = m_configuration.DisplayOptions.Colors.InvalidVersionMarked;
-                break;
-            case (int)ProjectListViewItemTypes.IllegalVersionUnmarked:
-                m_labelSample.ForeColor = m_configuration.DisplayOptions.Colors.InvalidVersionNotMarked;
-                break;
-            case (int)ProjectListViewItemTypes.NoVersion:
-                m_labelSample.ForeColor = m_configuration.DisplayOptions.Colors.NoVersion;
-                break;
-            case (int)ProjectListViewItemTypes.SubProjectRoot:
-                m_labelSample.ForeColor = m_configuration.DisplayOptions.Colors.SubProjectRoot;
-                break;
-            case (int)ProjectListViewItemTypes.ReportVersionUpdated:
-                m_labelSample.ForeColor = m_configuration.DisplayOptions.Colors.ReportUpdatedVersion;
-                break;
-            case (int)ProjectListViewItemTypes.ReportNoVersionChange:
-                m_labelSample.ForeColor = m_configuration.DisplayOptions.Colors.ReportVersionNotChanged;
-                break;
-            case (int)ProjectListViewItemTypes.ReportVersionUpdateFailed:
-                m_labelSample.ForeColor = m_configuration.DisplayOptions.Colors.ReportVersionUpdateFailed = m_configuration.DisplayOptions.Colors.ReportVersionUpdateFailed;
-                break;
-            default:
-                Debug.Assert(false, "Not supported color configuration.");
-                break;
+            switch (m_listBoxProjectListViewItems.SelectedIndex)
+            {
+                case (int)ProjectListViewItemTypes.NotModifiedMarked:
+                    m_labelSample.ForeColor = m_configuration.DisplayOptions.Colors.NotModifiedMarked;
+                    break;
+                case (int)ProjectListViewItemTypes.NotModifiedNotMarked:
+                    m_labelSample.ForeColor = m_configuration.DisplayOptions.Colors.NotModifiedNotMarked;
+                    break;
+                case (int)ProjectListViewItemTypes.ModifiedMarked:
+                    m_labelSample.ForeColor = m_configuration.DisplayOptions.Colors.ModifiedMarked;
+                    break;
+                case (int)ProjectListViewItemTypes.ModifiedNotMarked:
+                    m_labelSample.ForeColor = m_configuration.DisplayOptions.Colors.ModifiedNotMarked;
+                    break;
+                case (int)ProjectListViewItemTypes.IllegalVersionMarked:
+                    m_labelSample.ForeColor = m_configuration.DisplayOptions.Colors.InvalidVersionMarked;
+                    break;
+                case (int)ProjectListViewItemTypes.IllegalVersionUnmarked:
+                    m_labelSample.ForeColor = m_configuration.DisplayOptions.Colors.InvalidVersionNotMarked;
+                    break;
+                case (int)ProjectListViewItemTypes.NoVersion:
+                    m_labelSample.ForeColor = m_configuration.DisplayOptions.Colors.NoVersion;
+                    break;
+                case (int)ProjectListViewItemTypes.SubProjectRoot:
+                    m_labelSample.ForeColor = m_configuration.DisplayOptions.Colors.SubProjectRoot;
+                    break;
+                case (int)ProjectListViewItemTypes.ReportVersionUpdated:
+                    m_labelSample.ForeColor = m_configuration.DisplayOptions.Colors.ReportUpdatedVersion;
+                    break;
+                case (int)ProjectListViewItemTypes.ReportNoVersionChange:
+                    m_labelSample.ForeColor = m_configuration.DisplayOptions.Colors.ReportVersionNotChanged;
+                    break;
+                case (int)ProjectListViewItemTypes.ReportVersionUpdateFailed:
+                    m_labelSample.ForeColor = m_configuration.DisplayOptions.Colors.ReportVersionUpdateFailed = m_configuration.DisplayOptions.Colors.ReportVersionUpdateFailed;
+                    break;
+                default:
+                    Debug.Assert(false, "Not supported color configuration.");
+                    break;
             }
         }
 
-        private void m_buttonSelectColor_Click(object sender, System.EventArgs e) {
+        private void m_buttonSelectColor_Click(object sender, System.EventArgs e)
+        {
             m_colorsForm.Color = m_labelSample.ForeColor;
             // places the window right to the button
             m_colorsForm.Location = PointToScreen(new Point(m_tabControlSettings.Left + m_tabPageAppearance.Left + m_groupBoxColors.Left + m_buttonSelectColor.Right, m_tabControlSettings.Top + m_tabPageAppearance.Top + m_groupBoxColors.Top + m_buttonSelectColor.Top /*- m_colorsForm.ClientRectangle.Height*/));
@@ -1406,45 +1470,55 @@ namespace BuildAutoIncrement {
                 m_colorsForm.Show();
         }
 
-        private void m_checkBoxSynchronizeAllTypes_CheckedChanged(object sender, System.EventArgs e) {
+        private void m_checkBoxSynchronizeAllTypes_CheckedChanged(object sender, System.EventArgs e)
+        {
             if (m_checkBoxSynchronizeAllTypes.Checked)
-                m_checkBoxApplyToAllTabs.Checked = true;;
+                m_checkBoxApplyToAllTabs.Checked = true; ;
             m_checkBoxApplyToAllTabs.Enabled = !m_checkBoxSynchronizeAllTypes.Checked;
         }
 
-        private void m_checkBoxIndentSubProjects_CheckedChanged(object sender, System.EventArgs e) {
+        private void m_checkBoxIndentSubProjects_CheckedChanged(object sender, System.EventArgs e)
+        {
             m_numericUpDownSubProjectIndentation.Enabled = m_checkBoxIndentSubProjects.Checked;
         }
 
-        private void m_checkBoxIncludeSetupProjects_CheckedChanged(object sender, System.EventArgs e) {
+        private void m_checkBoxIncludeSetupProjects_CheckedChanged(object sender, System.EventArgs e)
+        {
             m_checkBoxGenerateProductAndPackageCode.Enabled = m_checkBoxIncludeSetupProjects.Checked;
         }
 
-        private void m_checkBoxShowSubProjectRoot_CheckedChanged(object sender, System.EventArgs e) {
+        private void m_checkBoxShowSubProjectRoot_CheckedChanged(object sender, System.EventArgs e)
+        {
             EnableShowEmptySubfolderCheckbox();
         }
 
-        private void m_checkBoxShowEnterpriseTemplateRoot_CheckedChanged(object sender, System.EventArgs e) {
+        private void m_checkBoxShowEnterpriseTemplateRoot_CheckedChanged(object sender, System.EventArgs e)
+        {
             EnableShowEmptySubfolderCheckbox();
         }
 
-        private void EnableShowEmptySubfolderCheckbox() {
+        private void EnableShowEmptySubfolderCheckbox()
+        {
             m_checkBoxShowEmptyFolder.Enabled = m_checkBoxShowSubProjectRoot.Checked || m_checkBoxShowEnterpriseTemplateRoot.Checked;
         }
 
-        private void m_checkBoxSourceSafeInstalled_CheckedChanged(object sender, System.EventArgs e) {
+        private void m_checkBoxSourceSafeInstalled_CheckedChanged(object sender, System.EventArgs e)
+        {
             m_textBoxSourceSafePath.Enabled = m_checkBoxSourceSafeInstalled.Checked;
             m_buttonBrowseSourceSafe.Enabled = m_checkBoxSourceSafeInstalled.Checked;
         }
 
-        private void m_checkBoxIisInstalled_CheckedChanged(object sender, System.EventArgs e) {
+        private void m_checkBoxIisInstalled_CheckedChanged(object sender, System.EventArgs e)
+        {
             m_textBoxIisRoot.Enabled = m_checkBoxIisInstalled.Checked;
             m_buttonBrowseIisRoot.Enabled = m_checkBoxIisInstalled.Checked;
         }
 
-        private void m_buttonBrowseSourceSafe_Click(object sender, System.EventArgs e) {
+        private void m_buttonBrowseSourceSafe_Click(object sender, System.EventArgs e)
+        {
             string path = m_textBoxSourceSafePath.Text;
-            if (!Path.IsPathRooted(path)) {
+            if (!Path.IsPathRooted(path))
+            {
                 path = SourceSafeLocator.Instance.SourceSafeRoot;
             }
             OpenFileDialog dlg = new OpenFileDialog();
@@ -1452,14 +1526,17 @@ namespace BuildAutoIncrement {
             dlg.FileName = "ss.exe";
             dlg.Filter = m_txtSourceSafeFolderFilter;
             dlg.Title = m_txtSourceSafeFolderTitle;
-            if (dlg.ShowDialog() == DialogResult.OK) {
+            if (dlg.ShowDialog() == DialogResult.OK)
+            {
                 m_textBoxSourceSafePath.Text = Path.GetDirectoryName(dlg.FileName);
             }
         }
 
-        private void m_buttonBrowseIisRoot_Click(object sender, System.EventArgs e) {
+        private void m_buttonBrowseIisRoot_Click(object sender, System.EventArgs e)
+        {
             string path = m_textBoxIisRoot.Text;
-            if (!Path.IsPathRooted(path) || !Directory.Exists(path)) {
+            if (!Path.IsPathRooted(path) || !Directory.Exists(path))
+            {
                 if (InetRootLocator.Instance.IsIisAvailable)
                     path = InetRootLocator.Instance.PathWwwRoot;
                 else
@@ -1469,77 +1546,80 @@ namespace BuildAutoIncrement {
             dlg.SelectedPath = path;
             dlg.Description = m_txtSourceIisFolderDescription;
             dlg.ShowNewFolderButton = false;
-            if (dlg.ShowDialog() == DialogResult.OK) {
+            if (dlg.ShowDialog() == DialogResult.OK)
+            {
                 m_textBoxIisRoot.Text = dlg.SelectedPath;
             }
         }
-        
+
         #endregion // Control event handlers
 
         #region Private methods
 
-        private void SetControlValues() {
-            SaveFilesBeforeRunningAddinCommand          = m_configuration.NumberingOptions.SaveModifiedFilesBeforeRunningAddinCommand;
-            DefaultVersionType                          = m_configuration.NumberingOptions.DefaultVersionType;
-            ApplyToAllTabs                              = m_configuration.NumberingOptions.ApplyToAllTypes;
-            IncrementBy                                 = m_configuration.NumberingOptions.IncrementBy;
-            SynchronizeAllVersionTypes                  = m_configuration.NumberingOptions.SynchronizeAllVersionTypes;
-            DontWarnInvalidInformationalVersion         = m_configuration.NumberingOptions.AllowArbitraryInformationalVersion;
-            IncludeVCppResourceFiles                    = m_configuration.NumberingOptions.IncludeVCppResourceFiles;
-            IncludeSetupProjects                        = m_configuration.NumberingOptions.IncludeSetupProjects;
-            GeneratePackageAndProductCodes              = m_configuration.NumberingOptions.GeneratePackageAndProductCodes;
-            BatchCommandIncrementScheme                 = m_configuration.NumberingOptions.BatchCommandIncrementScheme;
-            IncrementScheme                             = m_configuration.NumberingOptions.IncrementScheme;
-            UseDateTimeBasedBuildAndRevisionNumbering   = m_configuration.NumberingOptions.UseDateTimeBasedBuildAndRevisionNumbering;
-            ResetBuildOnMajor                           = m_configuration.NumberingOptions.ResetBuildOnMajorIncrement;
-            ResetBuildOnMinor                           = m_configuration.NumberingOptions.ResetBuildOnMinorIncrement;
-            ResetRevisionOnMajor                        = m_configuration.NumberingOptions.ResetRevisionOnMajorIncrement;
-            ResetRevisionOnMinor                        = m_configuration.NumberingOptions.ResetRevisionOnMinorIncrement;
-            ResetRevisionOnBuild                        = m_configuration.NumberingOptions.ResetRevisionOnBuildIncrement;
-            ResetBuildAndRevisionTo                     = m_configuration.NumberingOptions.ResetBuildAndRevisionTo;
-            ReplaceAsteriskWithComponentVersions        = m_configuration.NumberingOptions.ReplaceAsteriskWithVersionComponents;
-            IndentSubProjectItems                       = m_configuration.DisplayOptions.IndentSubProjectItems;
-            SubProjectsIndentation                      = m_configuration.DisplayOptions.SubProjectIndentation;
-            ShowSubProjectRoots                         = m_configuration.DisplayOptions.ShowSubProjectRoot;
-            ShowEnterpriseTemplateProjectRoot           = m_configuration.DisplayOptions.ShowEnterpriseTemplateProjectRoot;
-            ShowNonVersionableProjects                  = m_configuration.DisplayOptions.ShowNonVersionableProjects;
-            ShowSuccessDialog                           = m_configuration.DisplayOptions.ShowSuccessDialog;
-            ShowEmptyFolders                            = m_configuration.DisplayOptions.ShowEmptyFolders;
-            SourceSafeFolderConfiguration               = m_configuration.FoldersConfigurations.SourceSafeFolder;
-            IisFolderConfiguration                      = m_configuration.FoldersConfigurations.IisFolder;
-            ExportConfiguration                         = m_configuration.ExportConfiguration;
+        private void SetControlValues()
+        {
+            SaveFilesBeforeRunningAddinCommand = m_configuration.NumberingOptions.SaveModifiedFilesBeforeRunningAddinCommand;
+            DefaultVersionType = m_configuration.NumberingOptions.DefaultVersionType;
+            ApplyToAllTabs = m_configuration.NumberingOptions.ApplyToAllTypes;
+            IncrementBy = m_configuration.NumberingOptions.IncrementBy;
+            SynchronizeAllVersionTypes = m_configuration.NumberingOptions.SynchronizeAllVersionTypes;
+            DontWarnInvalidInformationalVersion = m_configuration.NumberingOptions.AllowArbitraryInformationalVersion;
+            IncludeVCppResourceFiles = m_configuration.NumberingOptions.IncludeVCppResourceFiles;
+            IncludeSetupProjects = m_configuration.NumberingOptions.IncludeSetupProjects;
+            GeneratePackageAndProductCodes = m_configuration.NumberingOptions.GeneratePackageAndProductCodes;
+            BatchCommandIncrementScheme = m_configuration.NumberingOptions.BatchCommandIncrementScheme;
+            IncrementScheme = m_configuration.NumberingOptions.IncrementScheme;
+            UseDateTimeBasedBuildAndRevisionNumbering = m_configuration.NumberingOptions.UseDateTimeBasedBuildAndRevisionNumbering;
+            ResetBuildOnMajor = m_configuration.NumberingOptions.ResetBuildOnMajorIncrement;
+            ResetBuildOnMinor = m_configuration.NumberingOptions.ResetBuildOnMinorIncrement;
+            ResetRevisionOnMajor = m_configuration.NumberingOptions.ResetRevisionOnMajorIncrement;
+            ResetRevisionOnMinor = m_configuration.NumberingOptions.ResetRevisionOnMinorIncrement;
+            ResetRevisionOnBuild = m_configuration.NumberingOptions.ResetRevisionOnBuildIncrement;
+            ResetBuildAndRevisionTo = m_configuration.NumberingOptions.ResetBuildAndRevisionTo;
+            ReplaceAsteriskWithComponentVersions = m_configuration.NumberingOptions.ReplaceAsteriskWithVersionComponents;
+            IndentSubProjectItems = m_configuration.DisplayOptions.IndentSubProjectItems;
+            SubProjectsIndentation = m_configuration.DisplayOptions.SubProjectIndentation;
+            ShowSubProjectRoots = m_configuration.DisplayOptions.ShowSubProjectRoot;
+            ShowEnterpriseTemplateProjectRoot = m_configuration.DisplayOptions.ShowEnterpriseTemplateProjectRoot;
+            ShowNonVersionableProjects = m_configuration.DisplayOptions.ShowNonVersionableProjects;
+            ShowSuccessDialog = m_configuration.DisplayOptions.ShowSuccessDialog;
+            ShowEmptyFolders = m_configuration.DisplayOptions.ShowEmptyFolders;
+            SourceSafeFolderConfiguration = m_configuration.FoldersConfigurations.SourceSafeFolder;
+            IisFolderConfiguration = m_configuration.FoldersConfigurations.IisFolder;
+            ExportConfiguration = m_configuration.ExportConfiguration;
         }
 
-        private void GetControlValues() {
+        private void GetControlValues()
+        {
             m_configuration.NumberingOptions.SaveModifiedFilesBeforeRunningAddinCommand = SaveFilesBeforeRunningAddinCommand;
-            m_configuration.NumberingOptions.DefaultVersionType                         = DefaultVersionType;
-            m_configuration.NumberingOptions.ApplyToAllTypes                            = ApplyToAllTabs;
-            m_configuration.NumberingOptions.IncrementBy                                = IncrementBy;
-            m_configuration.NumberingOptions.AllowArbitraryInformationalVersion         = DontWarnInvalidInformationalVersion;
-            m_configuration.NumberingOptions.SynchronizeAllVersionTypes                 = SynchronizeAllVersionTypes;
-            m_configuration.NumberingOptions.IncludeVCppResourceFiles                   = IncludeVCppResourceFiles;
-            m_configuration.NumberingOptions.IncludeSetupProjects                       = IncludeSetupProjects;
-            m_configuration.NumberingOptions.GeneratePackageAndProductCodes             = GeneratePackageAndProductCodes;
-            m_configuration.NumberingOptions.BatchCommandIncrementScheme                = BatchCommandIncrementScheme;
-            m_configuration.NumberingOptions.IncrementScheme                            = IncrementScheme;
-            m_configuration.NumberingOptions.UseDateTimeBasedBuildAndRevisionNumbering  = UseDateTimeBasedBuildAndRevisionNumbering;
-            m_configuration.NumberingOptions.ResetBuildOnMajorIncrement                 = ResetBuildOnMajor;
-            m_configuration.NumberingOptions.ResetBuildOnMinorIncrement                 = ResetBuildOnMinor;
-            m_configuration.NumberingOptions.ResetRevisionOnMajorIncrement              = ResetRevisionOnMajor;
-            m_configuration.NumberingOptions.ResetRevisionOnMinorIncrement              = ResetRevisionOnMinor;
-            m_configuration.NumberingOptions.ResetRevisionOnBuildIncrement              = ResetRevisionOnBuild;
-            m_configuration.NumberingOptions.ResetBuildAndRevisionTo                    = ResetBuildAndRevisionTo;
-            m_configuration.NumberingOptions.ReplaceAsteriskWithVersionComponents       = ReplaceAsteriskWithComponentVersions;
-            m_configuration.DisplayOptions.IndentSubProjectItems                        = IndentSubProjectItems;
-            m_configuration.DisplayOptions.SubProjectIndentation                        = SubProjectsIndentation;
-            m_configuration.DisplayOptions.ShowSubProjectRoot                           = ShowSubProjectRoots;
-            m_configuration.DisplayOptions.ShowEnterpriseTemplateProjectRoot            = ShowEnterpriseTemplateProjectRoot;
-            m_configuration.DisplayOptions.ShowNonVersionableProjects                   = ShowNonVersionableProjects;
-            m_configuration.DisplayOptions.ShowSuccessDialog                            = ShowSuccessDialog;
-            m_configuration.DisplayOptions.ShowEmptyFolders                             = ShowEmptyFolders;
-            m_configuration.FoldersConfigurations.SourceSafeFolder                      = SourceSafeFolderConfiguration;
-            m_configuration.FoldersConfigurations.IisFolder                             = IisFolderConfiguration;
-            m_configuration.ExportConfiguration                                         = ExportConfiguration;
+            m_configuration.NumberingOptions.DefaultVersionType = DefaultVersionType;
+            m_configuration.NumberingOptions.ApplyToAllTypes = ApplyToAllTabs;
+            m_configuration.NumberingOptions.IncrementBy = IncrementBy;
+            m_configuration.NumberingOptions.AllowArbitraryInformationalVersion = DontWarnInvalidInformationalVersion;
+            m_configuration.NumberingOptions.SynchronizeAllVersionTypes = SynchronizeAllVersionTypes;
+            m_configuration.NumberingOptions.IncludeVCppResourceFiles = IncludeVCppResourceFiles;
+            m_configuration.NumberingOptions.IncludeSetupProjects = IncludeSetupProjects;
+            m_configuration.NumberingOptions.GeneratePackageAndProductCodes = GeneratePackageAndProductCodes;
+            m_configuration.NumberingOptions.BatchCommandIncrementScheme = BatchCommandIncrementScheme;
+            m_configuration.NumberingOptions.IncrementScheme = IncrementScheme;
+            m_configuration.NumberingOptions.UseDateTimeBasedBuildAndRevisionNumbering = UseDateTimeBasedBuildAndRevisionNumbering;
+            m_configuration.NumberingOptions.ResetBuildOnMajorIncrement = ResetBuildOnMajor;
+            m_configuration.NumberingOptions.ResetBuildOnMinorIncrement = ResetBuildOnMinor;
+            m_configuration.NumberingOptions.ResetRevisionOnMajorIncrement = ResetRevisionOnMajor;
+            m_configuration.NumberingOptions.ResetRevisionOnMinorIncrement = ResetRevisionOnMinor;
+            m_configuration.NumberingOptions.ResetRevisionOnBuildIncrement = ResetRevisionOnBuild;
+            m_configuration.NumberingOptions.ResetBuildAndRevisionTo = ResetBuildAndRevisionTo;
+            m_configuration.NumberingOptions.ReplaceAsteriskWithVersionComponents = ReplaceAsteriskWithComponentVersions;
+            m_configuration.DisplayOptions.IndentSubProjectItems = IndentSubProjectItems;
+            m_configuration.DisplayOptions.SubProjectIndentation = SubProjectsIndentation;
+            m_configuration.DisplayOptions.ShowSubProjectRoot = ShowSubProjectRoots;
+            m_configuration.DisplayOptions.ShowEnterpriseTemplateProjectRoot = ShowEnterpriseTemplateProjectRoot;
+            m_configuration.DisplayOptions.ShowNonVersionableProjects = ShowNonVersionableProjects;
+            m_configuration.DisplayOptions.ShowSuccessDialog = ShowSuccessDialog;
+            m_configuration.DisplayOptions.ShowEmptyFolders = ShowEmptyFolders;
+            m_configuration.FoldersConfigurations.SourceSafeFolder = SourceSafeFolderConfiguration;
+            m_configuration.FoldersConfigurations.IisFolder = IisFolderConfiguration;
+            m_configuration.ExportConfiguration = ExportConfiguration;
         }
 
         #endregion // private methods
@@ -1554,7 +1634,8 @@ namespace BuildAutoIncrement {
 
         #region Static constructor and fields
 
-        static ConfigurationForm() {
+        static ConfigurationForm()
+        {
             System.Resources.ResourceManager resources = new System.Resources.ResourceManager("BuildAutoIncrement.Resources.Shared", typeof(ConfigurationForm).Assembly);
             Debug.Assert(resources != null);
 
@@ -1575,8 +1656,9 @@ namespace BuildAutoIncrement {
         private static readonly string m_txtSourceSafeFolderTitle;
         private static readonly string m_txtSourceIisFolderDescription;
 
-        private void m_buttonOK_Click(object sender, System.EventArgs e) {
-        
+        private void m_buttonOK_Click(object sender, System.EventArgs e)
+        {
+
         }
 
         //private static string m_txtFileFilterCannotContainCharacters;

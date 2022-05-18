@@ -26,24 +26,31 @@ using System;
 using System.IO;
 using System.Text;
 
-namespace BuildAutoIncrement {
-	/// <summary>
-	/// Summary description for PlainTextListExporter.
-	/// </summary>
-	public class ListExporterToPlainTextFile : ListExporterToTextFile {
+namespace BuildAutoIncrement
+{
+    /// <summary>
+    /// Summary description for PlainTextListExporter.
+    /// </summary>
+    public class ListExporterToPlainTextFile : ListExporterToTextFile
+    {
 
-		public ListExporterToPlainTextFile() {
-		}
+        public ListExporterToPlainTextFile()
+        {
+        }
 
-        override protected string ExportFileFilter {
-            get {
+        override protected string ExportFileFilter
+        {
+            get
+            {
                 return "Text files (*.txt)|*.txt|All files (*.*)|*.*";
             }
         }
 
-        override protected string ExportFileExtension { 
-            get {
-                return ".vcb.txt"; 
+        override protected string ExportFileExtension
+        {
+            get
+            {
+                return ".vcb.txt";
             }
         }
 
@@ -56,7 +63,8 @@ namespace BuildAutoIncrement {
         /// <returns>
         ///   Formatting string.
         /// </returns>
-        private string GetFormatString(int width) {
+        private string GetFormatString(int width)
+        {
             return string.Format("{{0,-{0}}}", width);
         }
 
@@ -69,13 +77,15 @@ namespace BuildAutoIncrement {
         /// <returns>
         ///   Entire separator line.
         /// </returns>
-        private string GetSeparator(int width) {
+        private string GetSeparator(int width)
+        {
             StringBuilder sb = new StringBuilder();
             sb.Append('-', width);
             return sb.ToString();
         }
 
-        override protected void DoSave(string filename) {
+        override protected void DoSave(string filename)
+        {
             CollectColumnWidths();
             base.DoSave(filename);
         }
@@ -86,7 +96,8 @@ namespace BuildAutoIncrement {
         /// <param name="streamWriter">
         ///   <c>StreamWriter</c> used to write header.
         /// </param>
-        override protected void WriteHeader(StreamWriter streamWriter) {
+        override protected void WriteHeader(StreamWriter streamWriter)
+        {
             streamWriter.WriteLine(m_solutionName);
             streamWriter.WriteLine(m_exportDateTime.ToString("g"));
             streamWriter.WriteLine();
@@ -98,12 +109,15 @@ namespace BuildAutoIncrement {
         /// <param name="streamWriter">
         ///   <c>StreamWriter</c> used to write heading.
         /// </param>
-        override protected void WriteHeading(StreamWriter streamWriter) {
+        override protected void WriteHeading(StreamWriter streamWriter)
+        {
             StringBuilder output = new StringBuilder();
             string format = GetFormatString(m_columnWidths[(int)ColumnName.ProjectName] + m_columnSpacing);
             output.AppendFormat(format, HeaderProjectName);
-            foreach (AssemblyVersionTypeSelection avts in m_assemblyVersionTypes) {
-                if (avts.IsSelected) {
+            foreach (AssemblyVersionTypeSelection avts in m_assemblyVersionTypes)
+            {
+                if (avts.IsSelected)
+                {
                     format = GetFormatString(m_columnWidths[(int)ColumnName.Version] + m_columnSpacing);
                     output.AppendFormat(format, m_headings[avts.AssemblyVersionType]);
                 }
@@ -112,18 +126,23 @@ namespace BuildAutoIncrement {
             streamWriter.WriteLine(GetSeparator(output.Length));
         }
 
-        override protected void WriteItems(StreamWriter streamWriter) {
-            foreach (ProjectInfo pi in m_projectInfoList) {
-                if (pi.IsVersionable || !m_dontExportNonversionable) {
+        override protected void WriteItems(StreamWriter streamWriter)
+        {
+            foreach (ProjectInfo pi in m_projectInfoList)
+            {
+                if (pi.IsVersionable || !m_dontExportNonversionable)
+                {
                     // set indentation
                     StringBuilder projectName = new StringBuilder(pi.ProjectName);
-                    if (pi.Level > 0) 
+                    if (pi.Level > 0)
                         projectName.Insert(0, " ", pi.Level);
                     StringBuilder output = new StringBuilder();
                     string format = GetFormatString(m_columnWidths[(int)ColumnName.ProjectName] + m_columnSpacing);
                     output.AppendFormat(format, projectName);
-                    foreach (AssemblyVersionTypeSelection avts in m_assemblyVersionTypes) {
-                        if (avts.IsSelected) {
+                    foreach (AssemblyVersionTypeSelection avts in m_assemblyVersionTypes)
+                    {
+                        if (avts.IsSelected)
+                        {
                             format = GetFormatString(m_columnWidths[(int)ColumnName.Version] + m_columnSpacing);
                             output.AppendFormat(format, pi.CurrentAssemblyVersions[avts.AssemblyVersionType]);
                         }
@@ -136,25 +155,31 @@ namespace BuildAutoIncrement {
         /// <summary>
         ///   Evaluates required widths of individual columns,
         /// </summary>
-        private void CollectColumnWidths() {
+        private void CollectColumnWidths()
+        {
             m_columnWidths = new int[Enum.GetValues(typeof(ColumnName)).Length];
             m_columnWidths[(int)ColumnName.ProjectName] = HeaderProjectName.Length;
             // find largest version column header
-            foreach (AssemblyVersionTypeSelection avts in m_assemblyVersionTypes) {
-                if (avts.IsSelected) {
+            foreach (AssemblyVersionTypeSelection avts in m_assemblyVersionTypes)
+            {
+                if (avts.IsSelected)
+                {
                     int width = ((string)m_headings[avts.AssemblyVersionType]).Length;
                     if (width > m_columnWidths[(int)ColumnName.Version])
                         m_columnWidths[(int)ColumnName.Version] = width;
                 }
             }
-            foreach (ProjectInfo pi in m_projectInfoList) {
+            foreach (ProjectInfo pi in m_projectInfoList)
+            {
                 int width = pi.ProjectName.Length + pi.Level;
                 if (width > m_columnWidths[(int)ColumnName.ProjectName])
                     m_columnWidths[(int)ColumnName.ProjectName] = width;
 
                 // go through all selected version types
-                foreach (AssemblyVersionTypeSelection avts in m_assemblyVersionTypes) {
-                    if (avts.IsSelected) {
+                foreach (AssemblyVersionTypeSelection avts in m_assemblyVersionTypes)
+                {
+                    if (avts.IsSelected)
+                    {
                         width = pi.CurrentAssemblyVersions[avts.AssemblyVersionType].ToString().Length;
                         if (width > m_columnWidths[(int)ColumnName.Version])
                             m_columnWidths[(int)ColumnName.Version] = width;

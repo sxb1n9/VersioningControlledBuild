@@ -28,40 +28,47 @@ using System.Drawing;
 using System.Drawing.Printing;
 using System.Windows.Forms;
 
-namespace BuildAutoIncrement {
-	/// <summary>
-	///   Provides formatted output to a printer.
-	/// </summary>
-    public class ListPrinter : ListExporter {
+namespace BuildAutoIncrement
+{
+    /// <summary>
+    ///   Provides formatted output to a printer.
+    /// </summary>
+    public class ListPrinter : ListExporter
+    {
 
         /// <summary>
         ///   Initializes <c>ListPrinter</c> object using settings from 
         ///   <c>ExportConfiguration</c>.
         /// </summary>
-		public ListPrinter(IWin32Window owner) {
+		public ListPrinter(IWin32Window owner)
+        {
             m_owner = owner;
             m_printDocument = new PrintDocument();
             PrintOptions po = ConfigurationPersister.Instance.Configuration.ExportConfiguration.PrintOptions;
-            m_printFont     = po.ItemFont;
-            m_headingFont   = po.HeadingFont;
-            m_headerFont    = po.HeaderFont;
-            m_drawIcons     = po.PrintProjectIcons;
+            m_printFont = po.ItemFont;
+            m_headingFont = po.HeadingFont;
+            m_headerFont = po.HeaderFont;
+            m_drawIcons = po.PrintProjectIcons;
         }
 
         /// <summary>
         ///   Sets the font used to print items.
         /// </summary>
-        public Font Font {
-            set { 
-                m_printFont = value; 
+        public Font Font
+        {
+            set
+            {
+                m_printFont = value;
             }
         }
 
         /// <summary>
         ///   Sets the font used to print page header.
         /// </summary>
-        public Font HeaderFont {
-            set { 
+        public Font HeaderFont
+        {
+            set
+            {
                 m_headerFont = value;
             }
         }
@@ -69,8 +76,10 @@ namespace BuildAutoIncrement {
         /// <summary>
         ///   Sets the font used to print list heading.
         /// </summary>
-        public Font HeadingFont {
-            set { 
+        public Font HeadingFont
+        {
+            set
+            {
                 m_headingFont = value;
             }
         }
@@ -78,8 +87,10 @@ namespace BuildAutoIncrement {
         /// <summary>
         ///   Sets the flag if icons are drawn in front of project name.
         /// </summary>
-        public bool DrawIcons {
-            set {
+        public bool DrawIcons
+        {
+            set
+            {
                 m_drawIcons = value;
             }
         }
@@ -93,7 +104,8 @@ namespace BuildAutoIncrement {
         /// <param name="projectInfoList">
         ///   List of items to print.
         /// </param>
-        public void Print(string solutionName, ProjectInfoList projectInfoList) {
+        public void Print(string solutionName, ProjectInfoList projectInfoList)
+        {
             Debug.Assert(m_printDocument.PrinterSettings.IsValid);
             m_solutionName = solutionName;
             m_projectInfoList = projectInfoList;
@@ -115,12 +127,15 @@ namespace BuildAutoIncrement {
         /// <param name="projectInfoList">
         ///   List of items to print.
         /// </param>
-        public void Print(string printerName, string solutionName, ProjectInfoList projectInfoList) {
+        public void Print(string printerName, string solutionName, ProjectInfoList projectInfoList)
+        {
             m_printDocument.PrinterSettings.PrinterName = printerName;
-            if (printerName == string.Empty || !m_printDocument.PrinterSettings.IsValid) {
+            if (printerName == string.Empty || !m_printDocument.PrinterSettings.IsValid)
+            {
                 PrintDialog pd = new PrintDialog();
                 pd.Document = m_printDocument;
-                if (pd.ShowDialog(m_owner) == DialogResult.OK) {
+                if (pd.ShowDialog(m_owner) == DialogResult.OK)
+                {
                     // to update main form immediately
                     Win32Api.UpdateWindow(m_owner.Handle);
                     m_printDocument.PrinterSettings.PrinterName = pd.PrinterSettings.PrinterName;
@@ -135,27 +150,35 @@ namespace BuildAutoIncrement {
         /// <summary>
         ///   Passes through the entire list and evaluates required column widths.
         /// </summary>
-        private void CollectColumnWidths() {
+        private void CollectColumnWidths()
+        {
             m_columnWidths = new float[Enum.GetValues(typeof(ColumnName)).Length];
-            using (Graphics gr = m_printDocument.PrinterSettings.CreateMeasurementGraphics()) {
+            using (Graphics gr = m_printDocument.PrinterSettings.CreateMeasurementGraphics())
+            {
                 m_columnWidths[(int)ColumnName.ProjectName] = gr.MeasureString(HeaderProjectName, m_headingFont).Width;
                 // find largest version column header
                 m_columnWidths[(int)ColumnName.Version] = 0;
-                foreach (AssemblyVersionTypeSelection avts in m_assemblyVersionTypes) {
-                    if (avts.IsSelected) {
+                foreach (AssemblyVersionTypeSelection avts in m_assemblyVersionTypes)
+                {
+                    if (avts.IsSelected)
+                    {
                         float width = gr.MeasureString((string)m_headings[avts.AssemblyVersionType], m_headingFont).Width;
                         if (width > m_columnWidths[(int)ColumnName.Version])
                             m_columnWidths[(int)ColumnName.Version] = width;
                     }
                 }
-                foreach (ProjectInfo pi in m_projectInfoList) {
-                    if (pi.IsVersionable || !m_dontExportNonversionable) {
+                foreach (ProjectInfo pi in m_projectInfoList)
+                {
+                    if (pi.IsVersionable || !m_dontExportNonversionable)
+                    {
                         float width = gr.MeasureString(pi.ProjectName, m_printFont).Width + pi.Level * m_indent;
                         if (width > m_columnWidths[(int)ColumnName.ProjectName])
                             m_columnWidths[(int)ColumnName.ProjectName] = width;
                         // go through all selected version types
-                        foreach (AssemblyVersionTypeSelection avts in m_assemblyVersionTypes) {
-                            if (avts.IsSelected) {
+                        foreach (AssemblyVersionTypeSelection avts in m_assemblyVersionTypes)
+                        {
+                            if (avts.IsSelected)
+                            {
                                 width = gr.MeasureString(pi.CurrentAssemblyVersions[avts.AssemblyVersionType].ToString(), m_printFont).Width;
                                 if (width > m_columnWidths[(int)ColumnName.Version])
                                     m_columnWidths[(int)ColumnName.Version] = width;
@@ -169,10 +192,12 @@ namespace BuildAutoIncrement {
         /// <summary>
         ///   Initializes printing process.
         /// </summary>
-        private void DoPrint() {
+        private void DoPrint()
+        {
             Debug.Assert(m_projectInfoList != null && m_projectInfoList.ProjectInfos != null);
             m_pageNumber = 1;
-            try {
+            try
+            {
                 m_printDocument.PrintPage += new PrintPageEventHandler(PrintPage);
                 // replace PrintControllerWithStatusDialog (e.g. for Acrobat Destiller) which
                 // may cause problems when cancel button pressed
@@ -180,10 +205,12 @@ namespace BuildAutoIncrement {
                 m_projectInfoListEnumerator = m_projectInfoList.ProjectInfos.GetEnumerator();
                 m_printDocument.Print();
             }
-            catch (Exception exception) {
+            catch (Exception exception)
+            {
                 Trace.WriteLine(exception.Message);
             }
-            finally {
+            finally
+            {
                 m_printDocument.PrintPage -= new PrintPageEventHandler(PrintPage);
             }
         }
@@ -193,7 +220,8 @@ namespace BuildAutoIncrement {
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="ev"></param>
-        private void PrintPage(object sender, PrintPageEventArgs ev) {
+        private void PrintPage(object sender, PrintPageEventArgs ev)
+        {
             // to update main form if a dialog was open (e.g. file dialog when printing to file)
             Win32Api.UpdateWindow(m_owner.Handle);
             m_iconWidth = m_printFont.GetHeight(ev.Graphics);
@@ -206,20 +234,25 @@ namespace BuildAutoIncrement {
             float height = PrintHeading(ev.Graphics, leftMargin, yPos);
             yPos += height * 1.25f;
             // print lines
-            while (yPos < bottomLine && m_projectInfoListEnumerator.MoveNext()) {
+            while (yPos < bottomLine && m_projectInfoListEnumerator.MoveNext())
+            {
                 ProjectInfo pi = (ProjectInfo)m_projectInfoListEnumerator.Current;
-                if (pi.IsVersionable || !m_dontExportNonversionable) {
+                if (pi.IsVersionable || !m_dontExportNonversionable)
+                {
                     // draw project name
                     float offset = leftMargin;
-                    if (m_drawIcons) {
+                    if (m_drawIcons)
+                    {
                         DrawProjectIcon(ev.Graphics, pi.ProjectTypeInfo.IconIndex, offset + pi.Level * m_indent, yPos);
                         offset += m_iconWidth;
                     }
                     ev.Graphics.DrawString(pi.ProjectName, m_printFont, Brushes.Black, offset + pi.Level * m_indent, yPos);
                     offset += m_columnWidths[(int)ColumnName.ProjectName] + 15;
                     // go through all selected version types
-                    foreach (AssemblyVersionTypeSelection avts in m_assemblyVersionTypes) {
-                        if (avts.IsSelected) {
+                    foreach (AssemblyVersionTypeSelection avts in m_assemblyVersionTypes)
+                    {
+                        if (avts.IsSelected)
+                        {
                             string version = pi.CurrentAssemblyVersions[avts.AssemblyVersionType].ToString();
                             ev.Graphics.DrawString(version, m_printFont, Brushes.Black, offset, yPos);
                             offset += m_columnWidths[(int)ColumnName.Version] + 10;
@@ -228,7 +261,8 @@ namespace BuildAutoIncrement {
                     yPos += m_printFont.GetHeight(ev.Graphics);
                 }
             }
-            if (m_projectInfoListEnumerator.MoveNext()) {
+            if (m_projectInfoListEnumerator.MoveNext())
+            {
                 ev.HasMorePages = true;
                 m_pageNumber++;
             }
@@ -243,7 +277,8 @@ namespace BuildAutoIncrement {
         /// <param name="iconIndex"></param>
         /// <param name="x"></param>
         /// <param name="y"></param>
-        private void DrawProjectIcon(Graphics graphics, int iconIndex, float x, float y) {
+        private void DrawProjectIcon(Graphics graphics, int iconIndex, float x, float y)
+        {
             iconIndex /= 2;
             Debug.Assert(iconIndex < m_bitmaps.Images.Count);
             graphics.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic;
@@ -257,14 +292,17 @@ namespace BuildAutoIncrement {
         /// <param name="left"></param>
         /// <param name="top"></param>
         /// <returns></returns>
-        private float PrintHeading(Graphics graphics, float left, float top) {
+        private float PrintHeading(Graphics graphics, float left, float top)
+        {
             float offset = left;
             if (m_drawIcons)
                 offset += m_iconWidth;
             graphics.DrawString(HeaderProjectName, m_headingFont, Brushes.Black, offset, top);
             offset += m_columnWidths[(int)ColumnName.ProjectName] + 15;
-            foreach (AssemblyVersionTypeSelection avts in m_assemblyVersionTypes) {
-                if (avts.IsSelected) {
+            foreach (AssemblyVersionTypeSelection avts in m_assemblyVersionTypes)
+            {
+                if (avts.IsSelected)
+                {
                     graphics.DrawString((string)m_headings[avts.AssemblyVersionType], m_headingFont, Brushes.Black, offset, top);
                     offset += m_columnWidths[(int)ColumnName.Version] + 10;
                 }
@@ -276,7 +314,8 @@ namespace BuildAutoIncrement {
         ///   Prints page header.
         /// </summary>
         /// <param name="ev"></param>
-        private void PrintHeader(PrintPageEventArgs ev) {
+        private void PrintHeader(PrintPageEventArgs ev)
+        {
             float top = ev.MarginBounds.Top - m_headerFont.GetHeight(ev.Graphics) * 2f;
             ev.Graphics.DrawString(m_solutionName, m_headerFont, Brushes.Black, ev.MarginBounds.Left, top);
             StringFormat sf = new StringFormat();
@@ -285,7 +324,8 @@ namespace BuildAutoIncrement {
             sf.Alignment = StringAlignment.Far;
             ev.Graphics.DrawString(m_pageNumber.ToString(), m_headerFont, Brushes.Black, ev.MarginBounds.Right, top, sf);
             top += m_headerFont.GetHeight(ev.Graphics);
-            using (Pen pen = new Pen(Brushes.Black, 0.5f)) {
+            using (Pen pen = new Pen(Brushes.Black, 0.5f))
+            {
                 ev.Graphics.DrawLine(pen, ev.MarginBounds.Left, top, ev.MarginBounds.Right, top);
             }
         }
@@ -293,7 +333,8 @@ namespace BuildAutoIncrement {
         /// <summary>
         ///   Static constructor.
         /// </summary>
-        static ListPrinter() {
+        static ListPrinter()
+        {
             // load bitmap resources
             m_bitmaps = new ImageList();
             System.Reflection.Assembly assembly = System.Reflection.Assembly.GetExecutingAssembly();

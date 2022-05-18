@@ -26,7 +26,6 @@ using System;
 using System.Diagnostics;
 using System.IO;
 using System.Reflection;
-using System.Text;
 using System.Windows.Forms;
 using System.Xml;
 

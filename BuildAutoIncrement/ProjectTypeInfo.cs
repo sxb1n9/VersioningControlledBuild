@@ -26,12 +26,14 @@ using System;
 using System.Collections;
 using System.Diagnostics;
 
-namespace BuildAutoIncrement {
+namespace BuildAutoIncrement
+{
 
     /// <summary>
     ///   Enumeration containing all possible types in a project.
     /// </summary>
-    public enum ProjectType {
+    public enum ProjectType
+    {
         CSharpProject,
         SDECSharpProject,
         VBProject,
@@ -53,14 +55,17 @@ namespace BuildAutoIncrement {
     ///   A table of all supported project types with relevant information
     ///   like AssemblyInfo filename and icon index.
     /// </summary>
-    public class ProjectTypeInfo : ICloneable {
+    public class ProjectTypeInfo : ICloneable
+    {
 
         #region ProjectTypeInfoCollection class
         /// <summary>
         ///   Lookup table of all possible project types identified by their CLSID.
         /// </summary>
-        public sealed class ProjectTypeInfoCollection {
-            public ProjectTypeInfoCollection() {
+        public sealed class ProjectTypeInfoCollection
+        {
+            public ProjectTypeInfoCollection()
+            {
                 m_projectTypes = new Hashtable();
                 m_projectTypes.Add("{fae04ec0-301f-11d3-bf4b-00c04f79efbc}", CSharpProject);
                 m_projectTypes.Add("{20d4826a-c6fa-45db-90f4-c717570b9f32}", SDECCSharpProject);
@@ -82,7 +87,8 @@ namespace BuildAutoIncrement {
                 m_projectTypes.Add("{6141683f-8a12-4e36-9623-2eb02b2c2303}", InstallShieldLEProject);   // file version
             }
 
-            public ProjectTypeInfo this[string projectType] {
+            public ProjectTypeInfo this[string projectType]
+            {
                 get { return (ProjectTypeInfo)m_projectTypes[projectType.ToLower()]; }
             }
 
@@ -96,7 +102,8 @@ namespace BuildAutoIncrement {
         /// <summary>
         ///   Creates empty <c>ProjectTypeInfo</c> object.
         /// </summary>
-        private ProjectTypeInfo() {
+        private ProjectTypeInfo()
+        {
             Debug.Assert(false, "Should not be used");
         }
 
@@ -109,10 +116,11 @@ namespace BuildAutoIncrement {
         /// <param name="assemblyInfoFilename">
         ///   Name of the assembly info file.
         /// </param>
-        private ProjectTypeInfo(ProjectType projectType, string assemblyInfoFilename) {
-            ProjectType          = projectType;
+        private ProjectTypeInfo(ProjectType projectType, string assemblyInfoFilename)
+        {
+            ProjectType = projectType;
             AssemblyInfoFilename = assemblyInfoFilename;
-            IconIndex            = GetIconIndex(projectType);
+            IconIndex = GetIconIndex(projectType);
         }
 
         #endregion // Constructors
@@ -122,26 +130,29 @@ namespace BuildAutoIncrement {
         /// <summary>
         ///   Gets a flag if project is versionable.
         /// </summary>
-        public bool IsVersionable {
-            get {
-                switch (ProjectType) {
-                case ProjectType.CSharpProject:
-                case ProjectType.SDECSharpProject:
-                case ProjectType.VBProject:
-                case ProjectType.SDEVBProject:
-                case ProjectType.VJSharpProject:
-                case ProjectType.VCppProject:
-                case ProjectType.SetupProject:
-                case ProjectType.InstallShieldLEProject:
-                    return true;
-                case ProjectType.EnterpriseProject:
-                case ProjectType.SolutionFolder:
-                case ProjectType.FileBasedWebProject:
-                case ProjectType.DatabaseProject:
-                case ProjectType.VirtualFolder:
-                case ProjectType.FSharpProject:
-                case ProjectType.SQLDatabaseProject:
-                    return false;
+        public bool IsVersionable
+        {
+            get
+            {
+                switch (ProjectType)
+                {
+                    case ProjectType.CSharpProject:
+                    case ProjectType.SDECSharpProject:
+                    case ProjectType.VBProject:
+                    case ProjectType.SDEVBProject:
+                    case ProjectType.VJSharpProject:
+                    case ProjectType.VCppProject:
+                    case ProjectType.SetupProject:
+                    case ProjectType.InstallShieldLEProject:
+                        return true;
+                    case ProjectType.EnterpriseProject:
+                    case ProjectType.SolutionFolder:
+                    case ProjectType.FileBasedWebProject:
+                    case ProjectType.DatabaseProject:
+                    case ProjectType.VirtualFolder:
+                    case ProjectType.FSharpProject:
+                    case ProjectType.SQLDatabaseProject:
+                        return false;
                 }
                 Debug.Assert(false, string.Format("Not supported ProjectType: {0}", ProjectType.ToString()));
                 return false;
@@ -149,7 +160,7 @@ namespace BuildAutoIncrement {
         }
 
         #endregion // Public properties
-        
+
         #region Public readonly fields
 
         /// <summary>
@@ -160,18 +171,19 @@ namespace BuildAutoIncrement {
         /// <summary>
         ///   Gets assembly info filename.
         /// </summary>
-        public readonly string      AssemblyInfoFilename;
+        public readonly string AssemblyInfoFilename;
 
         /// <summary>
         ///   Gets icon index used in listview.
         /// </summary>
-        public readonly int         IconIndex;
+        public readonly int IconIndex;
 
         #endregion // Public readonly fields
 
         #region Public methods
 
-        public object Clone() {
+        public object Clone()
+        {
             return MemberwiseClone();
         }
 
@@ -184,26 +196,28 @@ namespace BuildAutoIncrement {
         /// </summary>
         /// <param name="projectType"></param>
         /// <returns></returns>
-        private int GetIconIndex(ProjectType projectType) {
-            switch (projectType) {
-            case ProjectType.CSharpProject:
-            case ProjectType.SDECSharpProject:
-            case ProjectType.VBProject:
-            case ProjectType.SDEVBProject:
-            case ProjectType.VJSharpProject:
-            case ProjectType.VCppProject:
-            case ProjectType.SetupProject:
-            case ProjectType.EnterpriseProject:
-            case ProjectType.SolutionFolder:
-            case ProjectType.FileBasedWebProject:
-            case ProjectType.DatabaseProject:
-            case ProjectType.FSharpProject:
-            case ProjectType.InstallShieldLEProject:
-                return (int)projectType * 2;
-            case ProjectType.VirtualFolder:
-                return (int)ProjectType.SolutionFolder * 2;
-            case ProjectType.SQLDatabaseProject:
-                return (int)ProjectType.DatabaseProject * 2;
+        private int GetIconIndex(ProjectType projectType)
+        {
+            switch (projectType)
+            {
+                case ProjectType.CSharpProject:
+                case ProjectType.SDECSharpProject:
+                case ProjectType.VBProject:
+                case ProjectType.SDEVBProject:
+                case ProjectType.VJSharpProject:
+                case ProjectType.VCppProject:
+                case ProjectType.SetupProject:
+                case ProjectType.EnterpriseProject:
+                case ProjectType.SolutionFolder:
+                case ProjectType.FileBasedWebProject:
+                case ProjectType.DatabaseProject:
+                case ProjectType.FSharpProject:
+                case ProjectType.InstallShieldLEProject:
+                    return (int)projectType * 2;
+                case ProjectType.VirtualFolder:
+                    return (int)ProjectType.SolutionFolder * 2;
+                case ProjectType.SQLDatabaseProject:
+                    return (int)ProjectType.DatabaseProject * 2;
             }
             Debug.Assert(false, string.Format("Not supported ProjectType: {0}", projectType.ToString()));
             return 0;
@@ -213,21 +227,21 @@ namespace BuildAutoIncrement {
 
         #region Static fields
 
-        public static readonly ProjectTypeInfo CSharpProject            = new ProjectTypeInfo(ProjectType.CSharpProject,        "AssemblyInfo.cs");
-        public static readonly ProjectTypeInfo SDECCSharpProject        = new ProjectTypeInfo(ProjectType.SDECSharpProject,     "AssemblyInfo.cs");
-        public static readonly ProjectTypeInfo VBProject                = new ProjectTypeInfo(ProjectType.VBProject,            "AssemblyInfo.vb");
-        public static readonly ProjectTypeInfo SDEVBProject             = new ProjectTypeInfo(ProjectType.SDEVBProject,         "AssemblyInfo.vb");
-        public static readonly ProjectTypeInfo VJSharpProject           = new ProjectTypeInfo(ProjectType.VJSharpProject,       "AssemblyInfo.jsl");
-        public static readonly ProjectTypeInfo VCppProject              = new ProjectTypeInfo(ProjectType.VCppProject,          "AssemblyInfo.cpp");
-        public static readonly ProjectTypeInfo SetupProject             = new ProjectTypeInfo(ProjectType.SetupProject,         "*.vdproj");
-        public static readonly ProjectTypeInfo EnterpriseProject        = new ProjectTypeInfo(ProjectType.EnterpriseProject,    "");
-        public static readonly ProjectTypeInfo SolutionFolder           = new ProjectTypeInfo(ProjectType.SolutionFolder,       "");
-        public static readonly ProjectTypeInfo FileBasedWebProject      = new ProjectTypeInfo(ProjectType.FileBasedWebProject,  "");
-        public static readonly ProjectTypeInfo DatabaseProject          = new ProjectTypeInfo(ProjectType.DatabaseProject,      "");
-        public static readonly ProjectTypeInfo VirtualFolder            = new ProjectTypeInfo(ProjectType.VirtualFolder,        "");
-        public static readonly ProjectTypeInfo FSharpProject            = new ProjectTypeInfo(ProjectType.FSharpProject,        "");
-        public static readonly ProjectTypeInfo InstallShieldLEProject   = new ProjectTypeInfo(ProjectType.InstallShieldLEProject, "*.isl");
-        public static readonly ProjectTypeInfo SQLDatabaseProject       = new ProjectTypeInfo(ProjectType.SQLDatabaseProject,   "");
+        public static readonly ProjectTypeInfo CSharpProject = new ProjectTypeInfo(ProjectType.CSharpProject, "AssemblyInfo.cs");
+        public static readonly ProjectTypeInfo SDECCSharpProject = new ProjectTypeInfo(ProjectType.SDECSharpProject, "AssemblyInfo.cs");
+        public static readonly ProjectTypeInfo VBProject = new ProjectTypeInfo(ProjectType.VBProject, "AssemblyInfo.vb");
+        public static readonly ProjectTypeInfo SDEVBProject = new ProjectTypeInfo(ProjectType.SDEVBProject, "AssemblyInfo.vb");
+        public static readonly ProjectTypeInfo VJSharpProject = new ProjectTypeInfo(ProjectType.VJSharpProject, "AssemblyInfo.jsl");
+        public static readonly ProjectTypeInfo VCppProject = new ProjectTypeInfo(ProjectType.VCppProject, "AssemblyInfo.cpp");
+        public static readonly ProjectTypeInfo SetupProject = new ProjectTypeInfo(ProjectType.SetupProject, "*.vdproj");
+        public static readonly ProjectTypeInfo EnterpriseProject = new ProjectTypeInfo(ProjectType.EnterpriseProject, "");
+        public static readonly ProjectTypeInfo SolutionFolder = new ProjectTypeInfo(ProjectType.SolutionFolder, "");
+        public static readonly ProjectTypeInfo FileBasedWebProject = new ProjectTypeInfo(ProjectType.FileBasedWebProject, "");
+        public static readonly ProjectTypeInfo DatabaseProject = new ProjectTypeInfo(ProjectType.DatabaseProject, "");
+        public static readonly ProjectTypeInfo VirtualFolder = new ProjectTypeInfo(ProjectType.VirtualFolder, "");
+        public static readonly ProjectTypeInfo FSharpProject = new ProjectTypeInfo(ProjectType.FSharpProject, "");
+        public static readonly ProjectTypeInfo InstallShieldLEProject = new ProjectTypeInfo(ProjectType.InstallShieldLEProject, "*.isl");
+        public static readonly ProjectTypeInfo SQLDatabaseProject = new ProjectTypeInfo(ProjectType.SQLDatabaseProject, "");
 
         public static readonly ProjectTypeInfoCollection ProjectTypeInfos = new ProjectTypeInfoCollection();
 

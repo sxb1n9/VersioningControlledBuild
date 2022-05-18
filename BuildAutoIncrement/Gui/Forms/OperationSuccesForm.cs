@@ -22,18 +22,17 @@
  *    misrepresented as being the original software.
  * 3. This notice may not be removed or altered from any source distribution.
  */
-using System;
 using System.Diagnostics;
 using System.Drawing;
-using System.Collections;
-using System.ComponentModel;
 using System.Windows.Forms;
 
-namespace BuildAutoIncrement {
-	/// <summary>
-	///   Displays update summary.
-	/// </summary>
-	public class OperationSuccesForm : System.Windows.Forms.Form {
+namespace BuildAutoIncrement
+{
+    /// <summary>
+    ///   Displays update summary.
+    /// </summary>
+    public class OperationSuccesForm : System.Windows.Forms.Form
+    {
 
         #region Controls
 
@@ -56,41 +55,46 @@ namespace BuildAutoIncrement {
 
         #region Constructor
 
-        private OperationSuccesForm() {
+        private OperationSuccesForm()
+        {
             InitializeComponent();
             m_pictureBox.Image = SystemIcons.Information.ToBitmap();
         }
-        
-        private OperationSuccesForm(UpdateSummary.UpdateSummaryItem[] updatedSummary) : this() {
+
+        private OperationSuccesForm(UpdateSummary.UpdateSummaryItem[] updatedSummary) : this()
+        {
             Debug.Assert(updatedSummary != null && updatedSummary.Length > 0);
             FillDetailsListView(updatedSummary);
-		}
+        }
 
         #endregion // Constructor
-        
+
         #region Dispose method
 
         /// <summary>
-		/// Clean up any resources being used.
-		/// </summary>
-		protected override void Dispose(bool disposing) {
-			if (disposing) {
-				if (components != null) {
-					components.Dispose();
-				}
-			}
-			base.Dispose(disposing);
-		}
+        /// Clean up any resources being used.
+        /// </summary>
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                if (components != null)
+                {
+                    components.Dispose();
+                }
+            }
+            base.Dispose(disposing);
+        }
 
         #endregion // Dispose method
 
-		#region Windows Form Designer generated code
-		/// <summary>
-		/// Required method for Designer support - do not modify
-		/// the contents of this method with the code editor.
-		/// </summary>
-		private void InitializeComponent()
-		{
+        #region Windows Form Designer generated code
+        /// <summary>
+        /// Required method for Designer support - do not modify
+        /// the contents of this method with the code editor.
+        /// </summary>
+        private void InitializeComponent()
+        {
             System.Resources.ResourceManager resources = new System.Resources.ResourceManager(typeof(OperationSuccesForm));
             this.m_labelOperationSuccess = new System.Windows.Forms.Label();
             this.m_buttonOK = new System.Windows.Forms.Button();
@@ -105,7 +109,7 @@ namespace BuildAutoIncrement {
             // 
             // m_labelOperationSuccess
             // 
-            this.m_labelOperationSuccess.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.m_labelOperationSuccess.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                 | System.Windows.Forms.AnchorStyles.Right)));
             this.m_labelOperationSuccess.Location = new System.Drawing.Point(56, 20);
             this.m_labelOperationSuccess.Name = "m_labelOperationSuccess";
@@ -134,8 +138,8 @@ namespace BuildAutoIncrement {
             // 
             // m_listViewDetails
             // 
-            this.m_listViewDetails.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-                | System.Windows.Forms.AnchorStyles.Left) 
+            this.m_listViewDetails.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                | System.Windows.Forms.AnchorStyles.Left)
                 | System.Windows.Forms.AnchorStyles.Right)));
             this.m_listViewDetails.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
                                                                                                 this.m_columnHeaderProjectName,
@@ -172,7 +176,7 @@ namespace BuildAutoIncrement {
             // 
             // m_labelListViewDivider
             // 
-            this.m_labelListViewDivider.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.m_labelListViewDivider.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                 | System.Windows.Forms.AnchorStyles.Right)));
             this.m_labelListViewDivider.Location = new System.Drawing.Point(8, 64);
             this.m_labelListViewDivider.Name = "m_labelListViewDivider";
@@ -203,17 +207,20 @@ namespace BuildAutoIncrement {
             this.ResumeLayout(false);
 
         }
-		#endregion
+        #endregion
 
         #region Private methods
 
-        private void FillDetailsListView(UpdateSummary.UpdateSummaryItem[] updateInfos) {
+        private void FillDetailsListView(UpdateSummary.UpdateSummaryItem[] updateInfos)
+        {
             m_listViewDetails.Items.Clear();
-            foreach (UpdateSummary.UpdateSummaryItem updateInfo in updateInfos) {
+            foreach (UpdateSummary.UpdateSummaryItem updateInfo in updateInfos)
+            {
                 ListViewItem lvi = new ListViewItem(updateInfo.ProjectName);
                 lvi.UseItemStyleForSubItems = false;
                 lvi.ForeColor = SelectStatusColor(updateInfo.UpdateState);
-                foreach (AssemblyVersionType versionType in AssemblyVersions.AssemblyVersionTypes) {
+                foreach (AssemblyVersionType versionType in AssemblyVersions.AssemblyVersionTypes)
+                {
                     ListViewItem.ListViewSubItem lvsi = new ListViewItem.ListViewSubItem();
                     lvsi.Text = updateInfo[versionType].Version;
                     lvsi.ForeColor = SelectStatusColor(updateInfo[versionType].UpdateState);
@@ -223,22 +230,25 @@ namespace BuildAutoIncrement {
             }
         }
 
-        private Color SelectStatusColor(UpdateSummary.UpdateState updateState) {
-            switch (updateState) {
-            case UpdateSummary.UpdateState.Updated:
-                return ConfigurationPersister.Instance.Configuration.DisplayOptions.Colors.ReportUpdatedVersion;
-            case UpdateSummary.UpdateState.NotUpdated:
-                return ConfigurationPersister.Instance.Configuration.DisplayOptions.Colors.ReportVersionNotChanged;
-            case UpdateSummary.UpdateState.Failed:
-                return ConfigurationPersister.Instance.Configuration.DisplayOptions.Colors.ReportVersionUpdateFailed;
+        private Color SelectStatusColor(UpdateSummary.UpdateState updateState)
+        {
+            switch (updateState)
+            {
+                case UpdateSummary.UpdateState.Updated:
+                    return ConfigurationPersister.Instance.Configuration.DisplayOptions.Colors.ReportUpdatedVersion;
+                case UpdateSummary.UpdateState.NotUpdated:
+                    return ConfigurationPersister.Instance.Configuration.DisplayOptions.Colors.ReportVersionNotChanged;
+                case UpdateSummary.UpdateState.Failed:
+                    return ConfigurationPersister.Instance.Configuration.DisplayOptions.Colors.ReportVersionUpdateFailed;
             }
             Debug.Assert(false, "Not configured UpdateState color");
             return SystemColors.ControlText;
         }
 
         #endregion // Private methods
-    
-        public static DialogResult Show(IWin32Window owner, UpdateSummary.UpdateSummaryItem[] updatedSummary) {
+
+        public static DialogResult Show(IWin32Window owner, UpdateSummary.UpdateSummaryItem[] updatedSummary)
+        {
             OperationSuccesForm osf = new OperationSuccesForm(updatedSummary);
             osf.StartPosition = FormStartPosition.CenterParent;
             return osf.ShowDialog(owner);

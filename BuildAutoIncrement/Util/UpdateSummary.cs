@@ -28,13 +28,16 @@ using System.Diagnostics;
 using System.IO;
 using System.Text;
 
-namespace BuildAutoIncrement {
-	/// <summary>
-	///   Collection containing summary of updates.
-	/// </summary>
-	public class UpdateSummary {
+namespace BuildAutoIncrement
+{
+    /// <summary>
+    ///   Collection containing summary of updates.
+    /// </summary>
+    public class UpdateSummary
+    {
 
-        public enum UpdateState {
+        public enum UpdateState
+        {
             Updated,
             NotUpdated,
             Failed
@@ -42,35 +45,43 @@ namespace BuildAutoIncrement {
 
         #region UpdateSummaryItem
 
-        public class UpdateSummaryItem {
+        public class UpdateSummaryItem
+        {
 
-            public class AssemblyVersionItem {
+            public class AssemblyVersionItem
+            {
 
-                public AssemblyVersionItem(string version, UpdateState updateState) {
-                    Version      = version;
+                public AssemblyVersionItem(string version, UpdateState updateState)
+                {
+                    Version = version;
                     UpdateState = updateState;
                 }
 
-                public string       Version      = "";
-                public UpdateState  UpdateState  = UpdateState.NotUpdated; 
+                public string Version = "";
+                public UpdateState UpdateState = UpdateState.NotUpdated;
             }
-            
-            public UpdateSummaryItem(ProjectInfo projectInfo, UpdateState updateState) {
+
+            public UpdateSummaryItem(ProjectInfo projectInfo, UpdateState updateState)
+            {
                 ProjectName = projectInfo.ProjectName;
                 ProjectFullName = projectInfo.FullName;
                 UpdateState = updateState;
-                foreach (AssemblyVersionType versionType in AssemblyVersions.AssemblyVersionTypes) {
+                foreach (AssemblyVersionType versionType in AssemblyVersions.AssemblyVersionTypes)
+                {
                     string version;
                     AssemblyVersionItem avi;
-                    if (updateState == UpdateState.Failed) {
+                    if (updateState == UpdateState.Failed)
+                    {
                         version = projectInfo.CurrentAssemblyVersions[versionType].ToString();
                         avi = new AssemblyVersionItem(version, UpdateState.Failed);
                     }
-                    if (projectInfo.IsMarkedForUpdate(versionType) && updateState == UpdateState.Updated) {
+                    if (projectInfo.IsMarkedForUpdate(versionType) && updateState == UpdateState.Updated)
+                    {
                         version = projectInfo.ToBecomeAssemblyVersions[versionType].ToString();
                         avi = new AssemblyVersionItem(version, UpdateState.Updated);
                     }
-                    else {
+                    else
+                    {
                         version = projectInfo.CurrentAssemblyVersions[versionType].ToString();
                         avi = new AssemblyVersionItem(version, UpdateState.NotUpdated);
                     }
@@ -78,8 +89,10 @@ namespace BuildAutoIncrement {
                 }
             }
 
-            public AssemblyVersionItem this[AssemblyVersionType assemblyVersionType] {
-                get {
+            public AssemblyVersionItem this[AssemblyVersionType assemblyVersionType]
+            {
+                get
+                {
                     return (AssemblyVersionItem)m_assemblyVersions[assemblyVersionType];
                 }
             }
@@ -90,51 +103,63 @@ namespace BuildAutoIncrement {
 
             private Hashtable m_assemblyVersions = new Hashtable(AssemblyVersions.AssemblyVersionTypes.Length);
 
-            public  UpdateState UpdateState;
+            public UpdateState UpdateState;
 
         }
 
         #endregion // UpdateSummaryItem
 
-        public UpdateSummary() {
-		}
+        public UpdateSummary()
+        {
+        }
 
-        public void AddRange(ProjectInfo[] projectInfos) {
-            foreach (ProjectInfo projectInfo in projectInfos) {
-                if (projectInfo.IsVersionable) {
+        public void AddRange(ProjectInfo[] projectInfos)
+        {
+            foreach (ProjectInfo projectInfo in projectInfos)
+            {
+                if (projectInfo.IsVersionable)
+                {
                     UpdateSummaryItem usi = new UpdateSummaryItem(projectInfo, UpdateState.NotUpdated);
                     m_projects.Add(usi);
                 }
             }
         }
 
-        public void Clear() {
+        public void Clear()
+        {
             m_projects.Clear();
         }
 
-        public void SetFailed(ProjectInfo projectInfo) {
+        public void SetFailed(ProjectInfo projectInfo)
+        {
             Debug.Assert(Contains(projectInfo));
             this[projectInfo].UpdateState = UpdateState.Failed;
         }
 
-        public void SetUpdated(ProjectInfo projectInfo, AssemblyVersionType versionType, string newVersion) {
+        public void SetUpdated(ProjectInfo projectInfo, AssemblyVersionType versionType, string newVersion)
+        {
             Debug.Assert(Contains(projectInfo));
             this[projectInfo].UpdateState = UpdateState.Updated;
             this[projectInfo][versionType].UpdateState = UpdateState.Updated;
             this[projectInfo][versionType].Version = newVersion;
         }
 
-        private bool Contains(ProjectInfo projectInfo) {
-            foreach (UpdateSummaryItem usi in m_projects) {
+        private bool Contains(ProjectInfo projectInfo)
+        {
+            foreach (UpdateSummaryItem usi in m_projects)
+            {
                 if (usi.ProjectFullName == projectInfo.FullName)
                     return true;
             }
             return false;
         }
 
-        private UpdateSummaryItem this[ProjectInfo projectInfo] {
-            get {
-                foreach (UpdateSummaryItem usi in m_projects) {
+        private UpdateSummaryItem this[ProjectInfo projectInfo]
+        {
+            get
+            {
+                foreach (UpdateSummaryItem usi in m_projects)
+                {
                     if (usi.ProjectFullName == projectInfo.FullName)
                         return usi;
                 }
@@ -142,34 +167,45 @@ namespace BuildAutoIncrement {
             }
         }
 
-        public int UpdatedItemsCount {
-            get {
+        public int UpdatedItemsCount
+        {
+            get
+            {
                 int updatedCount = 0;
-                foreach (UpdateSummaryItem usi in m_projects) {
+                foreach (UpdateSummaryItem usi in m_projects)
+                {
                     if (usi.UpdateState == UpdateState.Updated)
                         updatedCount++;
                 }
-                return updatedCount; 
+                return updatedCount;
             }
         }
 
-        public UpdateSummary.UpdateSummaryItem[] SummaryItems {
-            get {
+        public UpdateSummary.UpdateSummaryItem[] SummaryItems
+        {
+            get
+            {
                 UpdateSummary.UpdateSummaryItem[] items = new UpdateSummary.UpdateSummaryItem[m_projects.Count];
                 m_projects.CopyTo(items, 0);
                 return items;
             }
         }
 
-        public override string ToString() {
-            using (StringWriter sw = new StringWriter()) {
-                if (UpdatedItemsCount == 0) {
+        public override string ToString()
+        {
+            using (StringWriter sw = new StringWriter())
+            {
+                if (UpdatedItemsCount == 0)
+                {
                     sw.WriteLine(NothingToUpdate);
                 }
-                else {
+                else
+                {
                     sw.WriteLine(UpdateCaption);
-                    foreach (UpdateSummaryItem item in m_projects) {
-                        if (item.UpdateState == UpdateState.Updated) {
+                    foreach (UpdateSummaryItem item in m_projects)
+                    {
+                        if (item.UpdateState == UpdateState.Updated)
+                        {
                             sw.WriteLine(ProjectNameCaption + sw.NewLine + FullPathCaption, item.ProjectName, item.ProjectFullName);
                             if (item[AssemblyVersionType.AssemblyVersion].UpdateState == UpdateSummary.UpdateState.Updated)
                                 sw.WriteLine(AssemblyVersionCaption, item[AssemblyVersionType.AssemblyVersion].Version);
@@ -187,18 +223,19 @@ namespace BuildAutoIncrement {
 
         private ArrayList m_projects = new ArrayList();
 
-        private const string NothingToUpdate        = "No project found for version update. Please run the GUI tool.";
-        private const string UpdateCaption          = "VERSION UPDATE SUMMARY:";
-        private const string ProjectNameCaption     = "Project Name: {0}";
-        private const string FullPathCaption        = "Full Path:    {1}";
+        private const string NothingToUpdate = "No project found for version update. Please run the GUI tool.";
+        private const string UpdateCaption = "VERSION UPDATE SUMMARY:";
+        private const string ProjectNameCaption = "Project Name: {0}";
+        private const string FullPathCaption = "Full Path:    {1}";
         private const string AssemblyVersionCaption = "  Assembly version: {0}";
-        private const string ProductVersionCaption  = "  Product version:  {0}";
-        private const string FileVersionCaption     = "  File version:     {0}";
+        private const string ProductVersionCaption = "  Product version:  {0}";
+        private const string FileVersionCaption = "  File version:     {0}";
 
-        public static string CreateSummaryFilename(string solutionFilename) {
+        public static string CreateSummaryFilename(string solutionFilename)
+        {
             StringBuilder sb = new StringBuilder(Path.GetFileNameWithoutExtension(solutionFilename));
             sb.Append(".VersionUpdateSummary");
             return sb.ToString();
         }
-	}
+    }
 }

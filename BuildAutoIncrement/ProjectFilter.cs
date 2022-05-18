@@ -23,12 +23,13 @@
  *    misrepresented as being the original software.
  * 3. This notice may not be removed or altered from any source distribution.
  */
-using System;
 using System.Collections;
 
-namespace BuildAutoIncrement {
+namespace BuildAutoIncrement
+{
 
-    public interface IProjectFilter {
+    public interface IProjectFilter
+    {
         string[] ProjectsToForce { get; }
         bool Pass(ProjectInfo projectInfo);
     }
@@ -36,20 +37,25 @@ namespace BuildAutoIncrement {
     /// <summary>
     ///   Project filter passing all <c>ProjectInfo</c> objects.
     /// </summary>
-    public class ProjectFilter : IProjectFilter {
+    public class ProjectFilter : IProjectFilter
+    {
 
-        protected ProjectFilter() {
+        protected ProjectFilter()
+        {
         }
 
         #region IProjectFilter Members
 
-        public virtual bool Pass(ProjectInfo projectInfo) {
+        public virtual bool Pass(ProjectInfo projectInfo)
+        {
             return true;
         }
 
-        public virtual string[] ProjectsToForce { 
-            get {
-                return new string[0]; 
+        public virtual string[] ProjectsToForce
+        {
+            get
+            {
+                return new string[0];
             }
         }
 
@@ -58,18 +64,20 @@ namespace BuildAutoIncrement {
         public static ProjectFilter PassAll = new ProjectFilter();
     }
 
-	/// <summary>
-	/// <c>IProjectFilter</c> implementation that passes <c>ProjectInfo</c> 
-	/// objects using configuration settings.
-	/// </summary>
-	public class ProjectFilterByType : ProjectFilter {
+    /// <summary>
+    /// <c>IProjectFilter</c> implementation that passes <c>ProjectInfo</c> 
+    /// objects using configuration settings.
+    /// </summary>
+    public class ProjectFilterByType : ProjectFilter
+    {
 
-		public ProjectFilterByType(bool passSetupProjects, bool passNonVersionableProjects, bool passProjectFolders, bool passEnterpriseProjectRoots) {
+        public ProjectFilterByType(bool passSetupProjects, bool passNonVersionableProjects, bool passProjectFolders, bool passEnterpriseProjectRoots)
+        {
             m_passSetupProjects = passSetupProjects;
             m_passNonVersionableProjects = passNonVersionableProjects;
             m_passProjectFolders = passProjectFolders;
             m_passEnterpriseProjectRoots = passEnterpriseProjectRoots;
-		}
+        }
 
         /// <summary>
         ///   Filter method.
@@ -80,20 +88,22 @@ namespace BuildAutoIncrement {
         /// <returns>
         ///   Return <c>true</c> if project passed filter criteria.
         /// </returns>
-        public override bool Pass(ProjectInfo projectInfo) {
+        public override bool Pass(ProjectInfo projectInfo)
+        {
             ProjectType pt = projectInfo.ProjectTypeInfo.ProjectType;
-            switch (pt) {
-            case ProjectType.SetupProject:
-                return m_passSetupProjects;
-            case ProjectType.FileBasedWebProject:
-            case ProjectType.DatabaseProject:
-            case ProjectType.FSharpProject:
-                return m_passNonVersionableProjects;
-            case ProjectType.SolutionFolder:
-            case ProjectType.VirtualFolder:
-                return m_passProjectFolders;
-            case ProjectType.EnterpriseProject:
-                return m_passEnterpriseProjectRoots;
+            switch (pt)
+            {
+                case ProjectType.SetupProject:
+                    return m_passSetupProjects;
+                case ProjectType.FileBasedWebProject:
+                case ProjectType.DatabaseProject:
+                case ProjectType.FSharpProject:
+                    return m_passNonVersionableProjects;
+                case ProjectType.SolutionFolder:
+                case ProjectType.VirtualFolder:
+                    return m_passProjectFolders;
+                case ProjectType.EnterpriseProject:
+                    return m_passEnterpriseProjectRoots;
             }
             return true;
         }
@@ -111,40 +121,50 @@ namespace BuildAutoIncrement {
     ///   Object used by command-line utility to filter projects by their
     ///   name.
     /// </summary>
-    public class ProjectFilterByName : ProjectFilterByType {
+    public class ProjectFilterByName : ProjectFilterByType
+    {
 
-        public ProjectFilterByName(bool passSetupProjects, bool passNonVersionableProjects, bool passProjectFolders, bool passEnterpriseProjectRoots, string[] projectsToInclude, string[] projectsToExclude, string[] projectsToForce)  : base(passSetupProjects, passNonVersionableProjects, passProjectFolders, passEnterpriseProjectRoots) { 
+        public ProjectFilterByName(bool passSetupProjects, bool passNonVersionableProjects, bool passProjectFolders, bool passEnterpriseProjectRoots, string[] projectsToInclude, string[] projectsToExclude, string[] projectsToForce) : base(passSetupProjects, passNonVersionableProjects, passProjectFolders, passEnterpriseProjectRoots)
+        {
             m_projectsToInclude = (projectsToInclude == null) ? new string[0] : projectsToInclude;
             m_projectsToExclude = (projectsToExclude == null) ? new string[0] : projectsToExclude;
             m_projectsToForce = (projectsToForce == null) ? new string[0] : projectsToForce;
         }
 
-        public override string[] ProjectsToForce {
-            get {
+        public override string[] ProjectsToForce
+        {
+            get
+            {
                 return m_projectsToForce;
             }
         }
 
-        public override bool Pass(ProjectInfo projectInfo) {
+        public override bool Pass(ProjectInfo projectInfo)
+        {
             IEnumerator enumerator = m_projectsToForce.GetEnumerator();
-            while (enumerator.MoveNext()) {
+            while (enumerator.MoveNext())
+            {
                 string entry = (string)enumerator.Current;
                 if (ProjectNamesAreEqual(entry, projectInfo))
                     return true;
             }
             // if any of lists is not empty
-            if (m_projectsToExclude.Length > 0 || m_projectsToInclude.Length > 0) {
+            if (m_projectsToExclude.Length > 0 || m_projectsToInclude.Length > 0)
+            {
                 // first the exclusion list
                 enumerator = m_projectsToExclude.GetEnumerator();
-                while (enumerator.MoveNext()) {
+                while (enumerator.MoveNext())
+                {
                     string entry = (string)enumerator.Current;
                     if (ProjectNamesAreEqual(entry, projectInfo))
                         return false;
                 }
                 // if there is an inclusion list
-                if (m_projectsToInclude.Length > 0) {
+                if (m_projectsToInclude.Length > 0)
+                {
                     enumerator = m_projectsToInclude.GetEnumerator();
-                    while (enumerator.MoveNext()) {
+                    while (enumerator.MoveNext())
+                    {
                         string entry = (string)enumerator.Current;
                         if (ProjectNamesAreEqual(entry, projectInfo))
                             return true;
@@ -155,8 +175,9 @@ namespace BuildAutoIncrement {
             return base.Pass(projectInfo);
         }
 
-        
-        protected bool ProjectNamesAreEqual(string name, ProjectInfo projectInfo) {
+
+        protected bool ProjectNamesAreEqual(string name, ProjectInfo projectInfo)
+        {
             return string.Compare(name, projectInfo.ProjectName, true) == 0;
         }
 

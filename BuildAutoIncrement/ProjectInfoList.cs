@@ -25,18 +25,21 @@
 using System;
 using System.Collections;
 
-namespace BuildAutoIncrement {
-	/// <summary>
-	///   A list of all projects satisfying the filter provided.
-	/// </summary>
-    public class ProjectInfoList : IList, ICollection, IEnumerable {
+namespace BuildAutoIncrement
+{
+    /// <summary>
+    ///   A list of all projects satisfying the filter provided.
+    /// </summary>
+    public class ProjectInfoList : IList, ICollection, IEnumerable
+    {
 
         #region Constructors
 
         /// <summary>
         ///   Hidden default constructor.
         /// </summary>
-        private ProjectInfoList() {
+        private ProjectInfoList()
+        {
             m_projectInfos = new ArrayList();
         }
 
@@ -58,18 +61,21 @@ namespace BuildAutoIncrement {
         ///   Mask defining which versions (AssemblyInfo, Informational or 
         ///   Product) may be updated.
         /// </param>
-        public ProjectInfoList(ProjectInfo[] projectInfos, IProjectFilter filter, NewVersionProvider newVersionProvider, AssemblyVersionType assemblyVersionsUpdateMask) {
+        public ProjectInfoList(ProjectInfo[] projectInfos, IProjectFilter filter, NewVersionProvider newVersionProvider, AssemblyVersionType assemblyVersionsUpdateMask)
+        {
             m_projectInfos = new ArrayList(projectInfos.Length);
-            m_highestToBeAssemblyVersions    = AssemblyVersions.MinValue;
+            m_highestToBeAssemblyVersions = AssemblyVersions.MinValue;
             m_highestProposedAssemblyVersion = AssemblyVersions.MinValue;
-            foreach (ProjectInfo projectInfo in projectInfos) {
-                if (filter.Pass(projectInfo)) {
+            foreach (ProjectInfo projectInfo in projectInfos)
+            {
+                if (filter.Pass(projectInfo))
+                {
                     ProjectInfo pi = projectInfo;
                     pi.SetToBecomeVersion(newVersionProvider);
-                    if (pi.Modified) 
+                    if (pi.Modified)
                         pi.MarkAssemblyVersionsForUpdate(assemblyVersionsUpdateMask);
                     m_projectInfos.Add(pi);
-                    m_highestToBeAssemblyVersions    = AssemblyVersions.Max(m_highestToBeAssemblyVersions, pi);
+                    m_highestToBeAssemblyVersions = AssemblyVersions.Max(m_highestToBeAssemblyVersions, pi);
                     m_highestProposedAssemblyVersion = AssemblyVersions.MaxProposed(m_highestProposedAssemblyVersion, pi);
                 }
             }
@@ -82,8 +88,10 @@ namespace BuildAutoIncrement {
         /// <summary>
         ///   Gets a list of filtered <c>ProjectInfo</c> objects.
         /// </summary>
-        public ProjectInfo[] ProjectInfos {
-            get {
+        public ProjectInfo[] ProjectInfos
+        {
+            get
+            {
                 return (ProjectInfo[])m_projectInfos.ToArray(typeof(ProjectInfo));
             }
         }
@@ -91,18 +99,22 @@ namespace BuildAutoIncrement {
         /// <summary>
         ///   Gets the highest of all "to be" project versions in the current solution.
         /// </summary>
-        public AssemblyVersions HighestToBeAssemblyVersions {
-            get { 
-                return m_highestToBeAssemblyVersions; 
+        public AssemblyVersions HighestToBeAssemblyVersions
+        {
+            get
+            {
+                return m_highestToBeAssemblyVersions;
             }
         }
 
         /// <summary>
         ///   Gets the highest version among those marked for update.
         /// </summary>
-        public AssemblyVersions HighestProposedAssemblyVersions {
-            get { 
-                return m_highestProposedAssemblyVersion; 
+        public AssemblyVersions HighestProposedAssemblyVersions
+        {
+            get
+            {
+                return m_highestProposedAssemblyVersion;
             }
         }
 
@@ -115,8 +127,10 @@ namespace BuildAutoIncrement {
         /// </summary>
         /// <param name="projectName"></param>
         /// <returns></returns>
-        public bool Contains(string projectName) {
-            foreach (ProjectInfo projectInfo in m_projectInfos) {
+        public bool Contains(string projectName)
+        {
+            foreach (ProjectInfo projectInfo in m_projectInfos)
+            {
                 if (string.Compare(projectInfo.ProjectName, projectName, true) == 0)
                     return true;
             }
@@ -127,49 +141,60 @@ namespace BuildAutoIncrement {
 
         #region IList interface implementation
 
-        bool IList.IsFixedSize {
+        bool IList.IsFixedSize
+        {
             get { return true; }
         }
 
-        bool IList.IsReadOnly {
+        bool IList.IsReadOnly
+        {
             get { return true; }
         }
 
-        object IList.this[int index] {
+        object IList.this[int index]
+        {
             get { return this[index]; }
             set { this[index] = (ProjectInfo)value; }
         }
 
-        public ProjectInfo this[int index] {
+        public ProjectInfo this[int index]
+        {
             get { return (ProjectInfo)m_projectInfos[index]; }
             set { m_projectInfos[index] = value; }
         }
 
-        int IList.Add(object obj) {
+        int IList.Add(object obj)
+        {
             throw new NotImplementedException();
         }
 
-        void IList.Clear() {
+        void IList.Clear()
+        {
             throw new NotImplementedException();
         }
 
-        bool IList.Contains(object value) {
+        bool IList.Contains(object value)
+        {
             throw new NotImplementedException();
         }
 
-        int IList.IndexOf(object value) {
+        int IList.IndexOf(object value)
+        {
             throw new NotImplementedException();
         }
 
-        void IList.Insert(int index, object value) {
+        void IList.Insert(int index, object value)
+        {
             throw new NotImplementedException();
         }
 
-        void IList.Remove(object value) {
+        void IList.Remove(object value)
+        {
             throw new NotImplementedException();
         }
 
-        void IList.RemoveAt(int index) {
+        void IList.RemoveAt(int index)
+        {
             throw new NotImplementedException();
         }
 
@@ -177,19 +202,23 @@ namespace BuildAutoIncrement {
 
         #region ICollection interface implementation
 
-        int ICollection.Count {
+        int ICollection.Count
+        {
             get { return m_projectInfos.Count; }
         }
 
-        bool ICollection.IsSynchronized {
+        bool ICollection.IsSynchronized
+        {
             get { return m_projectInfos.IsSynchronized; }
         }
 
-        object ICollection.SyncRoot {
+        object ICollection.SyncRoot
+        {
             get { return m_projectInfos.SyncRoot; }
         }
 
-        void ICollection.CopyTo(Array array, int index) {
+        void ICollection.CopyTo(Array array, int index)
+        {
             m_projectInfos.CopyTo(array, index);
         }
 
@@ -198,7 +227,8 @@ namespace BuildAutoIncrement {
 
         #region IEnumerable interface implementation
 
-        IEnumerator IEnumerable.GetEnumerator() {
+        IEnumerator IEnumerable.GetEnumerator()
+        {
             return m_projectInfos.GetEnumerator();
         }
 
@@ -206,11 +236,11 @@ namespace BuildAutoIncrement {
 
         #region Private fields
 
-        private ArrayList           m_projectInfos;
+        private ArrayList m_projectInfos;
 
-        private AssemblyVersions    m_highestToBeAssemblyVersions;
+        private AssemblyVersions m_highestToBeAssemblyVersions;
 
-        private AssemblyVersions    m_highestProposedAssemblyVersion;
+        private AssemblyVersions m_highestProposedAssemblyVersion;
 
         #endregion // Private fields
     }

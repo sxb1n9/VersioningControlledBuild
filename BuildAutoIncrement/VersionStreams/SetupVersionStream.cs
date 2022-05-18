@@ -22,16 +22,15 @@
  *    misrepresented as being the original software.
  * 3. This notice may not be removed or altered from any source distribution.
  */
-using System;
-using System.Collections;
 using System.Diagnostics;
 using System.Text.RegularExpressions;
 
-namespace BuildAutoIncrement {
-	/// <summary>
-	///   Responsible for reading and writing version of Setup projects.
-	/// </summary>
-	public class SetupVersionStream : VersionStreamWGuid
+namespace BuildAutoIncrement
+{
+    /// <summary>
+    ///   Responsible for reading and writing version of Setup projects.
+    /// </summary>
+    public class SetupVersionStream : VersionStreamWGuid
     {
 
         #region Internal IVdProjPattern interface and implementations
@@ -173,5 +172,5 @@ namespace BuildAutoIncrement {
         private const string ProductCode = "\"ProductCode\"";
         private const string ProjectTypePattern = OptionalWhitespacePattern + "\"ProjectType\"" + OptionalWhitespacePattern + "=" + OptionalWhitespacePattern + GuidPatternQuoted;
         private const string GuidPatternQuoted = "\"" + "8:" + GuidPattern + "\"";
-	}
+    }
 }

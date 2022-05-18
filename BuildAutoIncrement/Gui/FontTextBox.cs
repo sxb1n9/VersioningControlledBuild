@@ -22,23 +22,23 @@
  *    misrepresented as being the original software.
  * 3. This notice may not be removed or altered from any source distribution.
  */
-using System;
 using System.ComponentModel;
 using System.Drawing;
-using System.Windows.Forms;
-using System.Windows.Forms.Design;
 
-namespace BuildAutoIncrement {
+namespace BuildAutoIncrement
+{
 
     /// <summary>
     ///   Displays font description.
     /// </summary>
-    public class FontTextBox : System.Windows.Forms.TextBox {
+    public class FontTextBox : System.Windows.Forms.TextBox
+    {
 
         /// <summary>
         ///   Initializes <c>FontTextBox</c> control.
         /// </summary>
-        public FontTextBox() : base() {
+        public FontTextBox() : base()
+        {
             ReadOnly = true;
             FontDescription = new FontDescription("Arial", FontStyle.Regular, 10f);
         }
@@ -46,33 +46,42 @@ namespace BuildAutoIncrement {
         #region Public properties
 
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public FontDescription FontDescription {
-            get {
+        public FontDescription FontDescription
+        {
+            get
+            {
                 return m_fontDescription;
             }
-            set {
+            set
+            {
                 m_fontDescription = value;
                 base.Text = m_fontDescription.ToString();
             }
         }
 
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public Font FontDisplayed {
-            get {
+        public Font FontDisplayed
+        {
+            get
+            {
                 return new Font(m_fontDescription.FontFamily, m_fontDescription.Size, m_fontDescription.FontStyle);
             }
-            set {
+            set
+            {
                 FontDescription = new FontDescription(value.FontFamily.Name, value.Style, value.Size);
             }
         }
 
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         [Browsable(false)]
-        public new string Text {
-            get {
+        public new string Text
+        {
+            get
+            {
                 return base.Text;
             }
-            set {
+            set
+            {
             }
         }
 
@@ -80,13 +89,14 @@ namespace BuildAutoIncrement {
 
         #region Overrides
 
-        protected override void InitLayout() {
-            base.InitLayout ();
+        protected override void InitLayout()
+        {
+            base.InitLayout();
             Text = m_fontDescription.ToString();
         }
 
         #endregion // Overrides
 
-        FontDescription m_fontDescription;		
+        FontDescription m_fontDescription;
     }
 }

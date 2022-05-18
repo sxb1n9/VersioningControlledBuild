@@ -24,14 +24,14 @@
  * 3. This notice may not be removed or altered from any source distribution.
  */
 using System;
-using System.Drawing;
-using System.ComponentModel;
-using System.Windows.Forms;
 using System.Runtime.InteropServices;
+using System.Windows.Forms;
 
-namespace BuildAutoIncrement {
+namespace BuildAutoIncrement
+{
 
-    public class RemoveConfigurationsForm : System.Windows.Forms.Form {
+    public class RemoveConfigurationsForm : System.Windows.Forms.Form
+    {
 
         [DllImport("user32.dll", SetLastError = true)]
         [return: MarshalAs(UnmanagedType.Bool)]
@@ -42,7 +42,7 @@ namespace BuildAutoIncrement {
         private const uint SWP_NOMOVE = 0x0002;
         private const uint SWP_NOSIZE = 0x0001;
 
- 
+
         #region Controls
 
         private System.Windows.Forms.Label label1;
@@ -56,36 +56,41 @@ namespace BuildAutoIncrement {
 
         #endregion // Controls
 
-		private System.ComponentModel.Container components = null;
+        private System.ComponentModel.Container components = null;
 
-		private RemoveConfigurationsForm() {
-			InitializeComponent();
-		}
+        private RemoveConfigurationsForm()
+        {
+            InitializeComponent();
+        }
 
-		/// <summary>
-		/// Clean up any resources being used.
-		/// </summary>
-		protected override void Dispose(bool disposing) {
-			if (disposing) {
-				if(components != null) {
-					components.Dispose();
-				}
-			}
-			base.Dispose(disposing);
-		}
+        /// <summary>
+        /// Clean up any resources being used.
+        /// </summary>
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                if (components != null)
+                {
+                    components.Dispose();
+                }
+            }
+            base.Dispose(disposing);
+        }
 
-        protected override void OnLoad(EventArgs e) {
+        protected override void OnLoad(EventArgs e)
+        {
             base.OnLoad(e);
             SetWindowPos(Handle, (IntPtr)HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE);
         }
 
-		#region Windows Form Designer generated code
-		/// <summary>
-		/// Required method for Designer support - do not modify
-		/// the contents of this method with the code editor.
-		/// </summary>
-		private void InitializeComponent()
-		{
+        #region Windows Form Designer generated code
+        /// <summary>
+        /// Required method for Designer support - do not modify
+        /// the contents of this method with the code editor.
+        /// </summary>
+        private void InitializeComponent()
+        {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(RemoveConfigurationsForm));
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
@@ -201,9 +206,10 @@ namespace BuildAutoIncrement {
             this.ResumeLayout(false);
 
         }
-		#endregion
+        #endregion
 
-        public static new DialogResult Show() {
+        public static new DialogResult Show()
+        {
             RemoveConfigurationsForm rcf = new RemoveConfigurationsForm();
             rcf.StartPosition = FormStartPosition.CenterScreen;
             return rcf.ShowDialog();
