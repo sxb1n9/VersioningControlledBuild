@@ -22,17 +22,18 @@
  *    misrepresented as being the original software.
  * 3. This notice may not be removed or altered from any source distribution.
  */
-using System;
 using System.Collections;
 using System.Diagnostics;
 using System.Text.RegularExpressions;
 
-namespace BuildAutoIncrement {
-	/// <summary>
-	///   Class responsible for getting and saving version from VC++ resource 
-	///   (.RC) files.
-	/// </summary>
-	public class ResourceFileStream : VersionStream {
+namespace BuildAutoIncrement
+{
+    /// <summary>
+    ///   Class responsible for getting and saving version from VC++ resource 
+    ///   (.RC) files.
+    /// </summary>
+    public class ResourceFileStream : VersionStream
+    {
 
         /// <summary>
         ///   Creates <c>ResourceFileStream</c> object for resource file provided.
@@ -40,7 +41,8 @@ namespace BuildAutoIncrement {
         /// <param name="filename">
         ///   Name of the resource file.
         /// </param>
-        public ResourceFileStream(string filename) : base(filename) {
+        public ResourceFileStream(string filename) : base(filename)
+        {
         }
 
         /// <summary>
@@ -49,14 +51,18 @@ namespace BuildAutoIncrement {
         /// <returns>
         ///   <c>AssemblyVersions</c> collection.
         /// </returns>
-        public override AssemblyVersions GetVersions() {
+        public override AssemblyVersions GetVersions()
+        {
             Hashtable projectVersions = new Hashtable(AssemblyVersions.AssemblyVersionTypes.Length);
-            foreach (AssemblyVersionType avt in AssemblyVersions.AssemblyVersionTypes) {
+            foreach (AssemblyVersionType avt in AssemblyVersions.AssemblyVersionTypes)
+            {
                 // resource file does not contain assembly version
-                if (avt == AssemblyVersionType.AssemblyVersion) {
+                if (avt == AssemblyVersionType.AssemblyVersion)
+                {
                     projectVersions[avt] = ProjectVersion.Empty;
                 }
-                else {
+                else
+                {
                     projectVersions[avt] = GetVersion(avt);
                 }
             }
@@ -72,15 +78,18 @@ namespace BuildAutoIncrement {
         /// <param name="newVersion">
         ///   New version to save.
         /// </param>
-        public override void SaveVersion(AssemblyVersionType typeToSave, string newVersion) {
+        public override void SaveVersion(AssemblyVersionType typeToSave, string newVersion)
+        {
             Debug.Assert(typeToSave != AssemblyVersionType.All);
             if (typeToSave == AssemblyVersionType.AssemblyVersion)
                 return;
-            if (typeToSave == AssemblyVersionType.AssemblyFileVersion) {
+            if (typeToSave == AssemblyVersionType.AssemblyFileVersion)
+            {
                 SetHeaderVersionString(FileVersionCaps, newVersion);
                 SetBlockVersionString(FileVersionQuoted, newVersion);
             }
-            if (typeToSave == AssemblyVersionType.AssemblyInformationalVersion) {
+            if (typeToSave == AssemblyVersionType.AssemblyInformationalVersion)
+            {
                 SetHeaderVersionString(ProductVersionCaps, newVersion);
                 SetBlockVersionString(ProductVersionQuoted, newVersion);
             }
@@ -98,7 +107,8 @@ namespace BuildAutoIncrement {
         /// <returns>
         ///   Version string found.
         /// </returns>
-        protected override string GetVersionString(AssemblyVersionType versionType) {
+        protected override string GetVersionString(AssemblyVersionType versionType)
+        {
             Debug.Assert(versionType != AssemblyVersionType.AssemblyVersion && versionType != AssemblyVersionType.All);
             // if VS_VERSION_INFO header not found, there is no valid version
             Regex regex = new Regex(VersionInfoHeaderLine, RegexOptions.Multiline);
@@ -107,16 +117,17 @@ namespace BuildAutoIncrement {
                 return "";
             int offset = match.Index + match.Length;
             string pattern = "";
-            switch (versionType) {
-            case AssemblyVersionType.AssemblyFileVersion:
-                pattern = StartOfLine + FileVersionCaps + OneOrMoreWhitespacePattern + VersionPattern;
-                break;
-            case AssemblyVersionType.AssemblyInformationalVersion:
-                pattern = StartOfLine + ProductVersionCaps + OneOrMoreWhitespacePattern + VersionPattern;
-                break;
-            default:
-                Debug.Assert(false, string.Format("Illegal versionName: {0}", versionType.ToString()));
-                break;
+            switch (versionType)
+            {
+                case AssemblyVersionType.AssemblyFileVersion:
+                    pattern = StartOfLine + FileVersionCaps + OneOrMoreWhitespacePattern + VersionPattern;
+                    break;
+                case AssemblyVersionType.AssemblyInformationalVersion:
+                    pattern = StartOfLine + ProductVersionCaps + OneOrMoreWhitespacePattern + VersionPattern;
+                    break;
+                default:
+                    Debug.Assert(false, string.Format("Illegal versionName: {0}", versionType.ToString()));
+                    break;
             }
             regex = new Regex(pattern, RegexOptions.Multiline);
             match = regex.Match(m_fileContent, offset);
@@ -124,7 +135,8 @@ namespace BuildAutoIncrement {
             return match.Value;
         }
 
-        protected override string VersionPattern {
+        protected override string VersionPattern
+        {
             get { return ResourceVersionPattern; }
         }
 
@@ -141,7 +153,8 @@ namespace BuildAutoIncrement {
         /// <param name="version">
         ///   New version string to apply.
         /// </param>
-        private void SetHeaderVersionString(string versionName, string version) {
+        private void SetHeaderVersionString(string versionName, string version)
+        {
             // first find start of the header
             Regex regex = new Regex(VersionInfoHeaderLine, RegexOptions.Multiline);
             Match match = regex.Match(m_fileContent);
@@ -162,7 +175,8 @@ namespace BuildAutoIncrement {
         /// <param name="version">
         ///   Version string.
         /// </param>
-        private void SetBlockVersionString(string atributeName, string version) {
+        private void SetBlockVersionString(string atributeName, string version)
+        {
             // first find start of the header
             Regex regex = new Regex(VersionInfoHeaderLine, RegexOptions.Multiline);
             Match match = regex.Match(m_fileContent);
@@ -188,7 +202,8 @@ namespace BuildAutoIncrement {
         /// <returns>
         ///   Trimmed version that will be applied.
         /// </returns>
-        private string ReduceBlockVersion(Regex regularExpression, string version, int offset) {
+        private string ReduceBlockVersion(Regex regularExpression, string version, int offset)
+        {
             string line = regularExpression.Match(m_fileContent, offset).Value;
             Regex regex = new Regex(VersionPattern);
             string currVersion = regex.Match(line).Value;
@@ -196,7 +211,8 @@ namespace BuildAutoIncrement {
             if (versionLength == 4)
                 return version;
             offset = 0;
-            while (versionLength > 0) {
+            while (versionLength > 0)
+            {
                 offset = version.IndexOf(".", offset + 1);
                 versionLength--;
             }
@@ -215,11 +231,13 @@ namespace BuildAutoIncrement {
         /// <param name="version">
         ///   Version string.
         /// </param>
-        private void FindAndReplaceAllVersionStrings(Regex regularExpression, string version, int offset) {
+        private void FindAndReplaceAllVersionStrings(Regex regularExpression, string version, int offset)
+        {
             string commaSeparatedVersion = version.Replace('.', ',');
             Regex regexVersion = new Regex(VersionPattern);
             Match lineMatch = regularExpression.Match(m_fileContent, offset);
-            while (lineMatch.Index > 0) {
+            while (lineMatch.Index > 0)
+            {
                 // check the separator used for version components
                 string newVersion = regexVersion.Match(lineMatch.Value).Value;
                 if (newVersion.IndexOf(',') != -1)
@@ -231,17 +249,17 @@ namespace BuildAutoIncrement {
             }
         }
 
-        private const string VsVersionInfoHeader        = "VS_VERSION_INFO";
-        private const string VersionInfoHeader          = "VERSIONINFO";
-        private const string VersionInfoHeaderLine      = StartOfLine + VsVersionInfoHeader + OneOrMoreWhitespacePattern + VersionInfoHeader;
-        private const string FileVersionCaps            = "FILEVERSION";
-        private const string ProductVersionCaps         = "PRODUCTVERSION";
-        private const string Value                      = "VALUE";
-        private const string FileVersionQuoted          = "\"FileVersion\"";
-        private const string ProductVersionQuoted       = "\"ProductVersion\"";
+        private const string VsVersionInfoHeader = "VS_VERSION_INFO";
+        private const string VersionInfoHeader = "VERSIONINFO";
+        private const string VersionInfoHeaderLine = StartOfLine + VsVersionInfoHeader + OneOrMoreWhitespacePattern + VersionInfoHeader;
+        private const string FileVersionCaps = "FILEVERSION";
+        private const string ProductVersionCaps = "PRODUCTVERSION";
+        private const string Value = "VALUE";
+        private const string FileVersionQuoted = "\"FileVersion\"";
+        private const string ProductVersionQuoted = "\"ProductVersion\"";
 
-        private const string ResourceVersionPattern       = @"([0-9]+)([\,\.]\s*[0-9]+){1,3}";
-        private const string VersionPatternQuoted         = "\"" + OptionalWhitespacePattern + ResourceVersionPattern + OptionalWhitespacePattern + "\"";
+        private const string ResourceVersionPattern = @"([0-9]+)([\,\.]\s*[0-9]+){1,3}";
+        private const string VersionPatternQuoted = "\"" + OptionalWhitespacePattern + ResourceVersionPattern + OptionalWhitespacePattern + "\"";
 
     }
 }

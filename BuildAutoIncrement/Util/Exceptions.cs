@@ -24,24 +24,29 @@
  */
 using System;
 
-namespace BuildAutoIncrement {
+namespace BuildAutoIncrement
+{
 
-    public class UserCancelledException : ApplicationException {
+    public class UserCancelledException : ApplicationException
+    {
         /// <summary>
         ///   Creates <c>UserCancelledException</c> object.
         /// </summary>
-        public UserCancelledException() : base() {
+        public UserCancelledException() : base()
+        {
         }
     }
 
-    public class VersionOverflowException : ApplicationException {
+    public class VersionOverflowException : ApplicationException
+    {
         /// <summary>
         ///   Creates <c>VersionOverflowException</c> object.
         /// </summary>
         /// <param name="versionComponent">
         ///   Version component that caused overflow.
         /// </param>
-        public VersionOverflowException(ProjectVersion.VersionComponent versionComponent) {
+        public VersionOverflowException(ProjectVersion.VersionComponent versionComponent)
+        {
             VersionComponent = versionComponent;
         }
 

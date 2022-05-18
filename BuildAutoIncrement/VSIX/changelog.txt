@@ -1,5 +1,3 @@
-ï»¿Release Notes:
-
 V1.0.0 2016-04-03:
 - Transformed the excellent Versioning Controlled Build Add-in from Julijan Sribar to be used in Visual Studio 2015.
 
@@ -13,4 +11,7 @@ V1.2.0 2017-03-01
 - VS 2017 support
 
 V1.2.1 2017-03-05
-- I accidentally removed VS 2015 support in the previous build. Turned out it was more difficult to support both in one packageÂ than I thought. Eventually it all worked out. So this version supports bothÂ VS2015 and VS2017.
+- I accidentally removed VS 2015 support in the previous build. Turned out it was more difficult to support both in one package than I thought. Eventually it all worked out. So this version supports both VS2015 and VS2017.
+
+V1.2.3
+- Add support for VS2022

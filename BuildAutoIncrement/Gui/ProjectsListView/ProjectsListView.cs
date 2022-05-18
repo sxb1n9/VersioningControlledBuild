@@ -32,11 +32,13 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Windows.Forms;
 
-namespace BuildAutoIncrement {
+namespace BuildAutoIncrement
+{
 
     [ToolboxItem(true)]
     [ToolboxBitmap(typeof(ListView))]
-    public class ProjectsListView : System.Windows.Forms.ListView {
+    public class ProjectsListView : System.Windows.Forms.ListView
+    {
 
         #region CheckBoxRenderer
         /// <summary>
@@ -44,12 +46,14 @@ namespace BuildAutoIncrement {
         ///   with visual style. If visual styles are not supported or disabled
         ///   then regular <c>ControlPaint.DrawCheckBox</c> method is used.
         /// </summary>
-        private class CheckBoxRenderer : IDisposable {
+        private class CheckBoxRenderer : IDisposable
+        {
 
             /// <summary>
             ///   <c>Button</c> parts for <c>DrawThemeBackground</c> method.
             /// </summary>
-            private enum ButtonParts {
+            private enum ButtonParts
+            {
                 PushButton = 1,
                 RadioButton = 2,
                 CheckBox = 3,
@@ -60,7 +64,8 @@ namespace BuildAutoIncrement {
             /// <summary>
             ///   CheckBox states for <c>DrawThemeBackground</c> method.
             /// </summary>
-            private enum CheckBoxStates {
+            private enum CheckBoxStates
+            {
                 UncheckedNormal = 1,
                 UncheckedHot = 2,
                 UncheckedPressed = 3,
@@ -80,9 +85,11 @@ namespace BuildAutoIncrement {
             /// <param name="parentHandle">
             ///   Handle of the parent listview.
             /// </param>
-            public CheckBoxRenderer(IntPtr parentHandle) {
+            public CheckBoxRenderer(IntPtr parentHandle)
+            {
                 Debug.Assert(parentHandle != IntPtr.Zero);
-                if (VisualStyles.Supported) {
+                if (VisualStyles.Supported)
+                {
                     m_hTheme = Win32Api.OpenThemeData(parentHandle, "Button");
                     Debug.Assert(m_hTheme != IntPtr.Zero);
                 }
@@ -93,14 +100,16 @@ namespace BuildAutoIncrement {
             /// <summary>
             ///   Finalize method.
             /// </summary>
-            ~CheckBoxRenderer() {
+            ~CheckBoxRenderer()
+            {
                 Dispose(false);
             }
 
             /// <summary>
             ///   Dispose method.
             /// </summary>
-            public void Dispose() {
+            public void Dispose()
+            {
                 GC.SuppressFinalize(this);
                 Dispose(true);
             }
@@ -110,8 +119,10 @@ namespace BuildAutoIncrement {
             ///   if necessary.
             /// </summary>
             /// <param name="disposing"></param>
-            private void Dispose(bool disposing) {
-                if (!m_disposed) {
+            private void Dispose(bool disposing)
+            {
+                if (!m_disposed)
+                {
                     if (m_hTheme != IntPtr.Zero)
                         Win32Api.CloseThemeData(m_hTheme);
                     m_disposed = true;
@@ -127,8 +138,10 @@ namespace BuildAutoIncrement {
             /// <param name="width"></param>
             /// <param name="height"></param>
             /// <param name="bs"></param>
-            public void DrawCheckBox(Graphics graphics, int x, int y, int width, int height, ButtonState bs) {
-                if (m_hTheme != IntPtr.Zero && VisualStyles.Enabled) {
+            public void DrawCheckBox(Graphics graphics, int x, int y, int width, int height, ButtonState bs)
+            {
+                if (m_hTheme != IntPtr.Zero && VisualStyles.Enabled)
+                {
                     CheckBoxStates state = CheckBoxStates.UncheckedNormal;
                     if ((bs & ButtonState.Checked) == ButtonState.Checked)
                         state = CheckBoxStates.CheckedNormal;
@@ -143,7 +156,8 @@ namespace BuildAutoIncrement {
                     Win32Api.DrawThemeBackground(m_hTheme, hdc, (int)ButtonParts.CheckBox, (int)state, ref rect, ref rect);
                     graphics.ReleaseHdc(hdc);
                 }
-                else {
+                else
+                {
                     ControlPaint.DrawCheckBox(graphics, x, y, width, height, bs);
                 }
             }
@@ -160,16 +174,19 @@ namespace BuildAutoIncrement {
         /// <summary>
         ///   Text box used to manually edit "to be version".
         /// </summary>
-        private class EmbeddedTextBox : System.Windows.Forms.TextBox {
+        private class EmbeddedTextBox : System.Windows.Forms.TextBox
+        {
 
-            public EmbeddedTextBox() : base() {
+            public EmbeddedTextBox() : base()
+            {
                 // multiline to allow smaller size than for single line
                 // so that control fits into listview item row
                 Multiline = true;
                 WordWrap = false;
             }
 
-            public void Activate(Rectangle bounds, string text) {
+            public void Activate(Rectangle bounds, string text)
+            {
                 Text = text;
                 Bounds = bounds;
                 Visible = true;
@@ -178,7 +195,8 @@ namespace BuildAutoIncrement {
                 SelectAll();
             }
 
-            public void Deactivate() {
+            public void Deactivate()
+            {
                 Visible = false;
                 Parent.Focus();
             }
@@ -189,7 +207,8 @@ namespace BuildAutoIncrement {
             ///   line control).
             /// </summary>
             /// <param name="e"></param>
-            protected override void OnKeyPress(KeyPressEventArgs e) {
+            protected override void OnKeyPress(KeyPressEventArgs e)
+            {
                 if (e.KeyChar == (char)(int)Keys.Enter)
                     e.Handled = true;
                 /*
@@ -205,15 +224,18 @@ namespace BuildAutoIncrement {
             ///   Overriden to prevent pasting multiline text.
             /// </summary>
             /// <param name="msg"></param>
-            protected override void WndProc(ref Message msg) {
+            protected override void WndProc(ref Message msg)
+            {
                 // prevents pasting multiline text
-                if (msg.Msg == (int)Win32Api.WM.PASTE) {
+                if (msg.Msg == (int)Win32Api.WM.PASTE)
+                {
                     if (!Clipboard.GetDataObject().GetDataPresent(typeof(string)))
                         return;
                     object clipBoardContent = Clipboard.GetDataObject().GetData(typeof(string));
                     string textToPaste = (string)Clipboard.GetDataObject().GetData(typeof(string));
                     int endOfLine = textToPaste.IndexOf(Environment.NewLine, 0);
-                    if (endOfLine > -1) {
+                    if (endOfLine > -1)
+                    {
                         int toRemove = textToPaste.Length - endOfLine;
                         textToPaste = textToPaste.Remove(endOfLine, toRemove);
                     }
@@ -231,21 +253,25 @@ namespace BuildAutoIncrement {
             /// </summary>
             /// <param name="msg"></param>
             /// <returns></returns>
-            public override bool PreProcessMessage(ref Message msg) {
-                if (msg.Msg == (int)Win32Api.WM.KEYDOWN) {
-                    Keys keyData = ((Keys) (int) msg.WParam) | ModifierKeys;
-                    Keys keyCode = ((Keys) (int) msg.WParam);
-    
-                    switch (keyCode) {
-                    case Keys.A:
-                        if ((ModifierKeys & Keys.Control) != 0) {
-                            SelectAll();
-                            return true;
-                        }
-                        break;
+            public override bool PreProcessMessage(ref Message msg)
+            {
+                if (msg.Msg == (int)Win32Api.WM.KEYDOWN)
+                {
+                    Keys keyData = ((Keys)(int)msg.WParam) | ModifierKeys;
+                    Keys keyCode = ((Keys)(int)msg.WParam);
+
+                    switch (keyCode)
+                    {
+                        case Keys.A:
+                            if ((ModifierKeys & Keys.Control) != 0)
+                            {
+                                SelectAll();
+                                return true;
+                            }
+                            break;
                     }
                 }
-                return base.PreProcessMessage (ref msg);
+                return base.PreProcessMessage(ref msg);
             }
         }
 
@@ -259,9 +285,11 @@ namespace BuildAutoIncrement {
         ///   has a valid assembly version). This is accomplished through 
         ///   new <c>Checked</c> property.
         /// </summary>
-        private class ProjectsListViewItem : ListViewItem {
+        private class ProjectsListViewItem : ListViewItem
+        {
 
-            protected ProjectsListViewItem() : base() {
+            protected ProjectsListViewItem() : base()
+            {
             }
 
             /// <summary>
@@ -275,7 +303,8 @@ namespace BuildAutoIncrement {
             /// <param name="assemblyVersionType">
             ///   <c>AssemblyVersionType</c> for which this item contains data.
             /// </param>
-            public ProjectsListViewItem(ProjectInfo projectInfo, AssemblyVersionType assemblyVersionType) : base(projectInfo.ProjectName) {
+            public ProjectsListViewItem(ProjectInfo projectInfo, AssemblyVersionType assemblyVersionType) : base(projectInfo.ProjectName)
+            {
                 Debug.Assert(projectInfo != null);
                 Debug.Assert(assemblyVersionType != AssemblyVersionType.All);
 
@@ -295,12 +324,16 @@ namespace BuildAutoIncrement {
             ///   Gets or sets the new checked state. Item can be checked only 
             ///   if it contains a valid assembly version.
             /// </summary>
-            public new bool Checked {
-                get {
+            public new bool Checked
+            {
+                get
+                {
                     return base.Checked;
                 }
-                set {
-                    if (IsAssemblyVersionDefined && value != base.Checked) {
+                set
+                {
+                    if (IsAssemblyVersionDefined && value != base.Checked)
+                    {
                         base.Checked = value;
                         SetImageIndex(value);
                     }
@@ -327,8 +360,10 @@ namespace BuildAutoIncrement {
             ///   Gets a flag indicating if current version is assigned (i.e. 
             ///   assembly version does exist).
             /// </summary>
-            public bool IsAssemblyVersionDefined {
-                get {
+            public bool IsAssemblyVersionDefined
+            {
+                get
+                {
                     Debug.Assert(CurrentVersion != null);
                     return CurrentVersion != ProjectVersion.Empty;
                 }
@@ -344,26 +379,29 @@ namespace BuildAutoIncrement {
             /// <returns>
             ///   Array of strings.
             /// </returns>
-            private string[] CreateSubItems(AssemblyVersionType assemblyVersionType) {
-                if (IsAssemblyVersionDefined) {
-                    return new string[] { 
-                                            ProjectInfo.CurrentAssemblyVersions[assemblyVersionType].ToString(), 
+            private string[] CreateSubItems(AssemblyVersionType assemblyVersionType)
+            {
+                if (IsAssemblyVersionDefined)
+                {
+                    return new string[] {
+                                            ProjectInfo.CurrentAssemblyVersions[assemblyVersionType].ToString(),
                                             ProjectInfo.VersionFileWrite.ToString(),
-                                            ProjectInfo.ToBecomeAssemblyVersions[assemblyVersionType].ToString() 
+                                            ProjectInfo.ToBecomeAssemblyVersions[assemblyVersionType].ToString()
                                         };
                 }
                 Debug.Assert(!IsAssemblyVersionDefined);
-                if (ProjectInfo.AssemblyFileExists) {
-                    return new string[] { 
+                if (ProjectInfo.AssemblyFileExists)
+                {
+                    return new string[] {
                                             ProjectInfo.CurrentAssemblyVersions[assemblyVersionType].Valid ? s_txtVersionNotFound : ProjectInfo.CurrentAssemblyVersions[assemblyVersionType].ToString(),
                                             ProjectInfo.VersionFileWrite.ToString(),
-                                            "" 
+                                            ""
                                         };
                 }
-                return new string[] { 
+                return new string[] {
                                         "",
-                                        s_txtFileNotFound, 
-                                        "" 
+                                        s_txtFileNotFound,
+                                        ""
                                     };
             }
 
@@ -371,7 +409,8 @@ namespace BuildAutoIncrement {
             ///   Adjusts image index associated with the project type and
             ///   check state.
             /// </summary>
-            public void SetImageIndex(bool isChecked) {
+            public void SetImageIndex(bool isChecked)
+            {
                 if (isChecked)
                     ImageIndex = ProjectInfo.ProjectTypeInfo.IconIndex;
                 else
@@ -395,19 +434,20 @@ namespace BuildAutoIncrement {
         /// <summary>
         ///   Creates empty <c>ProjectsListView</c> control.
         /// </summary>
-        public ProjectsListView() : base() {
+        public ProjectsListView() : base()
+        {
             InitializeComponent();
             // sets ListView properties
-            View                        = View.Details;
-            CheckBoxes                  = true;
-            FullRowSelect               = true;
-            HideSelection               = false;
-            LabelEdit                   = false;
+            View = View.Details;
+            CheckBoxes = true;
+            FullRowSelect = true;
+            HideSelection = false;
+            LabelEdit = false;
             // column indices
-            ProjectNameColumnIndex      = Columns.IndexOf(m_columnHeaderName);
-            ModifiedColumnIndex         = Columns.IndexOf(m_columnHeaderLastModified);
-            ToBecomeVersionColumnIndex  = Columns.IndexOf(m_columnHeaderToBecomeVersion);
-            CurrentVersionColumnIndex   = Columns.IndexOf(m_columnHeaderCurrentVersion);
+            ProjectNameColumnIndex = Columns.IndexOf(m_columnHeaderName);
+            ModifiedColumnIndex = Columns.IndexOf(m_columnHeaderLastModified);
+            ToBecomeVersionColumnIndex = Columns.IndexOf(m_columnHeaderToBecomeVersion);
+            CurrentVersionColumnIndex = Columns.IndexOf(m_columnHeaderCurrentVersion);
             // initializes embedded textbox for in-line editing
             m_editControl = new EmbeddedTextBox();
             m_editControl.Visible = false;
@@ -422,12 +462,15 @@ namespace BuildAutoIncrement {
         /// </summary>
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         [Browsable(false)]
-        public AssemblyVersionType AssemblyVersionType { 
-            get {
+        public AssemblyVersionType AssemblyVersionType
+        {
+            get
+            {
                 Debug.Assert(Tag != null);
                 return (AssemblyVersionType)Tag;
             }
-            set {
+            set
+            {
                 Debug.Assert(value != AssemblyVersionType.All);
                 Tag = value;
             }
@@ -438,8 +481,10 @@ namespace BuildAutoIncrement {
         ///   it contains a valid version. Used from the main form to enable or 
         ///   disable "Get selected" button.
         /// </summary>
-        public bool IsSingleSelectionWithValidAssemblyVersion {
-            get {
+        public bool IsSingleSelectionWithValidAssemblyVersion
+        {
+            get
+            {
                 return SelectedItems.Count == 1 && ((ProjectsListViewItem)SelectedItems[0]).IsAssemblyVersionDefined;
             }
         }
@@ -447,11 +492,14 @@ namespace BuildAutoIncrement {
         /// <summary>
         ///   Gets an array of all marked <c>ProjectInfo</c> items.
         /// </summary>
-        public ProjectInfo[] MarkedProjectInfos {
-            get {
+        public ProjectInfo[] MarkedProjectInfos
+        {
+            get
+            {
                 ProjectInfo[] markedItems = new ProjectInfo[CheckedItemsCount];
                 int i = 0;
-                foreach (ProjectsListViewItem plvi in CheckedItems) {
+                foreach (ProjectsListViewItem plvi in CheckedItems)
+                {
                     markedItems[i] = plvi.ProjectInfo;
                     i++;
                 }
@@ -459,14 +507,18 @@ namespace BuildAutoIncrement {
             }
         }
 
-        public int CheckedItemsCount {
-            get { 
+        public int CheckedItemsCount
+        {
+            get
+            {
                 int checkedItemsCount = 0;
-                foreach (ListViewItem item in Items) {
+                foreach (ListViewItem item in Items)
+                {
                     if (item.Checked)
                         checkedItemsCount++;
                 }
-                return checkedItemsCount; }
+                return checkedItemsCount;
+            }
         }
 
         /// <summary>
@@ -479,7 +531,8 @@ namespace BuildAutoIncrement {
         /// <param name="newCheckState">
         ///   New <c>CheckState</c>.
         /// </param>
-        public void DoSafeCheck(int index, CheckState newCheckState) {
+        public void DoSafeCheck(int index, CheckState newCheckState)
+        {
             ProjectsListViewItem lvi = (ProjectsListViewItem)Items[index];
             lvi.Checked = newCheckState == CheckState.Checked;
         }
@@ -499,9 +552,12 @@ namespace BuildAutoIncrement {
         /// <returns>
         ///   <c>true</c> if all items scanned have lower version.
         /// </returns>
-        public bool HaveAllListViewItemsLowerCurrentVersion(bool includeNotMarked, string versionToCompareTo) {
-            foreach (ProjectsListViewItem lvi in Items) {
-                if (lvi.Checked || includeNotMarked) {
+        public bool HaveAllListViewItemsLowerCurrentVersion(bool includeNotMarked, string versionToCompareTo)
+        {
+            foreach (ProjectsListViewItem lvi in Items)
+            {
+                if (lvi.Checked || includeNotMarked)
+                {
                     ProjectVersion version = lvi.ProjectInfo.CurrentAssemblyVersions[AssemblyVersionType];
                     if (version.CompareToPattern(versionToCompareTo) > 0)
                         return false;
@@ -517,7 +573,8 @@ namespace BuildAutoIncrement {
         ///   If selected item is checked (i.e. marked for update) "to be 
         ///   version" is returned. Otherwise, the current version is returned.
         /// </returns>
-        public ProjectVersion GetSelectedVersion() {
+        public ProjectVersion GetSelectedVersion()
+        {
             ProjectsListViewItem firstSelectedItem = (ProjectsListViewItem)SelectedItems[0];
             if (firstSelectedItem.Checked)
                 return new ProjectVersion(firstSelectedItem.SubItems[ToBecomeVersionColumnIndex].Text, this.AssemblyVersionType);
@@ -530,49 +587,58 @@ namespace BuildAutoIncrement {
 
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         [Browsable(false)]
-        public new System.Windows.Forms.View View {
+        public new System.Windows.Forms.View View
+        {
             get { return View.Details; }
             set { base.View = View.Details; }
         }
 
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         [Browsable(false)]
-        public new bool CheckBoxes {
+        public new bool CheckBoxes
+        {
             get { return true; }
             set { base.CheckBoxes = true; }
         }
 
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         [Browsable(false)]
-        public new bool FullRowSelect {
+        public new bool FullRowSelect
+        {
             get { return true; }
             set { base.FullRowSelect = true; }
         }
 
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         [Browsable(false)]
-        public new bool HideSelection {
+        public new bool HideSelection
+        {
             get { return false; }
             set { base.HideSelection = false; }
         }
 
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         [Browsable(false)]
-        public new bool LabelEdit {
+        public new bool LabelEdit
+        {
             get { return false; }
             set { base.LabelEdit = false; }
         }
 
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         [Browsable(false)]
-        public new int[] SelectedIndices {
-            get {
+        public new int[] SelectedIndices
+        {
+            get
+            {
                 int[] selectedIndices = new int[SelectedItems.Count];
                 base.SelectedIndices.CopyTo(selectedIndices, 0);
                 return selectedIndices;
             }
-            set {
-                for (int i = 0; i < Items.Count; i++) {
+            set
+            {
+                for (int i = 0; i < Items.Count; i++)
+                {
                     Items[i].Selected = Array.IndexOf(value, i) != -1;
                 }
             }
@@ -582,12 +648,14 @@ namespace BuildAutoIncrement {
 
         #region Overriden methods
 
-        public new void BeginUpdate() {
+        public new void BeginUpdate()
+        {
             m_batchUpdate = true;
             base.BeginUpdate();
         }
 
-        public new void EndUpdate() {
+        public new void EndUpdate()
+        {
             m_batchUpdate = false;
             base.EndUpdate();
         }
@@ -595,9 +663,12 @@ namespace BuildAutoIncrement {
         /// <summary>
         ///   Clean up any resources being used.
         /// </summary>
-        protected override void Dispose(bool disposing) {
-            if (disposing) {
-                if (components != null) {
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                if (components != null)
+                {
                     components.Dispose();
                 }
             }
@@ -608,7 +679,8 @@ namespace BuildAutoIncrement {
         ///   Override to create <c>CheckBoxRender</c> member.
         /// </summary>
         /// <param name="e"></param>
-        protected override void OnHandleCreated(EventArgs e) {
+        protected override void OnHandleCreated(EventArgs e)
+        {
             base.OnHandleCreated(e);
             m_checkBoxRenderer = new CheckBoxRenderer(this.Handle);
             Debug.Assert(m_checkBoxRenderer != null);
@@ -618,7 +690,8 @@ namespace BuildAutoIncrement {
         ///   Override to dispose <c>CheckBoxRender</c> member.
         /// </summary>
         /// <param name="e"></param>
-        protected override void OnHandleDestroyed(EventArgs e) {
+        protected override void OnHandleDestroyed(EventArgs e)
+        {
             m_checkBoxRenderer.Dispose();
             base.OnHandleDestroyed(e);
         }
@@ -628,26 +701,32 @@ namespace BuildAutoIncrement {
         ///   the color of the item when check state changes.
         /// </summary>
         /// <param name="ice"></param>
-        protected override void OnItemCheck(ItemCheckEventArgs ice) {
+        protected override void OnItemCheck(ItemCheckEventArgs ice)
+        {
             ProjectsListViewItem lvi = null;
-            if (ice.Index < Items.Count) {
+            if (ice.Index < Items.Count)
+            {
                 lvi = (ProjectsListViewItem)Items[ice.Index];
-                if (lvi.SubItems[ToBecomeVersionColumnIndex].Text.Length == 0) {
+                if (lvi.SubItems[ToBecomeVersionColumnIndex].Text.Length == 0)
+                {
                     ice.NewValue = CheckState.Unchecked;
                     if (SelectedItems.Count == 0)
                         lvi.Focused = true;
                     return;
                 }
-                else {
+                else
+                {
                     bool newChecked = ice.NewValue == CheckState.Checked;
-                    if (lvi.Checked != newChecked) {
+                    if (lvi.Checked != newChecked)
+                    {
                         ColorItem(lvi, newChecked);
                         lvi.SetImageIndex(newChecked);
                     }
                 }
             }
             base.OnItemCheck(ice);
-            if (lvi != null) {
+            if (lvi != null)
+            {
                 if (SelectedItems.Count == 0)
                     lvi.Focused = true;
             }
@@ -661,70 +740,80 @@ namespace BuildAutoIncrement {
         ///   when item fore color is changed.
         /// </summary>
         /// <param name="m"></param>
-        protected override void WndProc(ref Message m) {
-            switch (m.Msg) {
-            case (int)Win32Api.WM.ERASEBKGND:
-                // reduces flickering
-                if (m_updating)
-                    m.Msg = (int)Win32Api.WM.NULL;
-                break;
-            case (int)Win32Api.WM.PAINT:
-                // reduces flickering
-                if (m_updating) {
-                    Debug.Assert(m_listViewItemToUpdate != null);
-                    Win32Api.RECT vrect = new Win32Api.RECT();
-                    Win32Api.GetWindowRect(this.Handle, ref vrect);
-                    // validate the entire window                
-                    Win32Api.ValidateRect(this.Handle, ref vrect);
-                    //Invalidate only the new item
-                    Invalidate(m_listViewItemToUpdate.Bounds);
-                }
-                break;
-            // WM_VSCROLL, WM_HSCROLL or WM_SIZE messages should stop in-line editing
-            case (int)Win32Api.WM.VSCROLL:
-            case (int)Win32Api.WM.HSCROLL:
-            case (int)Win32Api.WM.SIZE:
-                EndEditingToBeVersion(false);
-                break;
-            case (int)Win32Api.WM.NOTIFY:
-                // Look for WM_NOTIFY of events that might also change the
-                // editor's position/size: Column reordering or resizing
-                Win32Api.NMHDR h = (Win32Api.NMHDR)Marshal.PtrToStructure(m.LParam, typeof(Win32Api.NMHDR));
-                if (h.code == (int)Win32Api.HDN.ITEMCHANGING)
-                    EndEditingToBeVersion(false);
-                break;
-            }
-            base.WndProc(ref m);
-            switch (m.Msg) {
-            case (int)(Win32Api.WM.REFLECT | Win32Api.WM.NOTIFY): 
-                Win32Api.NMHDR nmhdr = (Win32Api.NMHDR)m.GetLParam(typeof(Win32Api.NMHDR)); 
-                switch(nmhdr.code) { 
-                case (int)Win32Api.NM.CUSTOMDRAW: 
-                    Win32Api.NMCUSTOMDRAW nmcd = (Win32Api.NMCUSTOMDRAW)m.GetLParam(typeof(Win32Api.NMCUSTOMDRAW)); 
-                    switch(nmcd.dwDrawStage) { 
-                    case (int)Win32Api.CDDS.PREPAINT:
-                        m.Result = (IntPtr)(Win32Api.CDRF.NOTIFYITEMDRAW);
-                        break; 
-                    case (int)Win32Api.CDDS.ITEMPREPAINT: 
-                        using (Graphics graphics = Graphics.FromHdc(nmcd.hdc)) {
-                            int iRow = (int)nmcd.dwItemSpec; 
-                            if (iRow < Items.Count) {
-                                ProjectsListViewItem item = (ProjectsListViewItem)Items[iRow];
-                                DrawProjectListViewItem(graphics, item);
-                            }
-                        }
-                        m.Result = (IntPtr)(Win32Api.CDRF.SKIPDEFAULT);
-                        break; 
+        protected override void WndProc(ref Message m)
+        {
+            switch (m.Msg)
+            {
+                case (int)Win32Api.WM.ERASEBKGND:
+                    // reduces flickering
+                    if (m_updating)
+                        m.Msg = (int)Win32Api.WM.NULL;
+                    break;
+                case (int)Win32Api.WM.PAINT:
+                    // reduces flickering
+                    if (m_updating)
+                    {
+                        Debug.Assert(m_listViewItemToUpdate != null);
+                        Win32Api.RECT vrect = new Win32Api.RECT();
+                        Win32Api.GetWindowRect(this.Handle, ref vrect);
+                        // validate the entire window                
+                        Win32Api.ValidateRect(this.Handle, ref vrect);
+                        //Invalidate only the new item
+                        Invalidate(m_listViewItemToUpdate.Bounds);
                     }
                     break;
-                } 
-                break; 
+                // WM_VSCROLL, WM_HSCROLL or WM_SIZE messages should stop in-line editing
+                case (int)Win32Api.WM.VSCROLL:
+                case (int)Win32Api.WM.HSCROLL:
+                case (int)Win32Api.WM.SIZE:
+                    EndEditingToBeVersion(false);
+                    break;
+                case (int)Win32Api.WM.NOTIFY:
+                    // Look for WM_NOTIFY of events that might also change the
+                    // editor's position/size: Column reordering or resizing
+                    Win32Api.NMHDR h = (Win32Api.NMHDR)Marshal.PtrToStructure(m.LParam, typeof(Win32Api.NMHDR));
+                    if (h.code == (int)Win32Api.HDN.ITEMCHANGING)
+                        EndEditingToBeVersion(false);
+                    break;
+            }
+            base.WndProc(ref m);
+            switch (m.Msg)
+            {
+                case (int)(Win32Api.WM.REFLECT | Win32Api.WM.NOTIFY):
+                    Win32Api.NMHDR nmhdr = (Win32Api.NMHDR)m.GetLParam(typeof(Win32Api.NMHDR));
+                    switch (nmhdr.code)
+                    {
+                        case (int)Win32Api.NM.CUSTOMDRAW:
+                            Win32Api.NMCUSTOMDRAW nmcd = (Win32Api.NMCUSTOMDRAW)m.GetLParam(typeof(Win32Api.NMCUSTOMDRAW));
+                            switch (nmcd.dwDrawStage)
+                            {
+                                case (int)Win32Api.CDDS.PREPAINT:
+                                    m.Result = (IntPtr)(Win32Api.CDRF.NOTIFYITEMDRAW);
+                                    break;
+                                case (int)Win32Api.CDDS.ITEMPREPAINT:
+                                    using (Graphics graphics = Graphics.FromHdc(nmcd.hdc))
+                                    {
+                                        int iRow = (int)nmcd.dwItemSpec;
+                                        if (iRow < Items.Count)
+                                        {
+                                            ProjectsListViewItem item = (ProjectsListViewItem)Items[iRow];
+                                            DrawProjectListViewItem(graphics, item);
+                                        }
+                                    }
+                                    m.Result = (IntPtr)(Win32Api.CDRF.SKIPDEFAULT);
+                                    break;
+                            }
+                            break;
+                    }
+                    break;
             }
         }
 
-        protected override void OnSelectedIndexChanged(EventArgs e) {
+        protected override void OnSelectedIndexChanged(EventArgs e)
+        {
             base.OnSelectedIndexChanged(e);
-            if (SelectedItems.Count == 0) {
+            if (SelectedItems.Count == 0)
+            {
                 // clears the list of previously selected items
                 m_previouslySelectedItems = new ProjectsListViewItem[0];
             }
@@ -734,10 +823,12 @@ namespace BuildAutoIncrement {
         ///   Overriden to ensure focus rectangle is drawn.
         /// </summary>
         /// <param name="e"></param>
-        protected override void OnGotFocus(EventArgs e) {
+        protected override void OnGotFocus(EventArgs e)
+        {
             base.OnGotFocus(e);
             // make sure to draw focus rectangle when control receives focus
-            if (SelectedItems.Count == 0 && FocusedItem == null && Items.Count > 0) {
+            if (SelectedItems.Count == 0 && FocusedItem == null && Items.Count > 0)
+            {
                 Items[0].Focused = true;
             }
         }
@@ -746,16 +837,21 @@ namespace BuildAutoIncrement {
         ///   Overriden to activate in-line editing of "to be version"
         /// </summary>
         /// <param name="e"></param>
-        protected override void OnMouseUp(MouseEventArgs e) {
+        protected override void OnMouseUp(MouseEventArgs e)
+        {
             base.OnMouseUp(e);
             ProjectsListViewItem item = (ProjectsListViewItem)GetItemAt(e.X, e.Y);
-            if (item != null) {
-                if (Array.IndexOf(m_previouslySelectedItems, item) != -1) {
-                    if (GetSubItemIndex(item.Bounds.Left, e.X) == ToBecomeVersionColumnIndex) {
+            if (item != null)
+            {
+                if (Array.IndexOf(m_previouslySelectedItems, item) != -1)
+                {
+                    if (GetSubItemIndex(item.Bounds.Left, e.X) == ToBecomeVersionColumnIndex)
+                    {
                         StartEditingToBeVersion(item);
                     }
                 }
-                else {
+                else
+                {
                     m_previouslySelectedItems = new ProjectsListViewItem[SelectedItems.Count];
                     SelectedItems.CopyTo(m_previouslySelectedItems, 0);
                 }
@@ -769,9 +865,12 @@ namespace BuildAutoIncrement {
         /// <param name="msg"></param>
         /// <param name="keyData"></param>
         /// <returns></returns>
-        protected override bool ProcessCmdKey(ref Message msg, Keys keyData) {
-            if (keyData == Keys.F2) {
-                if (SelectedItems.Count > 0) {
+        protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
+        {
+            if (keyData == Keys.F2)
+            {
+                if (SelectedItems.Count > 0)
+                {
                     StartEditingToBeVersion((ProjectsListViewItem)SelectedItems[0]);
                     m_previouslySelectedItems = new ProjectsListViewItem[] { (ProjectsListViewItem)SelectedItems[0] };
                     return true;
@@ -784,7 +883,8 @@ namespace BuildAutoIncrement {
 
         #region Methods accessed through delegates
 
-        public static void FillListView(ProjectsListView listView, object obj) {
+        public static void FillListView(ProjectsListView listView, object obj)
+        {
             Debug.Assert(listView != null);
             Debug.Assert(obj != null && obj is ICollection);
             listView.FillListView((ICollection)obj);
@@ -796,24 +896,28 @@ namespace BuildAutoIncrement {
         /// <param name="projectInfos">
         ///   <c>ICollection</c> with information for each individiual project.
         /// </param>
-        private void FillListView(ICollection projectInfos) {
+        private void FillListView(ICollection projectInfos)
+        {
             Debug.Assert(projectInfos != null);
             m_projectInfos = new ArrayList(projectInfos);
             FillListView();
             Debug.Assert(m_projectInfos != null);
         }
 
-        public static int GetValidVersionsCount(ProjectsListView listView) {
+        public static int GetValidVersionsCount(ProjectsListView listView)
+        {
             Debug.Assert(listView != null);
             return listView.m_validVersionsCount;
         }
 
-        public static int GetMarkedItemsCount(ProjectsListView listView) {
+        public static int GetMarkedItemsCount(ProjectsListView listView)
+        {
             Debug.Assert(listView != null);
             return listView.CheckedItemsCount;
         }
 
-        public static void ProposeToBeVersion(ProjectsListView listView, object obj) {
+        public static void ProposeToBeVersion(ProjectsListView listView, object obj)
+        {
             Debug.Assert(listView != null);
             Debug.Assert(obj is string);
             listView.ProposeToBeVersion((string)obj);
@@ -822,52 +926,63 @@ namespace BuildAutoIncrement {
         /// <summary>
         ///   Proposes new to be version updating colors of items.
         /// </summary>
-        private void ProposeToBeVersion(string toBeVersionPattern) {
+        private void ProposeToBeVersion(string toBeVersionPattern)
+        {
             Debug.Assert(toBeVersionPattern != null && toBeVersionPattern.Length > 0);
             m_proposedToBeVersionPattern = toBeVersionPattern;
             UpdateColors();
         }
 
-        public static void MarkAllProjects(ProjectsListView listView, object obj) {
+        public static void MarkAllProjects(ProjectsListView listView, object obj)
+        {
             Debug.Assert(listView != null);
             Debug.Assert(obj == null);
             listView.MarkAllProjects();
         }
 
-        private void MarkAllProjects() {
-            foreach (ProjectsListViewItem lvi in Items) {
+        private void MarkAllProjects()
+        {
+            foreach (ProjectsListViewItem lvi in Items)
+            {
                 lvi.Checked = true;
             }
         }
 
-        public static void UnmarkAllProjects(ProjectsListView listView, object obj) {
+        public static void UnmarkAllProjects(ProjectsListView listView, object obj)
+        {
             Debug.Assert(listView != null);
             Debug.Assert(obj == null);
-            foreach (ProjectsListViewItem lvi in listView.Items) {
+            foreach (ProjectsListViewItem lvi in listView.Items)
+            {
                 lvi.Checked = false;
             }
         }
 
-        public static void InvertProjectMarks(ProjectsListView listView, object obj) {
+        public static void InvertProjectMarks(ProjectsListView listView, object obj)
+        {
             Debug.Assert(listView != null);
             Debug.Assert(obj == null);
             listView.InvertProjectMarks();
         }
 
-        private void InvertProjectMarks() {
-            foreach (ProjectsListViewItem lvi in Items) 
+        private void InvertProjectMarks()
+        {
+            foreach (ProjectsListViewItem lvi in Items)
                 lvi.Checked = !lvi.Checked;
         }
 
-        public static void ResetVersions(ProjectsListView listView, object obj) {
+        public static void ResetVersions(ProjectsListView listView, object obj)
+        {
             Debug.Assert(listView != null);
             Debug.Assert(obj == null);
             listView.ResetVersions();
         }
 
-        private void ResetVersions() {
+        private void ResetVersions()
+        {
             Debug.Assert(m_projectInfos != null);
-            foreach (ProjectsListViewItem lvi in CheckedItems) {
+            foreach (ProjectsListViewItem lvi in CheckedItems)
+            {
                 ProjectInfo projectInfo = lvi.ProjectInfo;
                 string toBecomeAssemblyVersion = projectInfo.ToBecomeAssemblyVersions[AssemblyVersionType].ToString();
                 lvi.SubItems[ToBecomeVersionColumnIndex].Text = toBecomeAssemblyVersion;
@@ -875,43 +990,52 @@ namespace BuildAutoIncrement {
             }
         }
 
-        public static void ResetListView(ProjectsListView listView, object obj) {
+        public static void ResetListView(ProjectsListView listView, object obj)
+        {
             Debug.Assert(listView != null);
             Debug.Assert(obj == null);
             listView.ResetListView();
         }
 
-        private void ResetListView() {
+        private void ResetListView()
+        {
             ArrayList selectedIndices = new ArrayList(SelectedIndices);
             FillListView();
-            foreach (int index in selectedIndices) {
+            foreach (int index in selectedIndices)
+            {
                 Items[index].Selected = true;
             }
             UpdateColors();
         }
 
-        public static void ResetMarks(ProjectsListView listView, object obj) {
+        public static void ResetMarks(ProjectsListView listView, object obj)
+        {
             Debug.Assert(listView != null);
             Debug.Assert(obj == null);
             listView.ResetMarks();
         }
 
-        private void ResetMarks() {
+        private void ResetMarks()
+        {
             Debug.Assert(m_projectInfos != null);
-            foreach (ProjectsListViewItem lvi in Items) {
+            foreach (ProjectsListViewItem lvi in Items)
+            {
                 ProjectInfo projectInfo = lvi.ProjectInfo;
                 lvi.Checked = projectInfo.IsMarkedForUpdate(AssemblyVersionType);
             }
         }
 
-        public static void SaveVersions(ProjectsListView listView, object obj) {
+        public static void SaveVersions(ProjectsListView listView, object obj)
+        {
             Debug.Assert(listView != null);
             Debug.Assert(obj == null);
             listView.SaveVersions();
         }
 
-        private void SaveVersions() {
-            foreach (ProjectsListViewItem lvi in CheckedItems) {
+        private void SaveVersions()
+        {
+            foreach (ProjectsListViewItem lvi in CheckedItems)
+            {
                 ProjectInfo projectInfo = lvi.ProjectInfo;
                 string newVersion = lvi.SubItems[ToBecomeVersionColumnIndex].Text;
                 Debug.Assert(newVersion != null && newVersion.Length > 0);
@@ -919,41 +1043,51 @@ namespace BuildAutoIncrement {
             }
         }
 
-        public static void IncrementVersions(ProjectsListView listView, object componentToIncrement) {
+        public static void IncrementVersions(ProjectsListView listView, object componentToIncrement)
+        {
             Debug.Assert(listView != null);
             Debug.Assert(componentToIncrement != null && componentToIncrement is ProjectVersion.VersionComponent);
             listView.IncrementVersions((ProjectVersion.VersionComponent)componentToIncrement);
         }
 
-        private void IncrementVersions(ProjectVersion.VersionComponent toIncrement) {
+        private void IncrementVersions(ProjectVersion.VersionComponent toIncrement)
+        {
             NumberingOptions numberingOptions = ConfigurationPersister.Instance.Configuration.NumberingOptions;
-            foreach (ProjectsListViewItem lvi in CheckedItems) {
+            foreach (ProjectsListViewItem lvi in CheckedItems)
+            {
                 ProjectInfo projectInfo = lvi.ProjectInfo;
                 ProjectVersion newVersion = IncrementVersion(projectInfo, toIncrement, numberingOptions);
                 lvi.SubItems[ToBecomeVersionColumnIndex].Text = newVersion.ToString();
             }
         }
 
-        public static void ApplyVersion(ProjectsListView listView, object versionToApply) {
+        public static void ApplyVersion(ProjectsListView listView, object versionToApply)
+        {
             Debug.Assert(listView != null);
             Debug.Assert(versionToApply != null && versionToApply is string);
             listView.ApplyVersion((string)versionToApply);
         }
 
-        private void ApplyVersion(string versionToApply) {
+        private void ApplyVersion(string versionToApply)
+        {
             ArrayList failedProjects = new ArrayList();
-            foreach (ProjectsListViewItem lvi in CheckedItems) {
-                try {
+            foreach (ProjectsListViewItem lvi in CheckedItems)
+            {
+                try
+                {
                     lvi.SubItems[ToBecomeVersionColumnIndex].Text = ProjectVersion.ApplyVersionPattern(versionToApply, lvi.ProjectInfo.CurrentAssemblyVersions[AssemblyVersionType].ToString(), ResetBuildAndRevisionTo);
                     ColorItem(lvi, lvi.Checked);
                 }
-                catch (VersionOverflowException) {
+                catch (VersionOverflowException)
+                {
                     failedProjects.Add(lvi.Text);
                 }
             }
-            if (failedProjects.Count > 0) {
+            if (failedProjects.Count > 0)
+            {
                 StringBuilder sb = new StringBuilder();
-                foreach (string failedProject in failedProjects) {
+                foreach (string failedProject in failedProjects)
+                {
                     sb.AppendFormat(Environment.NewLine + "    ");
                     sb.Append(failedProject);
                 }
@@ -962,57 +1096,72 @@ namespace BuildAutoIncrement {
             }
         }
 
-        public static ProjectVersion GetHighestMarkedVersion(ProjectsListView listView, object obj) {
+        public static ProjectVersion GetHighestMarkedVersion(ProjectsListView listView, object obj)
+        {
             Debug.Assert(listView != null);
             Debug.Assert(obj == null);
             return listView.GetHighestMarkedVersion();
         }
 
-        private ProjectVersion GetHighestMarkedVersion() {
+        private ProjectVersion GetHighestMarkedVersion()
+        {
             ProjectVersion highestVersion = ProjectVersion.MinValue;
-            foreach (ProjectsListViewItem lvi in CheckedItems) {
-                if (lvi.SubItems[ToBecomeVersionColumnIndex].Text.Length > 0) {
+            foreach (ProjectsListViewItem lvi in CheckedItems)
+            {
+                if (lvi.SubItems[ToBecomeVersionColumnIndex].Text.Length > 0)
+                {
                     highestVersion = ProjectVersion.Max(highestVersion, new ProjectVersion(lvi.SubItems[ToBecomeVersionColumnIndex].Text, this.AssemblyVersionType));
                 }
             }
             return highestVersion;
         }
 
-        public static ProjectVersion GetHighestToBecomeVersion(ProjectsListView listView, object obj) {
+        public static ProjectVersion GetHighestToBecomeVersion(ProjectsListView listView, object obj)
+        {
             Debug.Assert(listView != null);
             Debug.Assert(obj == null);
             return listView.GetHighestToBecomeVersion();
         }
 
-        private ProjectVersion GetHighestToBecomeVersion() {
+        private ProjectVersion GetHighestToBecomeVersion()
+        {
             ProjectVersion highestVersion = ProjectVersion.MinValue;
-            foreach (ProjectsListViewItem lvi in Items) {
-                if (lvi.SubItems[ToBecomeVersionColumnIndex].Text.Length > 0) {
+            foreach (ProjectsListViewItem lvi in Items)
+            {
+                if (lvi.SubItems[ToBecomeVersionColumnIndex].Text.Length > 0)
+                {
                     highestVersion = ProjectVersion.Max(highestVersion, new ProjectVersion(lvi.SubItems[ToBecomeVersionColumnIndex].Text, this.AssemblyVersionType));
                 }
             }
             return highestVersion;
         }
 
-        public static ProjectVersion GetHighestToUpdateVersion(ProjectsListView listView, object includeProjectsNotForUpdate) {
+        public static ProjectVersion GetHighestToUpdateVersion(ProjectsListView listView, object includeProjectsNotForUpdate)
+        {
             Debug.Assert(listView != null);
             Debug.Assert(includeProjectsNotForUpdate != null && includeProjectsNotForUpdate is bool);
             return listView.GetHighestToUpdateVersion((bool)includeProjectsNotForUpdate);
         }
 
-        private ProjectVersion GetHighestToUpdateVersion(bool includeProjectsNotForUpdate) {
+        private ProjectVersion GetHighestToUpdateVersion(bool includeProjectsNotForUpdate)
+        {
             ProjectVersion highestVersion = ProjectVersion.MinValue;
-            foreach (ProjectsListViewItem lvi in Items) {
-                if (lvi.SubItems[ToBecomeVersionColumnIndex].Text.Length > 0) {
+            foreach (ProjectsListViewItem lvi in Items)
+            {
+                if (lvi.SubItems[ToBecomeVersionColumnIndex].Text.Length > 0)
+                {
                     ProjectInfo projectInfo = lvi.ProjectInfo;
                     ProjectVersion itemVersion = null;
-                    if (projectInfo.IsMarkedForUpdate(AssemblyVersionType) || includeProjectsNotForUpdate) {
+                    if (projectInfo.IsMarkedForUpdate(AssemblyVersionType) || includeProjectsNotForUpdate)
+                    {
                         itemVersion = projectInfo.ToBecomeAssemblyVersions[AssemblyVersionType];
                     }
-                    else {
+                    else
+                    {
                         itemVersion = projectInfo.CurrentAssemblyVersions[AssemblyVersionType];
                     }
-                    if (itemVersion > highestVersion) {
+                    if (itemVersion > highestVersion)
+                    {
                         highestVersion = itemVersion;
                     }
                 }
@@ -1020,14 +1169,17 @@ namespace BuildAutoIncrement {
             return highestVersion;
         }
 
-        public static void MarkProjectsWithLowerVersion(ProjectsListView listView, object version) {
+        public static void MarkProjectsWithLowerVersion(ProjectsListView listView, object version)
+        {
             Debug.Assert(listView != null);
             Debug.Assert(version != null && version is ProjectVersion);
             listView.MarkProjectsWithLowerVersion((ProjectVersion)version);
         }
 
-        private void MarkProjectsWithLowerVersion(ProjectVersion version) {
-            foreach (ProjectsListViewItem lvi in Items) {
+        private void MarkProjectsWithLowerVersion(ProjectVersion version)
+        {
+            foreach (ProjectsListViewItem lvi in Items)
+            {
                 ProjectInfo projectInfo = lvi.ProjectInfo;
                 ProjectVersion currentVersion = projectInfo.CurrentAssemblyVersions[AssemblyVersionType];
                 lvi.Checked = currentVersion < version;
@@ -1041,7 +1193,8 @@ namespace BuildAutoIncrement {
         /// Required method for Designer support - do not modify
         /// the contents of this method with the code editor.
         /// </summary>
-        private void InitializeComponent() {
+        private void InitializeComponent()
+        {
             this.components = new System.ComponentModel.Container();
             System.Resources.ResourceManager resources = new System.Resources.ResourceManager(typeof(ProjectsListView));
 
@@ -1080,27 +1233,32 @@ namespace BuildAutoIncrement {
 
             this.ResumeLayout(false);
         }
-		#endregion
+        #endregion
 
         #region Private properites and methods
 
-        private ProjectsListViewColorsConfiguration ColorsConfiguration {
+        private ProjectsListViewColorsConfiguration ColorsConfiguration
+        {
             get { return ConfigurationPersister.Instance.Configuration.DisplayOptions.Colors; }
         }
 
-        private int ResetBuildAndRevisionTo {
-            get {
+        private int ResetBuildAndRevisionTo
+        {
+            get
+            {
                 return (int)ConfigurationPersister.Instance.Configuration.NumberingOptions.ResetBuildAndRevisionTo;
             }
         }
 
-        private void FillListView() {
+        private void FillListView()
+        {
             Debug.Assert(m_projectInfos != null);
             BeginUpdate();
             Items.Clear();
             ProjectsListViewItem lvi = null;
             m_validVersionsCount = m_projectInfos.Count;
-            foreach (ProjectInfo projectInfo in m_projectInfos) {
+            foreach (ProjectInfo projectInfo in m_projectInfos)
+            {
                 lvi = new ProjectsListViewItem(projectInfo, AssemblyVersionType);
                 Items.Add(lvi);
                 lvi.Checked = projectInfo.Modified;
@@ -1117,17 +1275,20 @@ namespace BuildAutoIncrement {
         /// <param name="item">
         ///   <c>ListViewItem</c> to draw.
         /// </param>
-        private void DrawProjectListViewItem(Graphics graphics, ProjectsListViewItem item) {
+        private void DrawProjectListViewItem(Graphics graphics, ProjectsListViewItem item)
+        {
             Rectangle rectEntire = item.GetBounds(ItemBoundsPortion.Entire);
             Rectangle rect = rectEntire;
             int indent = ConfigurationPersister.Instance.Configuration.DisplayOptions.IndentSubProjectItems ? item.ProjectInfo.Level * ConfigurationPersister.Instance.Configuration.DisplayOptions.SubProjectIndentation : 0;
-            if (item.ProjectInfo.IsVersionable) {
+            if (item.ProjectInfo.IsVersionable)
+            {
                 ButtonState bs = item.Checked ? ButtonState.Checked : ButtonState.Normal;
                 if (item.SubItems[ToBecomeVersionColumnIndex].Text.Length == 0)
                     bs = bs | ButtonState.Inactive;
                 m_checkBoxRenderer.DrawCheckBox(graphics, rectEntire.X + 3, rectEntire.Top + 1, 13, 13, bs);
             }
-            if (item.ImageIndex >= 0) {
+            if (item.ImageIndex >= 0)
+            {
                 rect = item.GetBounds(ItemBoundsPortion.Icon);
                 graphics.DrawImage(item.ImageList.Images[item.ImageIndex], rect.X + indent, rect.Y);
             }
@@ -1135,18 +1296,21 @@ namespace BuildAutoIncrement {
             rect.X += indent;
             rect.Width -= indent;
             Rectangle rectHighlight = new Rectangle(rect.X, rect.Y, rectEntire.Width - rect.Left, rectEntire.Height);
-            if (item.Selected) {
+            if (item.Selected)
+            {
                 if (Focused)
                     graphics.FillRectangle(SystemBrushes.Highlight, rectHighlight);
-                else 
+                else
                     graphics.FillRectangle(SystemBrushes.Control, rectHighlight);
             }
-            else {
-                using (Brush brush = new SolidBrush(this.BackColor)) {
+            else
+            {
+                using (Brush brush = new SolidBrush(this.BackColor))
+                {
                     graphics.FillRectangle(brush, rectHighlight);
                 }
             }
-            if (Focused && item.Focused) 
+            if (Focused && item.Focused)
                 ControlPaint.DrawFocusRectangle(graphics, rectHighlight, BackColor, SystemColors.Highlight);
             DrawSubItemStrings(graphics, item);
         }
@@ -1159,7 +1323,8 @@ namespace BuildAutoIncrement {
         /// <param name="item">
         ///   <c>ListViewItem</c> for which subitems are drawn.
         /// </param>
-        private void DrawSubItemStrings(Graphics graphics, ProjectsListViewItem item) {
+        private void DrawSubItemStrings(Graphics graphics, ProjectsListViewItem item)
+        {
             StringFormat sf = StringFormat.GenericDefault;
             sf.FormatFlags |= StringFormatFlags.NoWrap;
             sf.LineAlignment = StringAlignment.Center;
@@ -1167,22 +1332,28 @@ namespace BuildAutoIncrement {
             int indent = ConfigurationPersister.Instance.Configuration.DisplayOptions.IndentSubProjectItems ? item.ProjectInfo.Level * ConfigurationPersister.Instance.Configuration.DisplayOptions.SubProjectIndentation : 0;
             rect.X += indent;
             rect.Width -= indent;
-            using (SolidBrush textColor = new SolidBrush(item.ForeColor)) {
+            using (SolidBrush textColor = new SolidBrush(item.ForeColor))
+            {
                 if (Focused && item.Selected)
                     textColor.Color = SystemColors.HighlightText;
-                string text = TrimText(item.Text, rect.Width, graphics); 
+                string text = TrimText(item.Text, rect.Width, graphics);
                 graphics.DrawString(text, this.Font, textColor, rect, sf);
-                if (item.ProjectInfo.IsVersionable) {
-                    for (int i = 1; i < item.SubItems.Count; i++) {
+                if (item.ProjectInfo.IsVersionable)
+                {
+                    for (int i = 1; i < item.SubItems.Count; i++)
+                    {
                         rect.X = rect.Right + 4;
                         rect.Width = Columns[i].Width - 4;
                         ListViewItem.ListViewSubItem subItem = item.SubItems[i];
                         text = TrimText(subItem.Text, rect.Width, graphics);
-                        if ((i == item.SubItems.Count - 1) && item.PossiblyInvalidToBeVersion) {
+                        if ((i == item.SubItems.Count - 1) && item.PossiblyInvalidToBeVersion)
+                        {
                             if (Focused && item.Selected)
                                 graphics.DrawString(text, this.Font, textColor, rect, sf);
-                            else {
-                                using (SolidBrush errorHighlightColor = new SolidBrush(item.Checked ? ConfigurationPersister.Instance.Configuration.DisplayOptions.Colors.InvalidVersionMarked : ConfigurationPersister.Instance.Configuration.DisplayOptions.Colors.InvalidVersionNotMarked)) {
+                            else
+                            {
+                                using (SolidBrush errorHighlightColor = new SolidBrush(item.Checked ? ConfigurationPersister.Instance.Configuration.DisplayOptions.Colors.InvalidVersionMarked : ConfigurationPersister.Instance.Configuration.DisplayOptions.Colors.InvalidVersionNotMarked))
+                                {
                                     graphics.DrawString(text, this.Font, errorHighlightColor, rect, sf);
                                 }
                             }
@@ -1209,7 +1380,8 @@ namespace BuildAutoIncrement {
         /// <returns>
         ///   Trimmed string.
         /// </returns>
-        private string TrimText(string text, int widthToTrim, Graphics graphics) {
+        private string TrimText(string text, int widthToTrim, Graphics graphics)
+        {
             if (graphics.MeasureString(text, Font).Width < widthToTrim)
                 return text;
             StringBuilder sb = new StringBuilder(text);
@@ -1222,8 +1394,10 @@ namespace BuildAutoIncrement {
         /// <summary>
         ///   Updates colors for items to reflect their state.
         /// </summary>
-        public void UpdateColors() {
-            foreach (ProjectsListViewItem lvi in Items) {
+        public void UpdateColors()
+        {
+            foreach (ProjectsListViewItem lvi in Items)
+            {
                 ColorItem(lvi, lvi.Checked);
             }
         }
@@ -1243,47 +1417,57 @@ namespace BuildAutoIncrement {
         ///   To be version used to compare with actual version. If actual 
         ///   version is less, item is displayed in red.
         /// </param>
-        private void ColorItem(ProjectsListViewItem lvi, bool itemChecked) {
+        private void ColorItem(ProjectsListViewItem lvi, bool itemChecked)
+        {
             ProjectInfo projectInfo = lvi.ProjectInfo;
             Color oldColor = lvi.ForeColor;
             bool oldPossiblyInvalidToBeVersion = lvi.PossiblyInvalidToBeVersion;
             if (!lvi.ProjectInfo.IsVersionable)
                 lvi.ForeColor = ColorsConfiguration.SubProjectRoot;
-            else if (!lvi.IsAssemblyVersionDefined) {
+            else if (!lvi.IsAssemblyVersionDefined)
+            {
                 lvi.ForeColor = ColorsConfiguration.NoVersion;
             }
-            else {
+            else
+            {
                 string toBeVersion = lvi.SubItems[ToBecomeVersionColumnIndex].Text;
                 bool isRegularVersion = ProjectVersion.IsValidVersionString(toBeVersion, AssemblyVersionType, lvi.ProjectInfo.ProjectTypeInfo.ProjectType);
                 // check if "to be version" is higher than current version
                 Debug.Assert(isRegularVersion || AssemblyVersionType == AssemblyVersionType.AssemblyInformationalVersion);
-                if (!isRegularVersion || lvi.CurrentVersion.CompareTo(toBeVersion) <= 0) {
-                    if (projectInfo.Modified) {
+                if (!isRegularVersion || lvi.CurrentVersion.CompareTo(toBeVersion) <= 0)
+                {
+                    if (projectInfo.Modified)
+                    {
                         if (itemChecked)
                             lvi.ForeColor = ColorsConfiguration.ModifiedMarked;
                         else
                             lvi.ForeColor = ColorsConfiguration.ModifiedNotMarked;
                     }
-                    else {
+                    else
+                    {
                         if (itemChecked)
                             lvi.ForeColor = ColorsConfiguration.NotModifiedMarked;
                         else
                             lvi.ForeColor = ColorsConfiguration.NotModifiedNotMarked;
                     }
                 }
-                else {
+                else
+                {
                     if (itemChecked)
                         lvi.ForeColor = ColorsConfiguration.InvalidVersionMarked;
                     else
                         lvi.ForeColor = ColorsConfiguration.InvalidVersionNotMarked;
                 }
-                if (isRegularVersion) {
-                    try {
+                if (isRegularVersion)
+                {
+                    try
+                    {
                         string s = ProjectVersion.ApplyVersionPattern(m_proposedToBeVersionPattern, lvi.ProjectInfo.CurrentAssemblyVersions[AssemblyVersionType].ToString(), ResetBuildAndRevisionTo);
                         ProjectVersion curr = lvi.ProjectInfo.CurrentAssemblyVersions[AssemblyVersionType];
                         lvi.PossiblyInvalidToBeVersion = !curr.IsStringPatternHigher(s) || !curr.IsStringPatternHigher(toBeVersion);
                     }
-                    catch (VersionOverflowException) {
+                    catch (VersionOverflowException)
+                    {
                         lvi.PossiblyInvalidToBeVersion = true;
                     }
                 }
@@ -1292,8 +1476,10 @@ namespace BuildAutoIncrement {
                 UpdateItem(lvi);
         }
 
-        private void UpdateItem(ProjectsListViewItem lvi) {
-            if (!m_batchUpdate && Visible) {
+        private void UpdateItem(ProjectsListViewItem lvi)
+        {
+            if (!m_batchUpdate && Visible)
+            {
                 m_updating = true;
                 m_listViewItemToUpdate = lvi;
                 this.Update();
@@ -1301,7 +1487,8 @@ namespace BuildAutoIncrement {
             }
         }
 
-        private ProjectVersion IncrementVersion(ProjectInfo projectInfo, ProjectVersion.VersionComponent toIncrement, NumberingOptions numberingOptions) {
+        private ProjectVersion IncrementVersion(ProjectInfo projectInfo, ProjectVersion.VersionComponent toIncrement, NumberingOptions numberingOptions)
+        {
             ProjectVersion newVersion = projectInfo.CurrentAssemblyVersions[AssemblyVersionType].Clone();
             newVersion.IncrementComponent(toIncrement, numberingOptions);
             return newVersion;
@@ -1311,28 +1498,33 @@ namespace BuildAutoIncrement {
 
         #region Inline editing methods
 
-        private void StartEditingToBeVersion(ProjectsListViewItem item) {
+        private void StartEditingToBeVersion(ProjectsListViewItem item)
+        {
             if (!IsVersionEditable(item))
                 return;
             item.EnsureVisible();
             Rectangle subItemBounds = GetToBeVersionSubItemBounds(item);
             subItemBounds.Intersect(ClientRectangle);
             m_editControl.Activate(subItemBounds, item.SubItems[ToBecomeVersionColumnIndex].Text);
-            m_editControl.Leave     += new EventHandler(m_editControl_Leave);
-            m_editControl.KeyPress  += new KeyPressEventHandler(m_editControl_KeyPress);
+            m_editControl.Leave += new EventHandler(m_editControl_Leave);
+            m_editControl.KeyPress += new KeyPressEventHandler(m_editControl_KeyPress);
             m_itemEdited = item;
         }
 
-        private void EndEditingToBeVersion(bool acceptChanges) {
+        private void EndEditingToBeVersion(bool acceptChanges)
+        {
             if (m_itemEdited == null)
                 return;
-            if (acceptChanges) {
-                if (AssemblyVersionType != AssemblyVersionType.AssemblyInformationalVersion 
+            if (acceptChanges)
+            {
+                if (AssemblyVersionType != AssemblyVersionType.AssemblyInformationalVersion
                     || m_itemEdited.ProjectInfo.ProjectTypeInfo == ProjectTypeInfo.VCppProject
                     || m_itemEdited.ProjectInfo.ProjectTypeInfo == ProjectTypeInfo.SetupProject
-                    || !ConfigurationPersister.Instance.Configuration.NumberingOptions.AllowArbitraryInformationalVersion) {
+                    || !ConfigurationPersister.Instance.Configuration.NumberingOptions.AllowArbitraryInformationalVersion)
+                {
                     string message = ProjectVersion.ValidateVersionString(m_editControl.Text, AssemblyVersionType, m_itemEdited.ProjectInfo.ProjectTypeInfo.ProjectType);
-                    if (message != string.Empty) {
+                    if (message != string.Empty)
+                    {
                         MessageBox.Show(TopLevelControl, message, s_txtVersionFormatError, MessageBoxButtons.OK, MessageBoxIcon.Error);
                         m_editControl.Focus();
                         return;
@@ -1341,8 +1533,8 @@ namespace BuildAutoIncrement {
                 m_itemEdited.SubItems[ToBecomeVersionColumnIndex].Text = m_editControl.Text;
                 ColorItem(m_itemEdited, m_itemEdited.Checked);
             }
-            m_editControl.Leave     -= new EventHandler(m_editControl_Leave);
-            m_editControl.KeyPress  -= new KeyPressEventHandler(m_editControl_KeyPress);
+            m_editControl.Leave -= new EventHandler(m_editControl_Leave);
+            m_editControl.KeyPress -= new KeyPressEventHandler(m_editControl_KeyPress);
             m_editControl.Deactivate();
             m_itemEdited = null;
 
@@ -1350,16 +1542,20 @@ namespace BuildAutoIncrement {
             SelectedItems.CopyTo(m_previouslySelectedItems, 0);
         }
 
-        private bool IsVersionEditable(ProjectsListViewItem item) {
+        private bool IsVersionEditable(ProjectsListViewItem item)
+        {
             return item.IsAssemblyVersionDefined || !item.CurrentVersion.Valid;
         }
 
-        private void m_editControl_Leave(object sender, EventArgs e) {
+        private void m_editControl_Leave(object sender, EventArgs e)
+        {
             EndEditingToBeVersion(true);
         }
 
-        private void m_editControl_KeyPress(object sender, System.Windows.Forms.KeyPressEventArgs e) {
-            switch (e.KeyChar) {
+        private void m_editControl_KeyPress(object sender, System.Windows.Forms.KeyPressEventArgs e)
+        {
+            switch (e.KeyChar)
+            {
                 case (char)(int)Keys.Escape:
                     EndEditingToBeVersion(false);
                     break;
@@ -1369,10 +1565,13 @@ namespace BuildAutoIncrement {
             }
         }
 
-        private int GetSubItemIndex(int itemLeft, int x) {
-            for (int i = 0; i < Columns.Count; i++) {
+        private int GetSubItemIndex(int itemLeft, int x)
+        {
+            for (int i = 0; i < Columns.Count; i++)
+            {
                 ColumnHeader h = Columns[i];
-                if (x <	itemLeft + h.Width) {
+                if (x < itemLeft + h.Width)
+                {
                     return h.Index;
                 }
                 itemLeft += h.Width;
@@ -1380,18 +1579,20 @@ namespace BuildAutoIncrement {
             return -1;
         }
 
-        private Rectangle GetToBeVersionSubItemBounds(ProjectsListViewItem Item) {
+        private Rectangle GetToBeVersionSubItemBounds(ProjectsListViewItem Item)
+        {
             Rectangle subItemRect = Rectangle.Empty;
             Rectangle lviBounds = Item.GetBounds(ItemBoundsPortion.Entire);
-            int	subItemX = lviBounds.Left;
+            int subItemX = lviBounds.Left;
             int i;
-            for (i = 0; i < Columns.Count; i++) {
+            for (i = 0; i < Columns.Count; i++)
+            {
                 ColumnHeader col = Columns[i];
                 if (col.Index == ToBecomeVersionColumnIndex)
                     break;
                 subItemX += col.Width;
-            } 
-            subItemRect	= new Rectangle(subItemX + 4, lviBounds.Top, Columns[i].Width - 4, lviBounds.Height);
+            }
+            subItemRect = new Rectangle(subItemX + 4, lviBounds.Top, Columns[i].Width - 4, lviBounds.Height);
             return subItemRect;
         }
 
@@ -1401,43 +1602,43 @@ namespace BuildAutoIncrement {
         /// <summary>
         ///   
         /// </summary>
-        private IList           m_projectInfos;
+        private IList m_projectInfos;
         /// <summary>
         ///   Number of valid versions in the listview.
         /// </summary>
-        private int             m_validVersionsCount;
+        private int m_validVersionsCount;
         /// <summary>
         ///   Proposed "to be version" pattern taken from main form text box.
         /// </summary>
-        private string          m_proposedToBeVersionPattern;
+        private string m_proposedToBeVersionPattern;
         /// <summary>
         ///   <c>ListViewItem</c> currently being updated; used to avoid 
         ///   listview flickering.
         /// </summary>
-        private ProjectsListViewItem    m_listViewItemToUpdate;
+        private ProjectsListViewItem m_listViewItemToUpdate;
         /// <summary>
         ///   Flag that controls listview updating; used to avoid listview 
         ///   flickering.
         /// </summary>
-        private bool                    m_updating = false;
+        private bool m_updating = false;
         /// <summary>
         ///   Flag that prevents update of individual items for multiple 
         ///   commands.
         /// </summary>
-        private bool                    m_batchUpdate = false;
+        private bool m_batchUpdate = false;
         /// <summary>
         ///   Embedded textbox control used to manually edit version.
         /// </summary>
-        private EmbeddedTextBox         m_editControl;
+        private EmbeddedTextBox m_editControl;
         /// <summary>
         ///   ListViewItem being manually edited.
         /// </summary>
-        private ProjectsListViewItem    m_itemEdited;
+        private ProjectsListViewItem m_itemEdited;
         /// <summary>
         ///   Array of <c>ListViewItem</c>s being selected. Used when manually 
         ///   editing version.
         /// </summary>
-        private ProjectsListViewItem[]  m_previouslySelectedItems = new ProjectsListViewItem[0];
+        private ProjectsListViewItem[] m_previouslySelectedItems = new ProjectsListViewItem[0];
         /// <summary>
         ///   Object used to render checkboxes in the listview.
         /// </summary>
@@ -1447,13 +1648,14 @@ namespace BuildAutoIncrement {
 
         #region Static methods and fields
 
-        static ProjectsListView() {
+        static ProjectsListView()
+        {
             ResourceManager resources = new System.Resources.ResourceManager("BuildAutoIncrement.Resources.Shared", typeof(ResourceAccessor).Assembly);
             Debug.Assert(resources != null);
 
-            s_txtVersionNotFound    = resources.GetString("Version not found");
-            s_txtVersionInvalid     = resources.GetString("Invalid version");
-            s_txtFileNotFound       = resources.GetString("AssemblyInfo file not found in project");
+            s_txtVersionNotFound = resources.GetString("Version not found");
+            s_txtVersionInvalid = resources.GetString("Invalid version");
+            s_txtFileNotFound = resources.GetString("AssemblyInfo file not found in project");
             s_txtVersionFormatError = resources.GetString("Version format error");
             s_txtVersionOverflowError = resources.GetString("Version overflow occured for projects");
 
@@ -1462,7 +1664,7 @@ namespace BuildAutoIncrement {
             Debug.Assert(s_txtFileNotFound != null);
             Debug.Assert(s_txtVersionFormatError != null);
         }
-            
+
         private static readonly string s_txtVersionNotFound;
         private static readonly string s_txtVersionInvalid;
         private static readonly string s_txtFileNotFound;
@@ -1473,7 +1675,7 @@ namespace BuildAutoIncrement {
         private static int ToBecomeVersionColumnIndex;
         private static int ModifiedColumnIndex;
         private static int CurrentVersionColumnIndex;
-        
+
         #endregion // Static methods and fields
 
         private const int Indentation = 10;

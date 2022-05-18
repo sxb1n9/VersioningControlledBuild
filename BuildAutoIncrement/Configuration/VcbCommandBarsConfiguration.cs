@@ -1,16 +1,17 @@
 ﻿using System;
 using System.Collections;
 using System.Xml.Serialization;
-using System.Diagnostics;
 
-namespace BuildAutoIncrement {
+namespace BuildAutoIncrement
+{
 
     /// <summary>
     ///   Contains UI elements configurations (toolbar, menu) for
     ///   all develompment environments.
     /// </summary>
     [Serializable]
-    public class VcbCommandBarsConfiguration {
+    public class VcbCommandBarsConfiguration
+    {
 
         /// <summary>
         ///   Returns configuration for a given version of Visual Studio.
@@ -25,8 +26,10 @@ namespace BuildAutoIncrement {
         ///   <code>VcbCommandBarsSettings</code> control configuration for 
         ///   the version of Visual Studio provided.
         /// </returns>
-        public VcbCommandBarsSettings GetConfiguration(string version, string addInProgID) {
-            foreach (VcbCommandBarsSettings devEnv in m_developmentEnvironmets) {
+        public VcbCommandBarsSettings GetConfiguration(string version, string addInProgID)
+        {
+            foreach (VcbCommandBarsSettings devEnv in m_developmentEnvironmets)
+            {
                 if (devEnv.Version == version)
                     return devEnv;
             }
@@ -44,8 +47,10 @@ namespace BuildAutoIncrement {
         /// <returns>
         ///   <code>true</code> if configuration exists, otherwise <code>false</code>:
         /// </returns>
-        public bool Contains(string version) {
-            foreach (VcbCommandBarsSettings devEnv in m_developmentEnvironmets) {
+        public bool Contains(string version)
+        {
+            foreach (VcbCommandBarsSettings devEnv in m_developmentEnvironmets)
+            {
                 if (devEnv.Version == version)
                     return true;
             }
@@ -56,7 +61,8 @@ namespace BuildAutoIncrement {
         ///   Gets or sets the array of settings for each version of Visual Studio.
         /// </summary>
         [XmlElement("VcbCommandBarsSettings")]
-        public VcbCommandBarsSettings[] Items {
+        public VcbCommandBarsSettings[] Items
+        {
             get { return (VcbCommandBarsSettings[])m_developmentEnvironmets.ToArray(typeof(VcbCommandBarsSettings)); }
             set { m_developmentEnvironmets = new ArrayList(value); }
         }
@@ -68,25 +74,30 @@ namespace BuildAutoIncrement {
     ///   VCB menu and toolbar settings for a specific version of Visual Studio.
     /// </summary>
     [Serializable]
-    public class VcbCommandBarsSettings {
+    public class VcbCommandBarsSettings
+    {
 
-        public VcbCommandBarsSettings() {
+        public VcbCommandBarsSettings()
+        {
         }
 
-        public VcbCommandBarsSettings(string addInProgId) {
+        public VcbCommandBarsSettings(string addInProgId)
+        {
             m_toolbar = new ToolbarSettings(addInProgId);
             m_menuBar = new MenuSettings(addInProgId);
         }
 
         public VcbCommandBarsSettings(string version, string addInProgId)
-            : this(addInProgId) {
+            : this(addInProgId)
+        {
             m_version = version;
         }
 
         /// <summary>
         ///   Gets or sets VCB toolbar settings.
         /// </summary>
-        public ToolbarSettings Toolbar {
+        public ToolbarSettings Toolbar
+        {
             get { return m_toolbar; }
             set { m_toolbar = value; }
         }
@@ -94,7 +105,8 @@ namespace BuildAutoIncrement {
         /// <summary>
         ///   Gets or sets VCB menu settings.
         /// </summary>
-        public MenuSettings Menu {
+        public MenuSettings Menu
+        {
             get { return m_menuBar; }
             set { m_menuBar = value; }
         }
@@ -103,7 +115,8 @@ namespace BuildAutoIncrement {
         ///   Gets or sets version of Visual Studio.
         /// </summary>
         [XmlAttribute]
-        public string Version {
+        public string Version
+        {
             get { return m_version; }
             set { m_version = value; }
         }
@@ -187,12 +200,15 @@ namespace BuildAutoIncrement {
     ///   VCB toolbar settings.
     /// </summary>
     [Serializable]
-    public class ToolbarSettings : VcbBarSettings {
+    public class ToolbarSettings : VcbBarSettings
+    {
 
-        public ToolbarSettings() {
+        public ToolbarSettings()
+        {
         }
 
-        public ToolbarSettings(string addInProgId) {
+        public ToolbarSettings(string addInProgId)
+        {
             m_vcbControls.Add(new VcbControl(string.Format("{0}.{1}", addInProgId, Constants.Commands.GUI), false));
             m_vcbControls.Add(new VcbControl(string.Format("{0}.{1}", addInProgId, Constants.Commands.Build), false));
             m_vcbControls.Add(new VcbControl(string.Format("{0}.{1}", addInProgId, Constants.Commands.Rebuild), false));
@@ -202,7 +218,8 @@ namespace BuildAutoIncrement {
         /// <summary>
         ///   Gets or sets the position of toolbar.
         /// </summary>
-        public int Position {
+        public int Position
+        {
             get { return m_position; }
             set { m_position = value; }
         }
@@ -210,7 +227,8 @@ namespace BuildAutoIncrement {
         /// <summary>
         ///   Gets or sets <code>Left</code> property of the toolbar.
         /// </summary>
-        public int Left {
+        public int Left
+        {
             get { return m_left; }
             set { m_left = value; }
         }
@@ -246,12 +264,15 @@ namespace BuildAutoIncrement {
     ///   VCB menu settings.
     /// </summary>
     [Serializable]
-    public class MenuSettings : VcbBarSettings {
+    public class MenuSettings : VcbBarSettings
+    {
 
-        public MenuSettings() {
+        public MenuSettings()
+        {
         }
 
-        public MenuSettings(string addInProgId) {
+        public MenuSettings(string addInProgId)
+        {
             m_vcbControls.Add(new VcbControl(string.Format("{0}.{1}", addInProgId, Constants.Commands.GUI), false));
             m_vcbControls.Add(new VcbControl(string.Format("{0}.{1}", addInProgId, Constants.Commands.Build), false));
             m_vcbControls.Add(new VcbControl(string.Format("{0}.{1}", addInProgId, Constants.Commands.Rebuild), false));
@@ -265,7 +286,8 @@ namespace BuildAutoIncrement {
         /// <summary>
         ///   Gets or sets the index of the menu.
         /// </summary>
-        public int Index {
+        public int Index
+        {
             get { return m_index; }
             set { m_index = value; }
         }
@@ -277,15 +299,19 @@ namespace BuildAutoIncrement {
     ///   Settings for a control (menu item or toolbar button).
     /// </summary>
     [Serializable]
-    public class VcbControl {
+    public class VcbControl
+    {
 
-        public VcbControl() {
+        public VcbControl()
+        {
         }
 
-        public VcbControl(string name) : this(name, false) {
+        public VcbControl(string name) : this(name, false)
+        {
         }
 
-        public VcbControl(string name, bool beginGroup) {
+        public VcbControl(string name, bool beginGroup)
+        {
             m_name = name;
             m_beginGroup = beginGroup;
         }
@@ -293,7 +319,8 @@ namespace BuildAutoIncrement {
         /// <summary>
         ///   Gets or sets the name of the control.
         /// </summary>
-        public string Name {
+        public string Name
+        {
             get { return m_name; }
             set { m_name = value; }
         }
@@ -306,7 +333,8 @@ namespace BuildAutoIncrement {
         /// <returns>
         ///   <code>true</code> if controls have the same name, otherwise <code>false</code>.
         /// </returns>
-        public override bool Equals(object obj) {
+        public override bool Equals(object obj)
+        {
             VcbControl other = obj as VcbControl;
             if (other == null)
                 return false;
@@ -317,7 +345,8 @@ namespace BuildAutoIncrement {
         ///   Overriden since <code>Equals</code> have been overriden.
         /// </summary>
         /// <returns></returns>
-        public override int GetHashCode() {
+        public override int GetHashCode()
+        {
             return Name.GetHashCode();
         }
 
@@ -325,7 +354,8 @@ namespace BuildAutoIncrement {
         ///   Gets or sets a flag that indicates the control begins a group.
         /// </summary>
         [XmlAttribute]
-        public bool BeginGroup {
+        public bool BeginGroup
+        {
             get { return m_beginGroup; }
             set { m_beginGroup = value; }
         }
@@ -334,7 +364,8 @@ namespace BuildAutoIncrement {
         ///   Gets or sets the visibility of control.
         /// </summary>
         [XmlAttribute]
-        public bool Visible {
+        public bool Visible
+        {
             get { return m_isVisible; }
             set { m_isVisible = value; }
         }

@@ -22,69 +22,85 @@
  *    misrepresented as being the original software.
  * 3. This notice may not be removed or altered from any source distribution.
  */
-using System;
 using System.Windows.Forms;
 
-namespace BuildAutoIncrement {
+namespace BuildAutoIncrement
+{
     /// <summary>
     ///   Spin button control. Extends the range to long type range in order
     ///   to cope with largest values of version without overflow problem.
     /// </summary>
-    public class SpinButton : VScrollBar {
+    public class SpinButton : VScrollBar
+    {
 
-        public SpinButton() : base() {
+        public SpinButton() : base()
+        {
         }
 
-        public new long Value {
-            get {
+        public new long Value
+        {
+            get
+            {
                 return m_value;
             }
-            set {
+            set
+            {
                 m_value = value;
             }
         }
 
-        public new long Maximum {
-            get {
+        public new long Maximum
+        {
+            get
+            {
                 return m_maximum;
             }
-            set {
+            set
+            {
                 m_maximum = value;
             }
         }
 
-        public new long Minimum {
-            get {
+        public new long Minimum
+        {
+            get
+            {
                 return m_minimum;
             }
-            set {
+            set
+            {
                 m_minimum = value;
             }
         }
 
-        public new long LargeChange {
-            get {
+        public new long LargeChange
+        {
+            get
+            {
                 return m_largeChange;
             }
-            set {
+            set
+            {
                 m_largeChange = value;
             }
         }
 
-        protected override void OnScroll(ScrollEventArgs se) {
-            switch (se.Type) {
-            case ScrollEventType.LargeDecrement:
-                m_value += LargeChange;
-                break;
-            case ScrollEventType.LargeIncrement:
-                m_value -= LargeChange;
-                break;
-            case ScrollEventType.SmallDecrement:
-                m_value += SmallChange;
-                break;
-            case ScrollEventType.SmallIncrement:
-                m_value -= SmallChange;
-                break;
+        protected override void OnScroll(ScrollEventArgs se)
+        {
+            switch (se.Type)
+            {
+                case ScrollEventType.LargeDecrement:
+                    m_value += LargeChange;
+                    break;
+                case ScrollEventType.LargeIncrement:
+                    m_value -= LargeChange;
+                    break;
+                case ScrollEventType.SmallDecrement:
+                    m_value += SmallChange;
+                    break;
+                case ScrollEventType.SmallIncrement:
+                    m_value -= SmallChange;
+                    break;
             }
             if (m_value > Maximum)
                 m_value = Maximum;

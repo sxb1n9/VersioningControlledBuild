@@ -29,24 +29,28 @@ using System.IO;
 using System.Reflection;
 using System.Text;
 
-namespace BuildAutoIncrement {
-	/// <summary>
-	///   Utility structure to load corresponding implementation assembly for
-	///   runtime version provided. Used during uninstallation to assure that
-	///   toolbar has been removed.
-	/// </summary>
-	public struct ImplementationAssemblyLoader {
+namespace BuildAutoIncrement
+{
+    /// <summary>
+    ///   Utility structure to load corresponding implementation assembly for
+    ///   runtime version provided. Used during uninstallation to assure that
+    ///   toolbar has been removed.
+    /// </summary>
+    public struct ImplementationAssemblyLoader
+    {
 
-        private const string AddinImplementationAssemblyBasename    = "AddinImplementation.";
+        private const string AddinImplementationAssemblyBasename = "AddinImplementation.";
 
-        private const string FrameworkNotSupported                  = ".NET version {0} not supported.";
+        private const string FrameworkNotSupported = ".NET version {0} not supported.";
 
-        public static Assembly LoadMainAssembly(int runtimeVersion) {
+        public static Assembly LoadMainAssembly(int runtimeVersion)
+        {
             Debug.Assert(runtimeVersion >= 1 && runtimeVersion <= 4);
 
             string addinPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
             StringBuilder mainAssemblyFile = new StringBuilder(Path.Combine(addinPath, AddinImplementationAssemblyBasename));
-            switch (runtimeVersion) {
+            switch (runtimeVersion)
+            {
                 case 1:
                     mainAssemblyFile.Append("VS7");
                     break;
@@ -61,5 +65,5 @@ namespace BuildAutoIncrement {
             mainAssemblyFile.Append(".dll");
             return Assembly.LoadFrom(mainAssemblyFile.ToString());
         }
-	}
+    }
 }

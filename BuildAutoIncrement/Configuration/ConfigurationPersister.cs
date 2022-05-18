@@ -25,19 +25,16 @@
 using System;
 using System.Diagnostics;
 using System.IO;
-using System.Reflection;
-using System.Text;
-using System.Windows.Forms;
-using System.Xml;
-using System.Xml.Serialization;
 
-namespace BuildAutoIncrement {
+namespace BuildAutoIncrement
+{
 
     /// <summary>
     ///   Class responsible to load and save configuration file. Implemented
     ///   as a singleton to be accessible from entire code.
     /// </summary>
-    public sealed class ConfigurationPersister {
+    public sealed class ConfigurationPersister
+    {
 
         private static readonly ConfigurationPersister m_instance = new ConfigurationPersister();
 
@@ -46,7 +43,8 @@ namespace BuildAutoIncrement {
         ///   the configuration file. If reading fails, default configuration
         ///   is used.
         /// </summary>
-        private ConfigurationPersister() {
+        private ConfigurationPersister()
+        {
             ConfigurationFolder = FileUtil.GetConfigurationFolder();
             ConfigurationFilename = Path.Combine(ConfigurationFolder, Filename);
             // first create a default configuration
@@ -68,17 +66,20 @@ namespace BuildAutoIncrement {
         /// <summary>
         ///   Accessor to <c>ConfigurationPesister</c> instance.
         /// </summary>
-        public static ConfigurationPersister Instance {
-            get {
+        public static ConfigurationPersister Instance
+        {
+            get
+            {
                 m_instance.ReadConfiguration();
-                return m_instance; 
+                return m_instance;
             }
         }
 
         /// <summary>
         ///   Gets current configuration.
         /// </summary>
-        public VcbConfiguration Configuration {
+        public VcbConfiguration Configuration
+        {
             get { return m_configuration; }
             set { m_configuration = value; }
         }
@@ -86,22 +87,28 @@ namespace BuildAutoIncrement {
         /// <summary>
         ///   Stores configuration.
         /// </summary>
-        public void StoreConfiguration() {
+        public void StoreConfiguration()
+        {
             Debug.Assert(m_xmlSerializer != null);
-            try {
-                if (!Directory.Exists(ConfigurationFolder)) {
+            try
+            {
+                if (!Directory.Exists(ConfigurationFolder))
+                {
                     // create directory where configuration will be saved
                     Directory.CreateDirectory(ConfigurationFolder);
                 }
                 m_xmlSerializer.Serialize(ConfigurationFilename, m_configuration);
             }
-            catch (Exception exception) {
+            catch (Exception exception)
+            {
                 Trace.WriteLine(exception.ToString());
-                try {
+                try
+                {
                     if (File.Exists(ConfigurationFilename))
                         File.Delete(ConfigurationFilename);
                 }
-                catch {
+                catch
+                {
                 }
                 throw;
             }
@@ -110,23 +117,30 @@ namespace BuildAutoIncrement {
         /// <summary>
         ///   Reads configuration file if it has been updated meanwhile.
         /// </summary>
-        private void ReadConfiguration() {
+        private void ReadConfiguration()
+        {
             Debug.Assert(m_xmlSerializer != null);
-            if (File.Exists(ConfigurationFilename)) {
+            if (File.Exists(ConfigurationFilename))
+            {
                 DateTime lastWrite = File.GetLastWriteTime(ConfigurationFilename);
-                if (lastWrite > m_lastConfigurationDateTime) {
-                    try {
+                if (lastWrite > m_lastConfigurationDateTime)
+                {
+                    try
+                    {
                         m_configuration = m_xmlSerializer.Deserialize(ConfigurationFilename);
                         m_configuration.ConfigurationFileRead = true;
                         m_lastConfigurationDateTime = File.GetLastWriteTime(ConfigurationFilename);
                     }
-                    catch (Exception exception) {
+                    catch (Exception exception)
+                    {
                         Trace.WriteLine(exception.ToString());
                         // file seems to be corrupted so delete it
-                        try {
+                        try
+                        {
                             File.Delete(ConfigurationFilename);
                         }
-                        catch {
+                        catch
+                        {
                         }
                     }
                 }
@@ -137,13 +151,15 @@ namespace BuildAutoIncrement {
         /// <summary>
         ///   Gets the IIS root, reading it from registry.
         /// </summary>
-        private void GetIisRoot() {
+        private void GetIisRoot()
+        {
             Debug.Assert(m_configuration != null && m_configuration.FoldersConfigurations != null);
             FolderConfiguration iis = m_configuration.FoldersConfigurations.IisFolder;
             Debug.Assert(iis != null);
             // if no folder set but is available (e.g. when starting new version
             // with old configuration)
-            if (iis.IsAvailable && iis.Folder.Length == 0) {
+            if (iis.IsAvailable && iis.Folder.Length == 0)
+            {
                 if (InetRootLocator.Instance.IsIisAvailable)
                     iis.Folder = InetRootLocator.Instance.PathWwwRoot;
                 else
@@ -154,13 +170,15 @@ namespace BuildAutoIncrement {
         /// <summary>
         ///   Gets the SourceSafe executable path, reading from registry.
         /// </summary>
-        private void GetSourceSafePath() {
+        private void GetSourceSafePath()
+        {
             Debug.Assert(m_configuration != null && m_configuration.FoldersConfigurations != null);
             FolderConfiguration ss = m_configuration.FoldersConfigurations.SourceSafeFolder;
             Debug.Assert(ss != null);
             // if no folder set but is available (e.g. when starting new version
             // with old configuration)
-            if (ss.IsAvailable && ss.Folder.Length == 0) {
+            if (ss.IsAvailable && ss.Folder.Length == 0)
+            {
                 if (SourceSafeLocator.Instance.IsSourceSafeAvailable)
                     ss.Folder = SourceSafeLocator.Instance.SourceSafeRoot;
                 else
@@ -185,5 +203,5 @@ namespace BuildAutoIncrement {
         private readonly string ConfigurationFilename;
 
         private const string Filename = "Configuration.xml";
-	}
+    }
 }

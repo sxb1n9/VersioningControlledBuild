@@ -23,17 +23,17 @@
  * 3. This notice may not be removed or altered from any source distribution.
  */
 using System;
-using System.Collections;
-using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
 using System.Windows.Forms;
 
-namespace BuildAutoIncrement {
-	/// <summary>
-	///   Utility form used to display exception details.
-	/// </summary>
-	public class ExceptionForm : System.Windows.Forms.Form {
+namespace BuildAutoIncrement
+{
+    /// <summary>
+    ///   Utility form used to display exception details.
+    /// </summary>
+    public class ExceptionForm : System.Windows.Forms.Form
+    {
 
         #region Controls
         private System.Windows.Forms.Panel m_panelMessage;
@@ -50,31 +50,34 @@ namespace BuildAutoIncrement {
 		private System.ComponentModel.Container components = null;
 
         private readonly string m_detailsButtonCaption;
-        private          bool   m_detailsVisible;
-        private readonly Size   m_fullSize;
+        private bool m_detailsVisible;
+        private readonly Size m_fullSize;
 
         #region Constructors
 
         /// <summary>
         ///   Creates <c>ExceptionForm</c>.
         /// </summary>
-        private ExceptionForm() {
-			InitializeComponent();
-            m_detailsButtonCaption  = m_buttonDetails.Text;
-            m_fullSize              = ClientRectangle.Size;
+        private ExceptionForm()
+        {
+            InitializeComponent();
+            m_detailsButtonCaption = m_buttonDetails.Text;
+            m_fullSize = ClientRectangle.Size;
             HideDetails();
-		}
+        }
 
-        private ExceptionForm(Exception e, string caption, MessageBoxIcon icon) : this() {
-            m_labelMessage.Text     = e.Message;
-            m_textBoxDetails.Text   = e.ToString();
-            Text                    = caption;
-            if (icon == MessageBoxIcon.None) {
+        private ExceptionForm(Exception e, string caption, MessageBoxIcon icon) : this()
+        {
+            m_labelMessage.Text = e.Message;
+            m_textBoxDetails.Text = e.ToString();
+            Text = caption;
+            if (icon == MessageBoxIcon.None)
+            {
                 m_pictureBoxIcon.Visible = false;
                 m_labelMessage.Left = m_pictureBoxIcon.Left;
             }
             else
-                m_pictureBoxIcon.Image  = CreateIcon(icon);
+                m_pictureBoxIcon.Image = CreateIcon(icon);
         }
 
         #endregion // Constructors
@@ -84,9 +87,12 @@ namespace BuildAutoIncrement {
         /// <summary>
         /// Clean up any resources being used.
         /// </summary>
-        protected override void Dispose(bool disposing) {
-            if (disposing) {
-                if(components != null) {
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                if (components != null)
+                {
                     components.Dispose();
                 }
             }
@@ -97,8 +103,10 @@ namespace BuildAutoIncrement {
 
         #region Private methods
 
-        private Image CreateIcon(MessageBoxIcon icon) {
-            switch (icon) {
+        private Image CreateIcon(MessageBoxIcon icon)
+        {
+            switch (icon)
+            {
                 case MessageBoxIcon.Asterisk:
                     return SystemIcons.Asterisk.ToBitmap();
                 //case MessageBoxIcon.Error:
@@ -124,19 +132,22 @@ namespace BuildAutoIncrement {
             return null;
         }
 
-        private void ShowDetails() {
+        private void ShowDetails()
+        {
             m_buttonDetails.Text = "<< " + m_detailsButtonCaption;
             SetClientSizeCore(m_panelMessage.Width, m_fullSize.Height);
             m_detailsVisible = true;
         }
 
-        private void HideDetails() {
+        private void HideDetails()
+        {
             m_buttonDetails.Text = m_detailsButtonCaption + " >>";
             SetClientSizeCore(m_panelMessage.Width, m_panelMessage.Height);
             m_detailsVisible = false;
         }
 
-        private void ToggleDetails() {
+        private void ToggleDetails()
+        {
             if (m_detailsVisible)
                 HideDetails();
             else
@@ -144,14 +155,14 @@ namespace BuildAutoIncrement {
         }
 
         #endregion // Private methods
-        
-		#region Windows Form Designer generated code
-		/// <summary>
-		/// Required method for Designer support - do not modify
-		/// the contents of this method with the code editor.
-		/// </summary>
-		private void InitializeComponent()
-		{
+
+        #region Windows Form Designer generated code
+        /// <summary>
+        /// Required method for Designer support - do not modify
+        /// the contents of this method with the code editor.
+        /// </summary>
+        private void InitializeComponent()
+        {
             System.Resources.ResourceManager resources = new System.Resources.ResourceManager(typeof(ExceptionForm));
             this.m_buttonOK = new System.Windows.Forms.Button();
             this.m_buttonDetails = new System.Windows.Forms.Button();
@@ -205,8 +216,8 @@ namespace BuildAutoIncrement {
             // 
             // m_labelMessage
             // 
-            this.m_labelMessage.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-                | System.Windows.Forms.AnchorStyles.Left) 
+            this.m_labelMessage.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                | System.Windows.Forms.AnchorStyles.Left)
                 | System.Windows.Forms.AnchorStyles.Right)));
             this.m_labelMessage.Location = new System.Drawing.Point(64, 23);
             this.m_labelMessage.Name = "m_labelMessage";
@@ -216,8 +227,8 @@ namespace BuildAutoIncrement {
             // 
             // m_textBoxDetails
             // 
-            this.m_textBoxDetails.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-                | System.Windows.Forms.AnchorStyles.Left) 
+            this.m_textBoxDetails.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                | System.Windows.Forms.AnchorStyles.Left)
                 | System.Windows.Forms.AnchorStyles.Right)));
             this.m_textBoxDetails.HideSelection = false;
             this.m_textBoxDetails.Location = new System.Drawing.Point(8, 104);
@@ -249,37 +260,44 @@ namespace BuildAutoIncrement {
             this.ResumeLayout(false);
 
         }
-		#endregion
+        #endregion
 
-        private void m_buttonDetails_Click(object sender, System.EventArgs e) {
+        private void m_buttonDetails_Click(object sender, System.EventArgs e)
+        {
             ToggleDetails();
         }
 
         #region Public static methods to invoke the form
 
-        public static DialogResult Show(Exception e) {
+        public static DialogResult Show(Exception e)
+        {
             return Show(e, "", MessageBoxIcon.Error);
         }
 
-        public static DialogResult Show(IWin32Window owner, Exception e) {
+        public static DialogResult Show(IWin32Window owner, Exception e)
+        {
             return Show(owner, e, "", MessageBoxIcon.Error);
         }
 
-        public static DialogResult Show(Exception e, string caption) {
+        public static DialogResult Show(Exception e, string caption)
+        {
             return Show(e, caption, MessageBoxIcon.Error);
         }
 
-        public static DialogResult Show(IWin32Window owner, Exception e, string caption) {
+        public static DialogResult Show(IWin32Window owner, Exception e, string caption)
+        {
             return Show(owner, e, caption, MessageBoxIcon.Error);
         }
 
-        public static DialogResult Show(Exception e, string caption, MessageBoxIcon icon) {
+        public static DialogResult Show(Exception e, string caption, MessageBoxIcon icon)
+        {
             ExceptionForm ef = new ExceptionForm(e, caption, icon);
             ef.StartPosition = FormStartPosition.CenterScreen;
             return ef.ShowDialog();
         }
 
-        public static DialogResult Show(IWin32Window owner, Exception e, string caption, MessageBoxIcon icon) {
+        public static DialogResult Show(IWin32Window owner, Exception e, string caption, MessageBoxIcon icon)
+        {
             ExceptionForm ef = new ExceptionForm(e, caption, icon);
             ef.StartPosition = FormStartPosition.CenterParent;
             return ef.ShowDialog(owner);

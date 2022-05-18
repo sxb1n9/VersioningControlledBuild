@@ -22,18 +22,17 @@
  *    misrepresented as being the original software.
  * 3. This notice may not be removed or altered from any source distribution.
  */
-using System;
-using System.Collections;
 using System.ComponentModel;
 using System.Drawing;
-using System.Data;
 using System.Windows.Forms;
 
-namespace BuildAutoIncrement {
-	/// <summary>
-	///   <c>UserControl</c> used to display and select a font.
-	/// </summary>
-	public class FontSelectionUserControl : System.Windows.Forms.UserControl {
+namespace BuildAutoIncrement
+{
+    /// <summary>
+    ///   <c>UserControl</c> used to display and select a font.
+    /// </summary>
+    public class FontSelectionUserControl : System.Windows.Forms.UserControl
+    {
 
         #region Controls
 
@@ -42,58 +41,71 @@ namespace BuildAutoIncrement {
         private System.Windows.Forms.Button m_buttonSelect;
 
         #endregion // Controls
-        
-        /// <summary> 
-		/// Required designer variable.
-		/// </summary>
-		private System.ComponentModel.Container components = null;
 
-		public FontSelectionUserControl() {
-			InitializeComponent();
-		}
+        /// <summary> 
+        /// Required designer variable.
+        /// </summary>
+        private System.ComponentModel.Container components = null;
+
+        public FontSelectionUserControl()
+        {
+            InitializeComponent();
+        }
 
         #region Public properties
 
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)]
         [Browsable(true)]
-        public override string Text {
-            get {
+        public override string Text
+        {
+            get
+            {
                 return m_labelCaption.Text;
             }
-            set {
+            set
+            {
                 m_labelCaption.Text = value;
             }
         }
 
-        public int CaptionWidth {
-            get {
+        public int CaptionWidth
+        {
+            get
+            {
                 return m_labelCaption.Width;
             }
-            set {
+            set
+            {
                 int dx = m_labelCaption.Width - value;
                 m_labelCaption.Width = value;
                 m_textBoxFont.Left -= dx;
-                m_textBoxFont.Width += dx; 
+                m_textBoxFont.Width += dx;
             }
         }
 
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         [Browsable(false)]
-        public FontDescription FontDescription {
-            get {
+        public FontDescription FontDescription
+        {
+            get
+            {
                 return m_textBoxFont.FontDescription;
             }
-            set {
+            set
+            {
                 m_textBoxFont.FontDescription = value;
             }
         }
 
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public Font FontDisplayed {
-            get {
+        public Font FontDisplayed
+        {
+            get
+            {
                 return m_textBoxFont.FontDisplayed;
             }
-            set {
+            set
+            {
                 m_textBoxFont.FontDisplayed = value;
             }
         }
@@ -102,27 +114,30 @@ namespace BuildAutoIncrement {
 
         #region Overrides
 
-		/// <summary> 
-		/// Clean up any resources being used.
-		/// </summary>
-		protected override void Dispose(bool disposing) {
-			if (disposing) {
-				if (components != null) {
-					components.Dispose();
-				}
-			}
-			base.Dispose(disposing);
-		}
+        /// <summary> 
+        /// Clean up any resources being used.
+        /// </summary>
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                if (components != null)
+                {
+                    components.Dispose();
+                }
+            }
+            base.Dispose(disposing);
+        }
 
         #endregion // Overrides
 
-		#region Component Designer generated code
-		/// <summary> 
-		/// Required method for Designer support - do not modify 
-		/// the contents of this method with the code editor.
-		/// </summary>
-		private void InitializeComponent()
-		{
+        #region Component Designer generated code
+        /// <summary> 
+        /// Required method for Designer support - do not modify 
+        /// the contents of this method with the code editor.
+        /// </summary>
+        private void InitializeComponent()
+        {
             this.m_labelCaption = new System.Windows.Forms.Label();
             this.m_textBoxFont = new BuildAutoIncrement.FontTextBox();
             this.m_buttonSelect = new System.Windows.Forms.Button();
@@ -130,7 +145,7 @@ namespace BuildAutoIncrement {
             // 
             // m_labelCaption
             // 
-            this.m_labelCaption.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            this.m_labelCaption.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
                 | System.Windows.Forms.AnchorStyles.Left)));
             this.m_labelCaption.Location = new System.Drawing.Point(0, 0);
             this.m_labelCaption.Name = "m_labelCaption";
@@ -141,8 +156,8 @@ namespace BuildAutoIncrement {
             // 
             // m_textBoxFont
             // 
-            this.m_textBoxFont.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-                | System.Windows.Forms.AnchorStyles.Left) 
+            this.m_textBoxFont.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                | System.Windows.Forms.AnchorStyles.Left)
                 | System.Windows.Forms.AnchorStyles.Right)));
             this.m_textBoxFont.Location = new System.Drawing.Point(72, 0);
             this.m_textBoxFont.Name = "m_textBoxFont";
@@ -152,7 +167,7 @@ namespace BuildAutoIncrement {
             // 
             // m_buttonSelect
             // 
-            this.m_buttonSelect.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            this.m_buttonSelect.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
                 | System.Windows.Forms.AnchorStyles.Right)));
             this.m_buttonSelect.Location = new System.Drawing.Point(248, 0);
             this.m_buttonSelect.Name = "m_buttonSelect";
@@ -171,11 +186,12 @@ namespace BuildAutoIncrement {
             this.ResumeLayout(false);
 
         }
-		#endregion
+        #endregion
 
         #region Control handlers
-        
-        private void m_buttonSelect_Click(object sender, System.EventArgs e) {
+
+        private void m_buttonSelect_Click(object sender, System.EventArgs e)
+        {
             /*
             FontForm fd = new FontForm();
             */
@@ -185,11 +201,12 @@ namespace BuildAutoIncrement {
             fd.FontMustExist = true;
             fd.ShowEffects = false;
             fd.Font = m_textBoxFont.FontDisplayed;
-            if (fd.ShowDialog(this.TopLevelControl) == DialogResult.OK) {
+            if (fd.ShowDialog(this.TopLevelControl) == DialogResult.OK)
+            {
                 m_textBoxFont.FontDisplayed = fd.Font;
             }
         }
-    
+
         #endregion // Control handlers
     }
 }

@@ -28,20 +28,24 @@ using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
-namespace BuildAutoIncrement {
-	/// <summary>
-	///   Utility class that enables visual style for .NET 1.1 and higher.
-	/// </summary>
-	public struct VisualStyles {
+namespace BuildAutoIncrement
+{
+    /// <summary>
+    ///   Utility class that enables visual style for .NET 1.1 and higher.
+    /// </summary>
+    public struct VisualStyles
+    {
 
         /// <summary>
         ///   Enables visual styles for .NET 1.1 and higher.
         /// </summary>
-        public static void EnableStyles() {
+        public static void EnableStyles()
+        {
             // since .NET Framework 1.0 does not have Application.EnableVisualStyles
             // method, we must not call this method or MissingMethodException
             // would be thrown when JIT Compiler invokes the method
-            if (Environment.Version >= new Version(1, 1) && Enabled) {
+            if (Environment.Version >= new Version(1, 1) && Enabled)
+            {
                 EnableVisualStyles();
             }
         }
@@ -51,7 +55,8 @@ namespace BuildAutoIncrement {
         ///   separate method in order to prevent MissingMethodException
         ///   to be thrown by JIT compiler if running on .NET 1.0
         /// </summary>
-        private static void EnableVisualStyles() {
+        private static void EnableVisualStyles()
+        {
             // DoEvents must be called immediately after as a workaround for 
             // EnableVisualStyles bug:
             // http://www.codeproject.com/buglist/EnableVisualStylesBug.asp
@@ -62,8 +67,10 @@ namespace BuildAutoIncrement {
         /// <summary>
         ///   Checks if visual styles are supported.
         /// </summary>
-        public static bool Supported {
-            get {
+        public static bool Supported
+        {
+            get
+            {
                 OperatingSystem os = Environment.OSVersion;
                 bool isAppropriateOS = os.Platform == PlatformID.Win32NT && ((os.Version.Major == 5 && os.Version.Minor >= 1) || os.Version.Major > 5);
                 if (!isAppropriateOS)
@@ -80,8 +87,10 @@ namespace BuildAutoIncrement {
         /// <summary>
         ///   Checks if visual styles are enabled.
         /// </summary>
-        public static bool Enabled {
-            get {
+        public static bool Enabled
+        {
+            get
+            {
                 return Win32Api.IsAppThemed() && Win32Api.IsThemeActive();
             }
         }
@@ -91,8 +100,10 @@ namespace BuildAutoIncrement {
         ///   application on .NET 2.0
         /// </summary>
         /// <param name="tc"></param>
-        public static void SetUseVisualStyleBackColor(TabControl tc) {
-            if (Environment.Version >= new Version(2, 0)) {
+        public static void SetUseVisualStyleBackColor(TabControl tc)
+        {
+            if (Environment.Version >= new Version(2, 0))
+            {
                 TabControlUseVisualStyleBackColor(tc);
             }
         }
@@ -102,40 +113,52 @@ namespace BuildAutoIncrement {
         ///   when running on versions of .NET earlier than 2.0
         /// </summary>
         /// <param name="form"></param>
-        public static void SetButtonFlatStyleSystem(Form form) {
-            if (Environment.Version < new Version(2, 0) && Supported && Enabled) {
+        public static void SetButtonFlatStyleSystem(Form form)
+        {
+            if (Environment.Version < new Version(2, 0) && Supported && Enabled)
+            {
                 RecursivelySetButtonFlatStyleSystem(form);
             }
         }
 
-        private static void TabControlUseVisualStyleBackColor(TabControl tc) {
+        private static void TabControlUseVisualStyleBackColor(TabControl tc)
+        {
             PropertyInfo pi = typeof(TabPage).GetProperty("UseVisualStyleBackColor", BindingFlags.Public | BindingFlags.Instance | BindingFlags.SetProperty);
             Debug.Assert(pi != null);
-            foreach (TabPage tp in tc.TabPages) {
+            foreach (TabPage tp in tc.TabPages)
+            {
                 pi.SetValue(tp, true, null);
                 RecursivelyUseVisualStyleBackColor(tp);
             }
         }
 
-        private static void RecursivelyUseVisualStyleBackColor(Control control) {
-            foreach (Control subControl in control.Controls) {
+        private static void RecursivelyUseVisualStyleBackColor(Control control)
+        {
+            foreach (Control subControl in control.Controls)
+            {
                 ButtonBase bb = subControl as ButtonBase;
-                if (bb != null) {
+                if (bb != null)
+                {
                     ButtonUseVisualStyleBackColorProperty.SetValue(bb, true, null);
                 }
-                if (subControl.Controls.Count > 0) {
+                if (subControl.Controls.Count > 0)
+                {
                     RecursivelyUseVisualStyleBackColor(subControl);
                 }
             }
         }
 
-        private static void RecursivelySetButtonFlatStyleSystem(Control control) {
-            foreach (Control subControl in control.Controls) {
+        private static void RecursivelySetButtonFlatStyleSystem(Control control)
+        {
+            foreach (Control subControl in control.Controls)
+            {
                 ButtonBase bb = subControl as ButtonBase;
-                if (bb != null) {
+                if (bb != null)
+                {
                     ButtonFlatStyleProperty.SetValue(bb, FlatStyle.System, null);
                 }
-                if (subControl.Controls.Count > 0) {
+                if (subControl.Controls.Count > 0)
+                {
                     RecursivelySetButtonFlatStyleSystem(subControl);
                 }
             }

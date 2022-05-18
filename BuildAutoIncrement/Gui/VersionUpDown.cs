@@ -23,32 +23,31 @@
  * 3. This notice may not be removed or altered from any source distribution.
  */
 using System;
-using System.Collections;
-using System.ComponentModel;
-using System.Drawing;
-using System.Windows.Forms;
 
-namespace BuildAutoIncrement {
+namespace BuildAutoIncrement
+{
 
     public delegate void ToBeVersionChangedHandler(object sender, string toBeVersionPattern);
 
-	/// <summary>
-	/// User control that consists of VersionTextBox and a spin button.
-	/// </summary>
-	public class VersionUpDown : System.Windows.Forms.UserControl {
+    /// <summary>
+    /// User control that consists of VersionTextBox and a spin button.
+    /// </summary>
+    public class VersionUpDown : System.Windows.Forms.UserControl
+    {
 
         public event ToBeVersionChangedHandler ToBeVersionChanged;
-        
+
         private SpinButton m_spinButton;
         private VersionTextBox m_textBoxVersion;
-        
+
         private System.ComponentModel.Container components = null;
 
         /// <summary>
         /// Creates VersionUpDown control.
         /// </summary>
-        public VersionUpDown() {
-			InitializeComponent();
+        public VersionUpDown()
+        {
+            InitializeComponent();
             m_textBoxVersion.Maximum = ProjectVersion.MaxVersion - 1;
             m_textBoxVersion.Minimum = -2;
             m_spinButton.Maximum = +1;
@@ -56,7 +55,8 @@ namespace BuildAutoIncrement {
             AttachEventHandlers();
         }
 
-        override public string Text {
+        override public string Text
+        {
             get { return m_textBoxVersion.Text; }
             set { m_textBoxVersion.Text = value; }
         }
@@ -64,23 +64,26 @@ namespace BuildAutoIncrement {
         /// <summary> 
 		/// Clean up any resources being used.
 		/// </summary>
-		protected override void Dispose(bool disposing) {
-			if (disposing) {
+		protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
                 DetachEventHandlers();
-				if (components != null)	{
-					components.Dispose();
-				}
-			}
-			base.Dispose(disposing);
-		}
+                if (components != null)
+                {
+                    components.Dispose();
+                }
+            }
+            base.Dispose(disposing);
+        }
 
-		#region Component Designer generated code
-		/// <summary> 
-		/// Required method for Designer support - do not modify 
-		/// the contents of this method with the code editor.
-		/// </summary>
-		private void InitializeComponent()
-		{
+        #region Component Designer generated code
+        /// <summary> 
+        /// Required method for Designer support - do not modify 
+        /// the contents of this method with the code editor.
+        /// </summary>
+        private void InitializeComponent()
+        {
             this.m_spinButton = new BuildAutoIncrement.SpinButton();
             this.m_textBoxVersion = new VersionTextBox();
             this.SuspendLayout();
@@ -117,48 +120,55 @@ namespace BuildAutoIncrement {
             this.ResumeLayout(false);
 
         }
-		#endregion
+        #endregion
 
-        private void AttachEventHandlers() {
-            m_textBoxVersion.TextChanged        += new System.EventHandler(OnVersionChanged);
-            m_textBoxVersion.GotFocus           += new System.EventHandler(OnTextBoxGotFocus);
-            m_textBoxVersion.LostFocus          += new System.EventHandler(OnTextBoxLostFocus);
+        private void AttachEventHandlers()
+        {
+            m_textBoxVersion.TextChanged += new System.EventHandler(OnVersionChanged);
+            m_textBoxVersion.GotFocus += new System.EventHandler(OnTextBoxGotFocus);
+            m_textBoxVersion.LostFocus += new System.EventHandler(OnTextBoxLostFocus);
             m_textBoxVersion.ActiveBlockChanged += new System.EventHandler(OnActiveBlockChanged);
         }
 
-        private void DetachEventHandlers() {
-            m_textBoxVersion.TextChanged        -= new System.EventHandler(OnVersionChanged);
-            m_textBoxVersion.GotFocus           -= new System.EventHandler(OnTextBoxGotFocus);
-            m_textBoxVersion.LostFocus          -= new System.EventHandler(OnTextBoxLostFocus);
+        private void DetachEventHandlers()
+        {
+            m_textBoxVersion.TextChanged -= new System.EventHandler(OnVersionChanged);
+            m_textBoxVersion.GotFocus -= new System.EventHandler(OnTextBoxGotFocus);
+            m_textBoxVersion.LostFocus -= new System.EventHandler(OnTextBoxLostFocus);
             m_textBoxVersion.ActiveBlockChanged -= new System.EventHandler(OnActiveBlockChanged);
         }
 
         #region Event handlers
 
-        private void OnTextBoxGotFocus(object sender, EventArgs e) {
+        private void OnTextBoxGotFocus(object sender, EventArgs e)
+        {
             m_spinButton.Enabled = true;
         }
 
-        private void OnTextBoxLostFocus(object sender, EventArgs e) {
+        private void OnTextBoxLostFocus(object sender, EventArgs e)
+        {
             m_spinButton.Enabled = false;
         }
 
-        private void OnVersionChanged(object sender, EventArgs e) {
+        private void OnVersionChanged(object sender, EventArgs e)
+        {
             m_spinButton.Value = 0;
             if (ToBeVersionChanged != null)
                 ToBeVersionChanged(this, m_textBoxVersion.Text);
         }
 
-        private void OnActiveBlockChanged(object sender, EventArgs e) {
+        private void OnActiveBlockChanged(object sender, EventArgs e)
+        {
             m_spinButton.Value = 0;
         }
 
-        private void m_spinButton_Scroll(object sender, System.Windows.Forms.ScrollEventArgs e) {
+        private void m_spinButton_Scroll(object sender, System.Windows.Forms.ScrollEventArgs e)
+        {
             m_textBoxVersion.IncrementVersionNumber((int)m_spinButton.Value);
             m_spinButton.Value = 0;
         }
 
         #endregion // Event handlers
 
-	}
+    }
 }

@@ -25,19 +25,23 @@
  */
 using System;
 
-namespace BuildAutoIncrement {
+namespace BuildAutoIncrement
+{
     /// <summary>
     ///   Adapter class required to pass main window of Environment Development 
     ///   object as owner to <c>ShowDialog</c> method.
     /// </summary>
-    public class WindowAdapter : System.Windows.Forms.IWin32Window {
+    public class WindowAdapter : System.Windows.Forms.IWin32Window
+    {
         private IntPtr m_handle;
 
-        public WindowAdapter(int handle) {
+        public WindowAdapter(int handle)
+        {
             m_handle = new IntPtr(handle);
         }
 
-        public IntPtr Handle {
+        public IntPtr Handle
+        {
             get { return m_handle; }
         }
     }

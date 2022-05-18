@@ -22,17 +22,19 @@
  *    misrepresented as being the original software.
  * 3. This notice may not be removed or altered from any source distribution.
  */
-using System;
 using System.IO;
 
-namespace BuildAutoIncrement {
-	/// <summary>
-	/// Summary description for ListExporterToTextFile.
-	/// </summary>
-	public abstract class ListExporterToTextFile : ListExporterToFile {
+namespace BuildAutoIncrement
+{
+    /// <summary>
+    /// Summary description for ListExporterToTextFile.
+    /// </summary>
+    public abstract class ListExporterToTextFile : ListExporterToFile
+    {
 
-        public ListExporterToTextFile() {
-		}
+        public ListExporterToTextFile()
+        {
+        }
 
         /// <summary>
         ///   Saves list to a file.
@@ -40,8 +42,10 @@ namespace BuildAutoIncrement {
         /// <param name="filename">
         ///   Name of the file to save.
         /// </param>
-        override protected void DoSave(string filename) {
-            using (StreamWriter sw = new StreamWriter(filename)) {
+        override protected void DoSave(string filename)
+        {
+            using (StreamWriter sw = new StreamWriter(filename))
+            {
                 WriteHeader(sw);
                 WriteHeading(sw);
                 WriteItems(sw);
@@ -53,5 +57,5 @@ namespace BuildAutoIncrement {
         abstract protected void WriteHeading(StreamWriter streamWriter);
 
         abstract protected void WriteItems(StreamWriter streamWriter);
-	}
+    }
 }

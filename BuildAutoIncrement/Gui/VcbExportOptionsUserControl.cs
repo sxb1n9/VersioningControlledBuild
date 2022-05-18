@@ -22,24 +22,21 @@
  *    misrepresented as being the original software.
  * 3. This notice may not be removed or altered from any source distribution.
  */
-using System;
-using System.Collections;
-using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
-using System.Data;
-using System.Windows.Forms;
 
-namespace BuildAutoIncrement {
-	/// <summary>
-	///   <c>UserControl</c> used to select export options for printing 
-	///   projects list or exporting it to file.
-	/// </summary>
-	public class VcbExportOptionsUserControl : System.Windows.Forms.UserControl {
+namespace BuildAutoIncrement
+{
+    /// <summary>
+    ///   <c>UserControl</c> used to select export options for printing 
+    ///   projects list or exporting it to file.
+    /// </summary>
+    public class VcbExportOptionsUserControl : System.Windows.Forms.UserControl
+    {
 
         #region Controls
 
-		private System.Windows.Forms.GroupBox m_groupBoxVersions;
+        private System.Windows.Forms.GroupBox m_groupBoxVersions;
         private BuildAutoIncrement.VersionSelectUserControl m_versionsControl;
         private System.Windows.Forms.CheckBox m_checkBoxIndentSubprojects;
         private System.Windows.Forms.Label label4;
@@ -66,14 +63,17 @@ namespace BuildAutoIncrement {
 		/// </summary>
 		private System.ComponentModel.Container components = null;
 
-		public VcbExportOptionsUserControl() {
-			InitializeComponent();
+        public VcbExportOptionsUserControl()
+        {
+            InitializeComponent();
             m_userControlHeadingFont.FontDescription = new FontDescription("Arial", FontStyle.Bold, 9.75f);
             m_textBoxSeparator.Text = System.Globalization.CultureInfo.CurrentCulture.TextInfo.ListSeparator;
-		}
+        }
 
-        public ExportConfiguration ExportConfiguration {
-            get {
+        public ExportConfiguration ExportConfiguration
+        {
+            get
+            {
                 ExportConfiguration ec = new ExportConfiguration();
                 ec.AssemblyVersionTypes = m_versionsControl.AssemblyVersionTypes;
                 ec.IndentSubItems = m_checkBoxIndentSubprojects.Checked;
@@ -95,22 +95,24 @@ namespace BuildAutoIncrement {
                 ec.PrintOptions = po;
                 return ec;
             }
-            set {
+            set
+            {
                 ExportConfiguration ec = value;
                 m_versionsControl.AssemblyVersionTypes = ec.AssemblyVersionTypes;
                 m_checkBoxIndentSubprojects.Checked = ec.IndentSubItems;
                 m_numericUpDownIndentation.Value = ec.IndentSubItemsBy;
                 m_checkBoxExcludeNonversionable.Checked = ec.ExcludeNonversionableItems;
-                switch (ec.ExportFileFormat) {
-                case (ExportFileFormat.PlainText):
-                    m_radioButtonPlainText.Checked = true;
-                    break;
-                case (ExportFileFormat.CSV):
-                    m_radioButtonCsv.Checked = true;
-                    break;
-                default:
-                    Debug.Assert(false, "Not supported ExportFileFormat type");
-                    break;
+                switch (ec.ExportFileFormat)
+                {
+                    case (ExportFileFormat.PlainText):
+                        m_radioButtonPlainText.Checked = true;
+                        break;
+                    case (ExportFileFormat.CSV):
+                        m_radioButtonCsv.Checked = true;
+                        break;
+                    default:
+                        Debug.Assert(false, "Not supported ExportFileFormat type");
+                        break;
                 }
                 m_textBoxSeparator.Text = ec.CsvSeparator;
 
@@ -122,25 +124,28 @@ namespace BuildAutoIncrement {
             }
         }
 
-		/// <summary> 
-		/// Clean up any resources being used.
-		/// </summary>
-		protected override void Dispose(bool disposing) {
-			if (disposing) {
-				if (components != null) {
-					components.Dispose();
-				}
-			}
-			base.Dispose(disposing);
-		}
+        /// <summary> 
+        /// Clean up any resources being used.
+        /// </summary>
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                if (components != null)
+                {
+                    components.Dispose();
+                }
+            }
+            base.Dispose(disposing);
+        }
 
-		#region Component Designer generated code
-		/// <summary> 
-		/// Required method for Designer support - do not modify 
-		/// the contents of this method with the code editor.
-		/// </summary>
-		private void InitializeComponent()
-		{
+        #region Component Designer generated code
+        /// <summary> 
+        /// Required method for Designer support - do not modify 
+        /// the contents of this method with the code editor.
+        /// </summary>
+        private void InitializeComponent()
+        {
             System.Resources.ResourceManager resources = new System.Resources.ResourceManager(typeof(VcbExportOptionsUserControl));
             this.m_groupBoxVersions = new System.Windows.Forms.GroupBox();
             this.m_versionsControl = new BuildAutoIncrement.VersionSelectUserControl();
@@ -167,7 +172,7 @@ namespace BuildAutoIncrement {
             // 
             // m_groupBoxVersions
             // 
-            this.m_groupBoxVersions.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.m_groupBoxVersions.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                 | System.Windows.Forms.AnchorStyles.Right)));
             this.m_groupBoxVersions.Controls.Add(this.m_versionsControl);
             this.m_groupBoxVersions.Location = new System.Drawing.Point(0, 0);
@@ -179,7 +184,7 @@ namespace BuildAutoIncrement {
             // 
             // m_versionsControl
             // 
-            this.m_versionsControl.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.m_versionsControl.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                 | System.Windows.Forms.AnchorStyles.Right)));
             this.m_versionsControl.Location = new System.Drawing.Point(8, 16);
             this.m_versionsControl.Name = "m_versionsControl";
@@ -232,7 +237,7 @@ namespace BuildAutoIncrement {
             // 
             // m_groupBoxFonts
             // 
-            this.m_groupBoxFonts.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.m_groupBoxFonts.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                 | System.Windows.Forms.AnchorStyles.Right)));
             this.m_groupBoxFonts.Controls.Add(this.m_userControlHeaderFont);
             this.m_groupBoxFonts.Controls.Add(this.m_userControlHeadingFont);
@@ -246,7 +251,7 @@ namespace BuildAutoIncrement {
             // 
             // m_userControlHeaderFont
             // 
-            this.m_userControlHeaderFont.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.m_userControlHeaderFont.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                 | System.Windows.Forms.AnchorStyles.Right)));
             this.m_userControlHeaderFont.CaptionWidth = 60;
             this.m_userControlHeaderFont.Location = new System.Drawing.Point(8, 60);
@@ -258,7 +263,7 @@ namespace BuildAutoIncrement {
             // 
             // m_userControlHeadingFont
             // 
-            this.m_userControlHeadingFont.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.m_userControlHeadingFont.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                 | System.Windows.Forms.AnchorStyles.Right)));
             this.m_userControlHeadingFont.CaptionWidth = 60;
             this.m_userControlHeadingFont.Location = new System.Drawing.Point(8, 38);
@@ -270,7 +275,7 @@ namespace BuildAutoIncrement {
             // 
             // m_userControlItemFont
             // 
-            this.m_userControlItemFont.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.m_userControlItemFont.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                 | System.Windows.Forms.AnchorStyles.Right)));
             this.m_userControlItemFont.CaptionWidth = 60;
             this.m_userControlItemFont.Location = new System.Drawing.Point(8, 16);
@@ -292,7 +297,7 @@ namespace BuildAutoIncrement {
             // 
             // m_labelPrintOptions
             // 
-            this.m_labelPrintOptions.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.m_labelPrintOptions.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                 | System.Windows.Forms.AnchorStyles.Right)));
             this.m_labelPrintOptions.Location = new System.Drawing.Point(0, 212);
             this.m_labelPrintOptions.Name = "m_labelPrintOptions";
@@ -312,7 +317,7 @@ namespace BuildAutoIncrement {
             // 
             // m_groupBoxFileFormat
             // 
-            this.m_groupBoxFileFormat.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.m_groupBoxFileFormat.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                 | System.Windows.Forms.AnchorStyles.Right)));
             this.m_groupBoxFileFormat.Controls.Add(this.m_textBoxSeparator);
             this.m_groupBoxFileFormat.Controls.Add(this.label1);
@@ -382,14 +387,16 @@ namespace BuildAutoIncrement {
             this.ResumeLayout(false);
 
         }
-		#endregion
+        #endregion
 
-        private void m_checkBoxIndentSubprojects_CheckedChanged(object sender, System.EventArgs e) {
+        private void m_checkBoxIndentSubprojects_CheckedChanged(object sender, System.EventArgs e)
+        {
             m_numericUpDownIndentation.Enabled = m_checkBoxIndentSubprojects.Checked;
         }
 
-        private void m_radioButtonCsv_CheckedChanged(object sender, System.EventArgs e) {
+        private void m_radioButtonCsv_CheckedChanged(object sender, System.EventArgs e)
+        {
             m_textBoxSeparator.Enabled = m_radioButtonCsv.Checked;
         }
-	}
+    }
 }

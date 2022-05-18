@@ -22,36 +22,38 @@
  *    misrepresented as being the original software.
  * 3. This notice may not be removed or altered from any source distribution.
  */
-using Microsoft.Win32;
-using System;
-using System.Diagnostics;
-using System.IO;
-using System.Text;
 using System.ComponentModel;
+using System.IO;
 
-namespace BuildAutoIncrement {
-	/// <summary>
-	///   Class that gets the path to Source Safe command-line utility from
-	///   registry. Implemented as a singleton.
-	/// </summary>
-	public sealed class SourceSafeLocator {
+namespace BuildAutoIncrement
+{
+    /// <summary>
+    ///   Class that gets the path to Source Safe command-line utility from
+    ///   registry. Implemented as a singleton.
+    /// </summary>
+    public sealed class SourceSafeLocator
+    {
 
         private static SourceSafeLocator m_instance = null;
 
-		private SourceSafeLocator() {
+        private SourceSafeLocator()
+        {
             m_sourceSafeRoot = GetSourceSafeRoot();
-            if (m_sourceSafeRoot != null) {
+            if (m_sourceSafeRoot != null)
+            {
                 string sourceSafeExecutable = Path.Combine(m_sourceSafeRoot, "ss.exe");
                 if (File.Exists(sourceSafeExecutable))
                     SourceSafeExecutable = sourceSafeExecutable;
             }
-		}
+        }
 
         /// <summary>
         ///   Gets the only instance of <c>SourceSafeLocator</c> class.
         /// </summary>
-        public static SourceSafeLocator Instance {
-            get {
+        public static SourceSafeLocator Instance
+        {
+            get
+            {
                 if (m_instance == null)
                     m_instance = new SourceSafeLocator();
                 return m_instance;
@@ -61,8 +63,10 @@ namespace BuildAutoIncrement {
         /// <summary>
         ///   Returns flag indicating if SourceSafe is available.
         /// </summary>
-        public bool IsSourceSafeAvailable {
-            get {
+        public bool IsSourceSafeAvailable
+        {
+            get
+            {
                 return File.Exists(SourceSafeExecutable);
             }
         }
@@ -71,8 +75,10 @@ namespace BuildAutoIncrement {
         ///   Gets SourceSafe root folder or empty string if SourceSafe 
         ///   command line is not installed.
         /// </summary>
-        public string SourceSafeRoot {
-            get {
+        public string SourceSafeRoot
+        {
+            get
+            {
                 return m_sourceSafeRoot != null ? m_sourceSafeRoot : string.Empty;
             }
         }
@@ -83,17 +89,22 @@ namespace BuildAutoIncrement {
         /// <returns>
         ///   Source safe executable path if successful, otherwise <c>null</c>.
         /// </returns>
-        private string GetSourceSafeRoot() {
+        private string GetSourceSafeRoot()
+        {
             // Win API call must be invoked to get correct key on 64-bit systems
-            using (WoW64RegistryKey rk = new WoW64RegistryKey()) {
-                try {
+            using (WoW64RegistryKey rk = new WoW64RegistryKey())
+            {
+                try
+                {
                     rk.Open(WoW64RegistryKey.HKEY_LOCAL_MACHINE, SourceSafeSubKey);
                     string path = rk.ReadString(SCCServerPathValue);
-                    if (path != null && File.Exists(path)) {
+                    if (path != null && File.Exists(path))
+                    {
                         return Path.GetDirectoryName(path);
                     }
                 }
-                catch (Win32Exception) {
+                catch (Win32Exception)
+                {
                 }
                 return null;
             }
@@ -107,7 +118,7 @@ namespace BuildAutoIncrement {
 
         private readonly string m_sourceSafeRoot = null;
 
-        private const string SourceSafeSubKey               = "SOFTWARE\\Microsoft\\SourceSafe";
-        private const string SCCServerPathValue             = "SCCServerPath";
-	}
+        private const string SourceSafeSubKey = "SOFTWARE\\Microsoft\\SourceSafe";
+        private const string SCCServerPathValue = "SCCServerPath";
+    }
 }

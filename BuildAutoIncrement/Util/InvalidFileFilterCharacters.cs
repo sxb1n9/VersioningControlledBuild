@@ -7,16 +7,14 @@
  *              currently not in use.
  * Copyright:   Julijan Šribar, 2004-2007
  */
-using System;
-using System.Collections;
-using System.IO;
-using System.Text;
 
-namespace BuildAutoIncrement {
-	/// <summary>
-	/// Summary description for InvalidFileFilterCharacters.
-	/// </summary>
-	public class InvalidFileFilterCharacters {
+namespace BuildAutoIncrement
+{
+    /// <summary>
+    /// Summary description for InvalidFileFilterCharacters.
+    /// </summary>
+    public class InvalidFileFilterCharacters
+    {
         /*
         public InvalidFileFilterCharacters() {
             ArrayList invalidCharacters = new ArrayList();

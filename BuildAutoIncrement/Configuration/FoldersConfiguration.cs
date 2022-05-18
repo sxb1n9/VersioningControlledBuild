@@ -27,30 +27,36 @@ using System.Diagnostics;
 using System.IO;
 using System.Xml.Serialization;
 
-namespace BuildAutoIncrement {
-	/// <summary>
-	///   Contains configuration of folders for SourceSafe and IIS.
-	/// </summary>
+namespace BuildAutoIncrement
+{
+    /// <summary>
+    ///   Contains configuration of folders for SourceSafe and IIS.
+    /// </summary>
     [Serializable]
-    public class FolderConfiguration : ICloneable {
+    public class FolderConfiguration : ICloneable
+    {
         /// <summary>
         ///   Creates default instance.
         /// </summary>
-		public FolderConfiguration() {
+		public FolderConfiguration()
+        {
             m_isAvailable = true;
             m_folder = string.Empty;
-		}
+        }
 
         /// <summary>
         ///   Gets/sets a flag if this folder (i.e. component using it) is 
         ///   available at all.
         /// </summary>
         [XmlAttribute]
-        public bool IsAvailable {
-            get {
+        public bool IsAvailable
+        {
+            get
+            {
                 return m_isAvailable;
             }
-            set {
+            set
+            {
                 m_isAvailable = value;
             }
         }
@@ -59,62 +65,77 @@ namespace BuildAutoIncrement {
         ///   Gets/sets a path to the folder.
         /// </summary>
         [XmlText]
-        public string Folder {
-            get {
+        public string Folder
+        {
+            get
+            {
                 Debug.Assert(m_folder.Length == 0 || Directory.Exists(m_folder));
                 return m_folder;
             }
-            set {
+            set
+            {
                 Debug.Assert(value.Length == 0 || Directory.Exists(value));
                 m_folder = value;
             }
         }
 
-        object ICloneable.Clone() {
+        object ICloneable.Clone()
+        {
             return Clone();
         }
 
-        public FolderConfiguration Clone() {
+        public FolderConfiguration Clone()
+        {
             return (FolderConfiguration)MemberwiseClone();
         }
 
-        private bool    m_isAvailable;
-        private string  m_folder;
-	}
+        private bool m_isAvailable;
+        private string m_folder;
+    }
 
 
     [Serializable, XmlRoot("Folders")]
-    public class FoldersConfigurations : ICloneable {
-        public FoldersConfigurations() {
+    public class FoldersConfigurations : ICloneable
+    {
+        public FoldersConfigurations()
+        {
             m_sourceSafeFolder = new FolderConfiguration();
             m_iisFolder = new FolderConfiguration();
         }
 
         [XmlElement("SourceSafe")]
-        public FolderConfiguration SourceSafeFolder {
-            get {
+        public FolderConfiguration SourceSafeFolder
+        {
+            get
+            {
                 return m_sourceSafeFolder;
             }
-            set {
+            set
+            {
                 m_sourceSafeFolder = value;
             }
         }
 
         [XmlElement("IIS")]
-        public FolderConfiguration IisFolder {
-            get {
+        public FolderConfiguration IisFolder
+        {
+            get
+            {
                 return m_iisFolder;
             }
-            set {
+            set
+            {
                 m_iisFolder = value;
             }
         }
 
-        object ICloneable.Clone() {
+        object ICloneable.Clone()
+        {
             return Clone();
         }
 
-        public FoldersConfigurations Clone() {
+        public FoldersConfigurations Clone()
+        {
             FoldersConfigurations clone = new FoldersConfigurations();
             clone.SourceSafeFolder = SourceSafeFolder.Clone();
             clone.IisFolder = IisFolder.Clone();

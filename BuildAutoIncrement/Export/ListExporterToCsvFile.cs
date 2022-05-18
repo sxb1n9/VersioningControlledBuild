@@ -22,29 +22,35 @@
  *    misrepresented as being the original software.
  * 3. This notice may not be removed or altered from any source distribution.
  */
-using System;
 using System.IO;
 using System.Text;
 
-namespace BuildAutoIncrement {
-	/// <summary>
-	/// Summary description for ListExporterToCsvFile.
-	/// </summary>
-	public class ListExporterToCsvFile : ListExporterToTextFile {
+namespace BuildAutoIncrement
+{
+    /// <summary>
+    /// Summary description for ListExporterToCsvFile.
+    /// </summary>
+    public class ListExporterToCsvFile : ListExporterToTextFile
+    {
 
-        public ListExporterToCsvFile() {
+        public ListExporterToCsvFile()
+        {
             Separator = System.Globalization.CultureInfo.CurrentCulture.TextInfo.ListSeparator;
-		}
+        }
 
-        override protected string ExportFileFilter {
-            get {
+        override protected string ExportFileFilter
+        {
+            get
+            {
                 return "Comma-separated values files (*.csv)|*.csv|All files (*.*)|*.*";
             }
         }
 
-        override protected string ExportFileExtension { 
-            get {
-                return ".vcb.csv"; 
+        override protected string ExportFileExtension
+        {
+            get
+            {
+                return ".vcb.csv";
             }
         }
 
@@ -54,7 +60,8 @@ namespace BuildAutoIncrement {
         /// <param name="streamWriter">
         ///   <c>StreamWriter</c> used to write header.
         /// </param>
-        override protected void WriteHeader(StreamWriter streamWriter) {
+        override protected void WriteHeader(StreamWriter streamWriter)
+        {
             streamWriter.WriteLine("\"{0}\"", m_solutionName);
             streamWriter.WriteLine("\"{0}\"", m_exportDateTime.ToString("g"));
             streamWriter.WriteLine();
@@ -66,11 +73,14 @@ namespace BuildAutoIncrement {
         /// <param name="streamWriter">
         ///   <c>StreamWriter</c> used to write heading.
         /// </param>
-        override protected void WriteHeading(StreamWriter streamWriter) {
+        override protected void WriteHeading(StreamWriter streamWriter)
+        {
             StringBuilder output = new StringBuilder();
             output.AppendFormat("\"{0}\"", HeaderProjectName);
-            foreach (AssemblyVersionTypeSelection avts in m_assemblyVersionTypes) {
-                if (avts.IsSelected) {
+            foreach (AssemblyVersionTypeSelection avts in m_assemblyVersionTypes)
+            {
+                if (avts.IsSelected)
+                {
                     output.Append(Separator);
                     output.AppendFormat("\"{0}\"", m_headings[avts.AssemblyVersionType]);
                 }
@@ -78,13 +88,18 @@ namespace BuildAutoIncrement {
             streamWriter.WriteLine(output);
         }
 
-        override protected void WriteItems(StreamWriter streamWriter) {
-            foreach (ProjectInfo pi in m_projectInfoList) {
-                if (pi.IsVersionable || !m_dontExportNonversionable) {
+        override protected void WriteItems(StreamWriter streamWriter)
+        {
+            foreach (ProjectInfo pi in m_projectInfoList)
+            {
+                if (pi.IsVersionable || !m_dontExportNonversionable)
+                {
                     StringBuilder output = new StringBuilder();
                     output.AppendFormat("\"{0}\"", pi.ProjectName);
-                    foreach (AssemblyVersionTypeSelection avts in m_assemblyVersionTypes) {
-                        if (avts.IsSelected) {
+                    foreach (AssemblyVersionTypeSelection avts in m_assemblyVersionTypes)
+                    {
+                        if (avts.IsSelected)
+                        {
                             output.Append(Separator);
                             output.AppendFormat("\"{0}\"", pi.CurrentAssemblyVersions[avts.AssemblyVersionType]);
                         }
@@ -94,5 +109,5 @@ namespace BuildAutoIncrement {
             }
         }
 
-	}
+    }
 }

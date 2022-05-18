@@ -22,19 +22,18 @@
  *    misrepresented as being the original software.
  * 3. This notice may not be removed or altered from any source distribution.
  */
-using System;
 using System.Diagnostics;
 using System.Drawing;
-using System.Collections;
-using System.ComponentModel;
 using System.Windows.Forms;
 
-namespace BuildAutoIncrement {
-	/// <summary>
-	///   Form displaying the list of files failed to check-out.
-	/// </summary>
-	public class CheckOutErrorDialog : System.Windows.Forms.Form {
-        
+namespace BuildAutoIncrement
+{
+    /// <summary>
+    ///   Form displaying the list of files failed to check-out.
+    /// </summary>
+    public class CheckOutErrorDialog : System.Windows.Forms.Form
+    {
+
         #region Controls
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
@@ -44,42 +43,47 @@ namespace BuildAutoIncrement {
         private System.Windows.Forms.Button m_buttonNo;
         private System.Windows.Forms.PictureBox m_pictureBoxIcon;
         #endregion // Controls
-        
-        /// <summary>
-		/// Required designer variable.
-		/// </summary>
-		private System.ComponentModel.Container components = null;
 
-        private CheckOutErrorDialog() {
+        /// <summary>
+        /// Required designer variable.
+        /// </summary>
+        private System.ComponentModel.Container components = null;
+
+        private CheckOutErrorDialog()
+        {
             InitializeComponent();
             m_pictureBoxIcon.Image = Bitmap.FromHicon(SystemIcons.Warning.Handle);
         }
 
-		private CheckOutErrorDialog(string[] notCheckedOutFiles) : this() {
+        private CheckOutErrorDialog(string[] notCheckedOutFiles) : this()
+        {
             Debug.Assert(notCheckedOutFiles != null && notCheckedOutFiles.Length > 0);
             m_textBoxNotCheckedOut.Lines = notCheckedOutFiles;
             m_textBoxNotCheckedOut.SelectionLength = 0;
         }
 
-		/// <summary>
-		/// Clean up any resources being used.
-		/// </summary>
-		protected override void Dispose(bool disposing) {
-			if (disposing) {
-				if (components != null) {
-					components.Dispose();
-				}
-			}
-			base.Dispose(disposing);
-		}
+        /// <summary>
+        /// Clean up any resources being used.
+        /// </summary>
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                if (components != null)
+                {
+                    components.Dispose();
+                }
+            }
+            base.Dispose(disposing);
+        }
 
-		#region Windows Form Designer generated code
-		/// <summary>
-		/// Required method for Designer support - do not modify
-		/// the contents of this method with the code editor.
-		/// </summary>
-		private void InitializeComponent()
-		{
+        #region Windows Form Designer generated code
+        /// <summary>
+        /// Required method for Designer support - do not modify
+        /// the contents of this method with the code editor.
+        /// </summary>
+        private void InitializeComponent()
+        {
             this.label1 = new System.Windows.Forms.Label();
             this.m_textBoxNotCheckedOut = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
@@ -177,9 +181,10 @@ namespace BuildAutoIncrement {
             this.ResumeLayout(false);
 
         }
-		#endregion
+        #endregion
 
-        public static DialogResult Show(IWin32Window owner, string[] notCheckedOutFiles) {
+        public static DialogResult Show(IWin32Window owner, string[] notCheckedOutFiles)
+        {
             CheckOutErrorDialog coed = new CheckOutErrorDialog(notCheckedOutFiles);
             coed.StartPosition = FormStartPosition.CenterParent;
             return coed.ShowDialog(owner);

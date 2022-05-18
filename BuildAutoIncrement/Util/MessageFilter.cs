@@ -26,24 +26,28 @@
 using System;
 using System.Runtime.InteropServices;
 
-namespace BuildAutoIncrement {
+namespace BuildAutoIncrement
+{
     /// <summary>
     ///   Class implements an OLE message filter, appropriate for use with the 
     ///   VS automation clients. Used to avoid 'Application is Busy' and 
     ///   'Call was Rejected By Callee' errors:
     ///   http://msdn2.microsoft.com/en-us/library/ms228772(VS.80).aspx
     /// </summary>
-    public class MessageFilter : IOleMessageFilter {
+    public class MessageFilter : IOleMessageFilter
+    {
 
-        public static void Register() {
-            IOleMessageFilter newfilter = new MessageFilter(); 
+        public static void Register()
+        {
+            IOleMessageFilter newfilter = new MessageFilter();
 
-            IOleMessageFilter oldfilter = null; 
+            IOleMessageFilter oldfilter = null;
             CoRegisterMessageFilter(newfilter, out oldfilter);
         }
 
-        public static void Revoke() {
-            IOleMessageFilter oldfilter = null; 
+        public static void Revoke()
+        {
+            IOleMessageFilter oldfilter = null;
             CoRegisterMessageFilter(null, out oldfilter);
         }
 
@@ -55,21 +59,25 @@ namespace BuildAutoIncrement {
         /// <param name="dwTickCount"></param>
         /// <param name="lpInterfaceInfo"></param>
         /// <returns></returns>
-        int IOleMessageFilter.HandleInComingCall(int dwCallType, System.IntPtr hTaskCaller, int dwTickCount, System.IntPtr lpInterfaceInfo) {
+        int IOleMessageFilter.HandleInComingCall(int dwCallType, System.IntPtr hTaskCaller, int dwTickCount, System.IntPtr lpInterfaceInfo)
+        {
             System.Diagnostics.Debug.WriteLine("IOleMessageFilter::HandleInComingCall");
             return 0; //SERVERCALL_ISHANDLED
         }
 
-        int IOleMessageFilter.RetryRejectedCall(System.IntPtr hTaskCallee, int dwTickCount, int dwRejectType) {
+        int IOleMessageFilter.RetryRejectedCall(System.IntPtr hTaskCallee, int dwTickCount, int dwRejectType)
+        {
             System.Diagnostics.Debug.WriteLine("IOleMessageFilter::RetryRejectedCall");
-            if (dwRejectType == 2 ) { //SERVERCALL_RETRYLATER
+            if (dwRejectType == 2)
+            { //SERVERCALL_RETRYLATER
                 System.Diagnostics.Debug.WriteLine("Retry call later");
                 return 99; //retry immediately if return >=0 & <100
             }
             return -1; //cancel call
         }
 
-        int IOleMessageFilter.MessagePending(System.IntPtr hTaskCallee, int dwTickCount, int dwPendingType) {
+        int IOleMessageFilter.MessagePending(System.IntPtr hTaskCallee, int dwTickCount, int dwPendingType)
+        {
             System.Diagnostics.Debug.WriteLine("IOleMessageFilter::MessagePending");
             return 2; //PENDINGMSG_WAITDEFPROCESS 
         }
@@ -80,25 +88,26 @@ namespace BuildAutoIncrement {
         private static extern int CoRegisterMessageFilter(IOleMessageFilter newfilter, out IOleMessageFilter oldfilter);
     }
 
-    [ComImport(), Guid("00000016-0000-0000-C000-000000000046"),    
+    [ComImport(), Guid("00000016-0000-0000-C000-000000000046"),
     InterfaceTypeAttribute(ComInterfaceType.InterfaceIsIUnknown)]
-    interface IOleMessageFilter { // deliberately renamed to avoid confusion w/ System.Windows.Forms.IMessageFilter
+    interface IOleMessageFilter
+    { // deliberately renamed to avoid confusion w/ System.Windows.Forms.IMessageFilter
         [PreserveSig]
-        int HandleInComingCall( 
-            int dwCallType, 
-            IntPtr hTaskCaller, 
-            int dwTickCount, 
+        int HandleInComingCall(
+            int dwCallType,
+            IntPtr hTaskCaller,
+            int dwTickCount,
             IntPtr lpInterfaceInfo);
 
         [PreserveSig]
-        int RetryRejectedCall( 
-            IntPtr hTaskCallee, 
+        int RetryRejectedCall(
+            IntPtr hTaskCallee,
             int dwTickCount,
             int dwRejectType);
 
         [PreserveSig]
-        int MessagePending( 
-            IntPtr hTaskCallee, 
+        int MessagePending(
+            IntPtr hTaskCallee,
             int dwTickCount,
             int dwPendingType);
     }

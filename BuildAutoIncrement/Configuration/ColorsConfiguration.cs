@@ -26,168 +26,196 @@ using System;
 using System.Drawing;
 using System.Xml.Serialization;
 
-namespace BuildAutoIncrement {
+namespace BuildAutoIncrement
+{
 
-	/// <summary>
-	///   Configuration part used to persist listview colors.
-	/// </summary>
-	[Serializable]
-	public class ProjectsListViewColorsConfiguration : ICloneable {
-		public ProjectsListViewColorsConfiguration() {
-            m_notModifiedMarked         = SystemColors.WindowText;
-            m_notModifiedNotMarked      = SystemColors.GrayText;
-            m_modifiedMarked            = Color.Green;
-            m_modifiedNotMarked         = Color.LimeGreen;
-            m_invalidVersionMarked      = Color.Red;
-            m_invalidVersionNotMarked   = Color.LightCoral;
-            m_noVersion                 = Color.Orange;
-            m_updatedVersion            = Color.Blue;
-            m_versionNotChanged         = SystemColors.GrayText;
-            m_versionUpdateFailed       = Color.Red;
-            m_subProjectRoot            = Color.SlateGray;
-		}
+    /// <summary>
+    ///   Configuration part used to persist listview colors.
+    /// </summary>
+    [Serializable]
+    public class ProjectsListViewColorsConfiguration : ICloneable
+    {
+        public ProjectsListViewColorsConfiguration()
+        {
+            m_notModifiedMarked = SystemColors.WindowText;
+            m_notModifiedNotMarked = SystemColors.GrayText;
+            m_modifiedMarked = Color.Green;
+            m_modifiedNotMarked = Color.LimeGreen;
+            m_invalidVersionMarked = Color.Red;
+            m_invalidVersionNotMarked = Color.LightCoral;
+            m_noVersion = Color.Orange;
+            m_updatedVersion = Color.Blue;
+            m_versionNotChanged = SystemColors.GrayText;
+            m_versionUpdateFailed = Color.Red;
+            m_subProjectRoot = Color.SlateGray;
+        }
 
         [XmlIgnore]
-        public Color NotModifiedMarked {
+        public Color NotModifiedMarked
+        {
             get { return m_notModifiedMarked; }
             set { m_notModifiedMarked = value; }
         }
 
         [XmlElement("NotModifiedProjectMarked")]
-        public string NotModifiedMarkedAsString {
+        public string NotModifiedMarkedAsString
+        {
             get { return AsString(m_notModifiedMarked); }
             set { m_notModifiedMarked = FromString(value); }
         }
 
         [XmlIgnore]
-        public Color NotModifiedNotMarked {
+        public Color NotModifiedNotMarked
+        {
             get { return m_notModifiedNotMarked; }
             set { m_notModifiedNotMarked = value; }
         }
 
         [XmlElement("NotModifiedProjectNotMarked")]
-        public string NotModifiedNotMarkedAsString {
+        public string NotModifiedNotMarkedAsString
+        {
             get { return AsString(m_notModifiedNotMarked); }
             set { m_notModifiedNotMarked = FromString(value); }
         }
 
         [XmlIgnore]
-        public Color ModifiedMarked {
+        public Color ModifiedMarked
+        {
             get { return m_modifiedMarked; }
             set { m_modifiedMarked = value; }
         }
 
         [XmlElement("ModifiedProjectMarked")]
-        public string ModifiedMarkedAsString {
+        public string ModifiedMarkedAsString
+        {
             get { return AsString(m_modifiedMarked); }
             set { m_modifiedMarked = FromString(value); }
         }
 
         [XmlIgnore]
-        public Color ModifiedNotMarked {
+        public Color ModifiedNotMarked
+        {
             get { return m_modifiedNotMarked; }
             set { m_modifiedNotMarked = value; }
         }
 
         [XmlElement("ModifiedProjectNotMarked")]
-        public string ModifiedNotMarkedAsString {
+        public string ModifiedNotMarkedAsString
+        {
             get { return AsString(m_modifiedNotMarked); }
             set { m_modifiedNotMarked = FromString(value); }
         }
 
         [XmlIgnore]
-        public Color InvalidVersionMarked {
+        public Color InvalidVersionMarked
+        {
             get { return m_invalidVersionMarked; }
             set { m_invalidVersionMarked = value; }
         }
 
         [XmlElement("ProjectWithInvalidVersionMarked")]
-        public string MarkedWithInvalidVersionAsString {
+        public string MarkedWithInvalidVersionAsString
+        {
             get { return AsString(m_invalidVersionMarked); }
             set { m_invalidVersionMarked = FromString(value); }
         }
 
         [XmlIgnore]
-        public Color InvalidVersionNotMarked {
+        public Color InvalidVersionNotMarked
+        {
             get { return m_invalidVersionNotMarked; }
             set { m_invalidVersionNotMarked = value; }
         }
 
         [XmlElement("ProjectWithInvalidVersionNotMarked")]
-        public string NotMarkedWithInvalidVersionAsString {
+        public string NotMarkedWithInvalidVersionAsString
+        {
             get { return AsString(m_invalidVersionNotMarked); }
             set { m_invalidVersionNotMarked = FromString(value); }
         }
 
         [XmlIgnore]
-        public Color NoVersion {
+        public Color NoVersion
+        {
             get { return m_noVersion; }
             set { m_noVersion = value; }
         }
 
         [XmlElement("ProjectWithoutVersion")]
-        public string WithoutVersionAsString {
+        public string WithoutVersionAsString
+        {
             get { return AsString(m_noVersion); }
             set { m_noVersion = FromString(value); }
         }
 
         [XmlIgnore]
-        public Color ReportUpdatedVersion {
+        public Color ReportUpdatedVersion
+        {
             get { return m_updatedVersion; }
             set { m_updatedVersion = value; }
         }
 
         [XmlElement("ReportUpdatedVersion")]
-        public string ReportUpdatedVersionAsString {
+        public string ReportUpdatedVersionAsString
+        {
             get { return AsString(m_updatedVersion); }
             set { m_updatedVersion = FromString(value); }
         }
 
         [XmlIgnore]
-        public Color ReportVersionNotChanged {
+        public Color ReportVersionNotChanged
+        {
             get { return m_versionNotChanged; }
             set { m_versionNotChanged = value; }
         }
 
         [XmlElement("ReportVersionNotChanged")]
-        public string ReportVersionNotChangedAsString {
+        public string ReportVersionNotChangedAsString
+        {
             get { return AsString(m_versionNotChanged); }
             set { m_versionNotChanged = FromString(value); }
         }
 
         [XmlIgnore]
-        public Color ReportVersionUpdateFailed {
+        public Color ReportVersionUpdateFailed
+        {
             get { return m_versionUpdateFailed; }
             set { m_versionUpdateFailed = value; }
         }
 
         [XmlElement("ReportVersionUpdateFailed")]
-        public string ReportVersionUpdateFailedAsString {
+        public string ReportVersionUpdateFailedAsString
+        {
             get { return AsString(m_versionUpdateFailed); }
             set { m_versionUpdateFailed = FromString(value); }
         }
 
         [XmlIgnore]
-        public Color SubProjectRoot {
+        public Color SubProjectRoot
+        {
             get { return m_subProjectRoot; }
             set { m_subProjectRoot = value; }
         }
 
         [XmlElement("SubProjectRoot")]
-        public string SubProjectRootAsString {
+        public string SubProjectRootAsString
+        {
             get { return AsString(m_subProjectRoot); }
             set { m_subProjectRoot = FromString(value); }
         }
 
-        object ICloneable.Clone() {
+        object ICloneable.Clone()
+        {
             return this.Clone();
         }
 
-        public ProjectsListViewColorsConfiguration Clone() {
+        public ProjectsListViewColorsConfiguration Clone()
+        {
             return (ProjectsListViewColorsConfiguration)this.MemberwiseClone();
         }
 
-        public override bool Equals(object other) {
+        public override bool Equals(object other)
+        {
             if (other == null)
                 return false;
             if (GetType() != other.GetType())
@@ -218,21 +246,24 @@ namespace BuildAutoIncrement {
             return true;
         }
 
-        public override int GetHashCode() {
+        public override int GetHashCode()
+        {
             return base.GetHashCode();
         }
 
-        private string AsString(Color c) {
+        private string AsString(Color c)
+        {
             if (c.IsKnownColor)
-                return c.ToKnownColor().ToString(); 
+                return c.ToKnownColor().ToString();
             else
                 return c.ToArgb().ToString();
         }
 
-        private Color FromString(string s) {
+        private Color FromString(string s)
+        {
             if (Enum.IsDefined(typeof(KnownColor), s))
                 return Color.FromName(s);
-            return Color.FromArgb(int.Parse(s)); 
+            return Color.FromArgb(int.Parse(s));
         }
 
 
@@ -248,17 +279,20 @@ namespace BuildAutoIncrement {
         private Color m_versionUpdateFailed;
         private Color m_subProjectRoot;
 
-        public static bool operator==(ProjectsListViewColorsConfiguration plvcc1, ProjectsListViewColorsConfiguration plvcc2) {
-            if (ReferenceEquals(null, plvcc1) || ReferenceEquals(null, plvcc2)) {
+        public static bool operator ==(ProjectsListViewColorsConfiguration plvcc1, ProjectsListViewColorsConfiguration plvcc2)
+        {
+            if (ReferenceEquals(null, plvcc1) || ReferenceEquals(null, plvcc2))
+            {
                 return ReferenceEquals(plvcc1, plvcc2);
             }
-            return plvcc1.Equals(plvcc2);  
+            return plvcc1.Equals(plvcc2);
         }
 
-        public static bool operator!=(ProjectsListViewColorsConfiguration plvcc1, ProjectsListViewColorsConfiguration plvcc2) {
-            return !(plvcc1 == plvcc2);  
+        public static bool operator !=(ProjectsListViewColorsConfiguration plvcc1, ProjectsListViewColorsConfiguration plvcc2)
+        {
+            return !(plvcc1 == plvcc2);
         }
 
         public static ProjectsListViewColorsConfiguration Default = new ProjectsListViewColorsConfiguration();
-	}
+    }
 }

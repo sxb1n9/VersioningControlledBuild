@@ -24,70 +24,83 @@
  */
 using System;
 
-namespace BuildAutoIncrement {
-	/// <summary>
-	///   Display options for main GUI form of the tool.
-	/// </summary>
-	[Serializable]
-	public class DisplayOptions : ICloneable {
-		public DisplayOptions() {
-            m_listViewColors                = ProjectsListViewColorsConfiguration.Default;
-            m_indentSubProjectItems         = true;
-            m_subProjectsIndentation        = 10;
-            m_showSubprojectRoot            = true;
+namespace BuildAutoIncrement
+{
+    /// <summary>
+    ///   Display options for main GUI form of the tool.
+    /// </summary>
+    [Serializable]
+    public class DisplayOptions : ICloneable
+    {
+        public DisplayOptions()
+        {
+            m_listViewColors = ProjectsListViewColorsConfiguration.Default;
+            m_indentSubProjectItems = true;
+            m_subProjectsIndentation = 10;
+            m_showSubprojectRoot = true;
             m_showEnterpriseTemplateProjectRoot = true;
-            m_showEmptyFolders              = true;
-            m_showNonVersionableProjects    = true;
-            m_displaySuccessDialog          = true;
+            m_showEmptyFolders = true;
+            m_showNonVersionableProjects = true;
+            m_displaySuccessDialog = true;
         }
 
-        public ProjectsListViewColorsConfiguration Colors {
+        public ProjectsListViewColorsConfiguration Colors
+        {
             get { return m_listViewColors; }
             set { m_listViewColors = value; }
         }
 
-        public bool IndentSubProjectItems {
+        public bool IndentSubProjectItems
+        {
             get { return m_indentSubProjectItems; }
             set { m_indentSubProjectItems = value; }
         }
 
-        public int SubProjectIndentation {
+        public int SubProjectIndentation
+        {
             get { return m_subProjectsIndentation; }
             set { m_subProjectsIndentation = value; }
         }
 
-        public bool ShowSubProjectRoot {
+        public bool ShowSubProjectRoot
+        {
             get { return m_showSubprojectRoot; }
             set { m_showSubprojectRoot = value; }
         }
 
-        public bool ShowEnterpriseTemplateProjectRoot {
+        public bool ShowEnterpriseTemplateProjectRoot
+        {
             get { return m_showEnterpriseTemplateProjectRoot; }
             set { m_showEnterpriseTemplateProjectRoot = value; }
         }
 
-        public bool ShowEmptyFolders {
+        public bool ShowEmptyFolders
+        {
             get { return m_showEmptyFolders; }
             set { m_showEmptyFolders = value; }
         }
 
-        public bool ShowNonVersionableProjects {
+        public bool ShowNonVersionableProjects
+        {
             get { return m_showNonVersionableProjects; }
             set { m_showNonVersionableProjects = value; }
         }
 
-        public bool ShowSuccessDialog {
+        public bool ShowSuccessDialog
+        {
             get { return m_displaySuccessDialog; }
             set { m_displaySuccessDialog = value; }
         }
 
         #region ICloneable implementation
 
-        object ICloneable.Clone() {
+        object ICloneable.Clone()
+        {
             return Clone();
         }
 
-        public DisplayOptions Clone() {
+        public DisplayOptions Clone()
+        {
             DisplayOptions newOptions = (DisplayOptions)this.MemberwiseClone();
             newOptions.Colors = Colors.Clone();
             return newOptions;
@@ -97,12 +110,12 @@ namespace BuildAutoIncrement {
 
 
         private ProjectsListViewColorsConfiguration m_listViewColors;
-        private bool                                m_indentSubProjectItems;
-        private int                                 m_subProjectsIndentation;
-        private bool                                m_showSubprojectRoot;
-        private bool                                m_showEnterpriseTemplateProjectRoot;
-        private bool                                m_showNonVersionableProjects;
-        private bool                                m_showEmptyFolders;
-        private bool                                m_displaySuccessDialog;
+        private bool m_indentSubProjectItems;
+        private int m_subProjectsIndentation;
+        private bool m_showSubprojectRoot;
+        private bool m_showEnterpriseTemplateProjectRoot;
+        private bool m_showNonVersionableProjects;
+        private bool m_showEmptyFolders;
+        private bool m_displaySuccessDialog;
     }
 }

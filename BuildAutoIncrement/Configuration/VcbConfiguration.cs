@@ -23,62 +23,65 @@
  * 3. This notice may not be removed or altered from any source distribution.
  */
 using System;
-using System.Collections;
-using System.Diagnostics;
 using System.Drawing;
-using System.Globalization;
-using System.IO;
-using System.Reflection;
-using System.Text;
-using System.Windows.Forms;
 using System.Xml.Serialization;
 
-namespace BuildAutoIncrement {
+namespace BuildAutoIncrement
+{
 
     [Serializable]
-    public class VcbConfiguration : ICloneable {
+    public class VcbConfiguration : ICloneable
+    {
 
-        public VcbConfiguration() {
-            m_listViewColumnWidths          = new ListViewColumnWidths();
-            m_applyToAllTabsChecked         = true;
-            m_numberingOptions              = new NumberingOptions();
-            m_displayOptions                = new DisplayOptions();
-            m_foldersConfigurations         = new FoldersConfigurations();
-            m_configurationFileRead         = false;
-            m_exportConfiguration           = new ExportConfiguration();
+        public VcbConfiguration()
+        {
+            m_listViewColumnWidths = new ListViewColumnWidths();
+            m_applyToAllTabsChecked = true;
+            m_numberingOptions = new NumberingOptions();
+            m_displayOptions = new DisplayOptions();
+            m_foldersConfigurations = new FoldersConfigurations();
+            m_configurationFileRead = false;
+            m_exportConfiguration = new ExportConfiguration();
         }
 
-        public System.Drawing.Size MainFormSize {
+        public System.Drawing.Size MainFormSize
+        {
             get { return m_size; }
             set { m_size = value; }
         }
 
-        public ListViewColumnWidths ListViewColumnWidths {
+        public ListViewColumnWidths ListViewColumnWidths
+        {
             get { return m_listViewColumnWidths; }
             set { m_listViewColumnWidths = value; }
         }
 
-        public bool ApplyToAllTabsChecked {
+        public bool ApplyToAllTabsChecked
+        {
             get { return m_applyToAllTabsChecked; }
             set { m_applyToAllTabsChecked = value; }
         }
 
-        public NumberingOptions NumberingOptions {
+        public NumberingOptions NumberingOptions
+        {
             get { return m_numberingOptions; }
             set { m_numberingOptions = value; }
         }
 
-        public DisplayOptions DisplayOptions {
+        public DisplayOptions DisplayOptions
+        {
             get { return m_displayOptions; }
             set { m_displayOptions = value; }
         }
 
-        public FoldersConfigurations FoldersConfigurations {
+        public FoldersConfigurations FoldersConfigurations
+        {
             get { return m_foldersConfigurations; }
             set { m_foldersConfigurations = value; }
         }
 
-        public ExportConfiguration ExportConfiguration {
+        public ExportConfiguration ExportConfiguration
+        {
             get { return m_exportConfiguration; }
             set { m_exportConfiguration = value; }
         }
@@ -87,18 +90,21 @@ namespace BuildAutoIncrement {
         ///   Flag used to identify if configuration has been read from file.
         /// </summary>
         [XmlIgnore]
-        public bool ConfigurationFileRead {
+        public bool ConfigurationFileRead
+        {
             get { return m_configurationFileRead; }
             set { m_configurationFileRead = value; }
         }
 
         #region ICloneable implementation
 
-        object ICloneable.Clone() {
+        object ICloneable.Clone()
+        {
             return Clone();
         }
 
-        public VcbConfiguration Clone() {
+        public VcbConfiguration Clone()
+        {
             VcbConfiguration newConfig = (VcbConfiguration)this.MemberwiseClone();
             newConfig.NumberingOptions = NumberingOptions.Clone();
             newConfig.DisplayOptions = DisplayOptions.Clone();
@@ -108,7 +114,8 @@ namespace BuildAutoIncrement {
 
         #endregion // ICloneable implementation
 
-        public int[] RetrieveListViewColumnWidths() {
+        public int[] RetrieveListViewColumnWidths()
+        {
             int[] columnWidths = new int[4];
             columnWidths[0] = ListViewColumnWidths.ProjectName;
             columnWidths[1] = ListViewColumnWidths.CurrentVersion;
@@ -117,20 +124,21 @@ namespace BuildAutoIncrement {
             return columnWidths;
         }
 
-        public void StoreListViewColumnWidths(int[] columnWidths) {
-            ListViewColumnWidths.ProjectName    = columnWidths[0];
+        public void StoreListViewColumnWidths(int[] columnWidths)
+        {
+            ListViewColumnWidths.ProjectName = columnWidths[0];
             ListViewColumnWidths.CurrentVersion = columnWidths[1];
-            ListViewColumnWidths.Modified       = columnWidths[2];
-            ListViewColumnWidths.ToBeVersion    = columnWidths[3];
+            ListViewColumnWidths.Modified = columnWidths[2];
+            ListViewColumnWidths.ToBeVersion = columnWidths[3];
         }
 
-        private Size                    m_size;
-        private ListViewColumnWidths    m_listViewColumnWidths;
-        private bool                    m_applyToAllTabsChecked;
-        private NumberingOptions        m_numberingOptions;
-        private DisplayOptions          m_displayOptions;
-        private FoldersConfigurations   m_foldersConfigurations;
-        private bool                    m_configurationFileRead;
-        private ExportConfiguration     m_exportConfiguration;
+        private Size m_size;
+        private ListViewColumnWidths m_listViewColumnWidths;
+        private bool m_applyToAllTabsChecked;
+        private NumberingOptions m_numberingOptions;
+        private DisplayOptions m_displayOptions;
+        private FoldersConfigurations m_foldersConfigurations;
+        private bool m_configurationFileRead;
+        private ExportConfiguration m_exportConfiguration;
     }
 }

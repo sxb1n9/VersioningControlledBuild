@@ -29,26 +29,29 @@ using System.IO;
 using System.Resources;
 using System.Windows.Forms;
 
-namespace BuildAutoIncrement {
+namespace BuildAutoIncrement
+{
 
-	/// <summary>
-	///  ProjectInfo class contains project name, current version and next 
-	///  version.
-	/// </summary>
-	public class ProjectInfo {
+    /// <summary>
+    ///  ProjectInfo class contains project name, current version and next 
+    ///  version.
+    /// </summary>
+    public class ProjectInfo
+    {
 
         /// <summary>
         ///   Hides default constructor.
         /// </summary>
-        private ProjectInfo() { 
+        private ProjectInfo()
+        {
             m_assemblyVersionsUpdateInfo = new Hashtable(AssemblyVersions.AssemblyVersionTypes.Length);
             m_assemblyVersionsUpdateInfo[AssemblyVersionType.AssemblyVersion] = false;
             m_assemblyVersionsUpdateInfo[AssemblyVersionType.AssemblyFileVersion] = false;
             m_assemblyVersionsUpdateInfo[AssemblyVersionType.AssemblyInformationalVersion] = false;
-            m_versionStreams        = new ArrayList();
-            SubProjects             = new ProjectsSortedArrayList();
-            Modified                = false;
-            m_level                 = 0;
+            m_versionStreams = new ArrayList();
+            SubProjects = new ProjectsSortedArrayList();
+            Modified = false;
+            m_level = 0;
             CurrentAssemblyVersions = AssemblyVersions.Empty;
             m_toBecomeAssemblyVersions = AssemblyVersions.Empty;
         }
@@ -68,13 +71,14 @@ namespace BuildAutoIncrement {
         /// <param name="level">
         ///   Indentation level.
         /// </param>
-        public ProjectInfo(string projectName, string projectFullName, string uiPath, ProjectTypeInfo projectTypeInfo, int level) : this() {
-            ProjectName             = projectName;
-            ProjectRoot             = Path.GetDirectoryName(projectFullName);
-            FullName                = projectFullName;
-            UIPath                  = uiPath;
-            ProjectTypeInfo         = projectTypeInfo;
-            m_level                 = level;
+        public ProjectInfo(string projectName, string projectFullName, string uiPath, ProjectTypeInfo projectTypeInfo, int level) : this()
+        {
+            ProjectName = projectName;
+            ProjectRoot = Path.GetDirectoryName(projectFullName);
+            FullName = projectFullName;
+            UIPath = uiPath;
+            ProjectTypeInfo = projectTypeInfo;
+            m_level = level;
         }
 
         /// <summary>
@@ -95,50 +99,53 @@ namespace BuildAutoIncrement {
         /// <param name="numberingOptions">
         ///   Numbering options.
         /// </param>
-        public ProjectInfo(string projectName, string projectFullName, string uiPath, ProjectTypeInfo projectTypeInfo, bool modified, int level, AssemblyVersions assemblyVersions, VersionStream[] versionStreams) : this(projectName, projectFullName, uiPath, projectTypeInfo, level) {
-			CurrentAssemblyVersions = assemblyVersions;
-            m_versionStreams        = new ArrayList(versionStreams);
-            Modified                = modified;
-		}
-
-        public ProjectInfo(string projectName, string projectFullName, ProjectTypeInfo projectTypeInfo, int level) : this(projectName, projectFullName, "", projectTypeInfo, level) {
+        public ProjectInfo(string projectName, string projectFullName, string uiPath, ProjectTypeInfo projectTypeInfo, bool modified, int level, AssemblyVersions assemblyVersions, VersionStream[] versionStreams) : this(projectName, projectFullName, uiPath, projectTypeInfo, level)
+        {
+            CurrentAssemblyVersions = assemblyVersions;
+            m_versionStreams = new ArrayList(versionStreams);
+            Modified = modified;
         }
 
-        public ProjectInfo(string projectName, string projectFullName, ProjectTypeInfo projectTypeInfo, bool modified, int level, AssemblyVersions assemblyVersions, VersionStream[] versionStreams) : this(projectName, projectFullName, "", projectTypeInfo, modified, level, assemblyVersions, versionStreams) {
+        public ProjectInfo(string projectName, string projectFullName, ProjectTypeInfo projectTypeInfo, int level) : this(projectName, projectFullName, "", projectTypeInfo, level)
+        {
+        }
+
+        public ProjectInfo(string projectName, string projectFullName, ProjectTypeInfo projectTypeInfo, bool modified, int level, AssemblyVersions assemblyVersions, VersionStream[] versionStreams) : this(projectName, projectFullName, "", projectTypeInfo, modified, level, assemblyVersions, versionStreams)
+        {
         }
 
         /// <summary>
         ///   Project name.
         /// </summary>
-        public readonly string              ProjectName;
+        public readonly string ProjectName;
         /// <summary>
         ///   Folder containing project root.
         /// </summary>
-        public readonly string              ProjectRoot;
+        public readonly string ProjectRoot;
         /// <summary>
         ///   Full name of the project file.
         /// </summary>
-        public readonly string              FullName;
+        public readonly string FullName;
         /// <summary>
         ///   Path to the project root in Solution Browser window.
         /// </summary>
-        public readonly string              UIPath;
+        public readonly string UIPath;
         /// <summary>
         ///   Information related to type of the project.
         /// </summary>
-        public readonly ProjectTypeInfo     ProjectTypeInfo;
+        public readonly ProjectTypeInfo ProjectTypeInfo;
         /// <summary>
         ///   Level in the solution hierarchy. Used for indentation.
         /// </summary>
-        private         int                 m_level;
+        private int m_level;
         /// <summary>
         ///   Current AssemblyVersion of the project.
         /// </summary>
-        public readonly AssemblyVersions    CurrentAssemblyVersions;
+        public readonly AssemblyVersions CurrentAssemblyVersions;
         /// <summary>
         ///   Flag indicating that project has been modifed.
         /// </summary>
-        public readonly bool                Modified;
+        public readonly bool Modified;
         /// <summary>
         ///   Sorted list of subprojects.
         /// </summary>
@@ -147,8 +154,10 @@ namespace BuildAutoIncrement {
         /// <summary>
         ///   Gets the indentation level.
         /// </summary>
-        public int Level {
-            get {
+        public int Level
+        {
+            get
+            {
                 return m_level;
             }
         }
@@ -156,8 +165,10 @@ namespace BuildAutoIncrement {
         /// <summary>
         ///   Gets the flag indicating if version update will be done.
         /// </summary>
-        public bool ToUpdate {
-            get {
+        public bool ToUpdate
+        {
+            get
+            {
                 return (bool)m_assemblyVersionsUpdateInfo[AssemblyVersionType.AssemblyVersion] | (bool)m_assemblyVersionsUpdateInfo[AssemblyVersionType.AssemblyFileVersion] | (bool)m_assemblyVersionsUpdateInfo[AssemblyVersionType.AssemblyInformationalVersion];
             }
         }
@@ -166,10 +177,13 @@ namespace BuildAutoIncrement {
         ///   Gets date &amp; time when file containing version has been 
         ///   written last time.
         /// </summary>
-        public DateTime VersionFileWrite {
-            get {
+        public DateTime VersionFileWrite
+        {
+            get
+            {
                 DateTime lastWrite = DateTime.MinValue;
-                foreach (string filename in VersionFilenames) {
+                foreach (string filename in VersionFilenames)
+                {
                     DateTime fileWrite = FileUtil.GetLastWriteTime(filename);
                     if (fileWrite > lastWrite)
                         lastWrite = fileWrite;
@@ -181,8 +195,10 @@ namespace BuildAutoIncrement {
         /// <summary>
         ///   Gets a flag indicating if version file exists.
         /// </summary>
-        public bool AssemblyFileExists {
-            get {
+        public bool AssemblyFileExists
+        {
+            get
+            {
                 return m_versionStreams.Count > 0;
             }
         }
@@ -191,8 +207,10 @@ namespace BuildAutoIncrement {
         ///   Gets an array of <c>VersionStream</c> objects attached to the 
         ///   project.
         /// </summary>
-        public string[] VersionFilenames {
-            get {
+        public string[] VersionFilenames
+        {
+            get
+            {
                 string[] versionFilenames = new string[m_versionStreams.Count];
                 for (int i = 0; i < m_versionStreams.Count; i++)
                     versionFilenames[i] = ((VersionStream)m_versionStreams[i]).Filename;
@@ -203,7 +221,8 @@ namespace BuildAutoIncrement {
         /// <summary>
         ///   Gets proposed versions.
         /// </summary>
-        public AssemblyVersions ToBecomeAssemblyVersions {
+        public AssemblyVersions ToBecomeAssemblyVersions
+        {
             get { return m_toBecomeAssemblyVersions; }
         }
 
@@ -212,16 +231,19 @@ namespace BuildAutoIncrement {
         ///   enterprise template projects do not contain any version
         ///   information.
         /// </summary>
-        public bool IsVersionable {
+        public bool IsVersionable
+        {
             get { return ProjectTypeInfo.IsVersionable; }
         }
 
         /// <summary>
         ///   Increments project level (i.e. indentation).
         /// </summary>
-        public void IncrementLevel() {
+        public void IncrementLevel()
+        {
             m_level++;
-            foreach (ProjectInfo pi in SubProjects) {
+            foreach (ProjectInfo pi in SubProjects)
+            {
                 pi.IncrementLevel();
                 Debug.Assert(pi.Level == Level + 1);
             }
@@ -233,7 +255,8 @@ namespace BuildAutoIncrement {
         /// <param name="versionProvider">
         ///   Version provider.
         /// </param>
-        public void SetToBecomeVersion(NewVersionProvider versionProvider) {
+        public void SetToBecomeVersion(NewVersionProvider versionProvider)
+        {
             if (CurrentAssemblyVersions != AssemblyVersions.Empty)
                 m_toBecomeAssemblyVersions = versionProvider.ProposeNewVersions(CurrentAssemblyVersions);
         }
@@ -245,16 +268,20 @@ namespace BuildAutoIncrement {
         ///   Version type to mark. May be any combination of flags, including 
         ///   <c>AssemblyVersionType.All</c>.
         /// </param>
-        public void MarkAssemblyVersionsForUpdate(AssemblyVersionType versionType) {
-            if ((versionType & AssemblyVersionType.AssemblyVersion) == AssemblyVersionType.AssemblyVersion) {
+        public void MarkAssemblyVersionsForUpdate(AssemblyVersionType versionType)
+        {
+            if ((versionType & AssemblyVersionType.AssemblyVersion) == AssemblyVersionType.AssemblyVersion)
+            {
                 if (CurrentAssemblyVersions[AssemblyVersionType.AssemblyVersion] != ProjectVersion.Empty)
                     m_assemblyVersionsUpdateInfo[AssemblyVersionType.AssemblyVersion] = true;
             }
-            if ((versionType & AssemblyVersionType.AssemblyFileVersion) == AssemblyVersionType.AssemblyFileVersion) {
+            if ((versionType & AssemblyVersionType.AssemblyFileVersion) == AssemblyVersionType.AssemblyFileVersion)
+            {
                 if (CurrentAssemblyVersions[AssemblyVersionType.AssemblyFileVersion] != ProjectVersion.Empty)
                     m_assemblyVersionsUpdateInfo[AssemblyVersionType.AssemblyFileVersion] = true;
             }
-            if ((versionType & AssemblyVersionType.AssemblyInformationalVersion) == AssemblyVersionType.AssemblyInformationalVersion) {
+            if ((versionType & AssemblyVersionType.AssemblyInformationalVersion) == AssemblyVersionType.AssemblyInformationalVersion)
+            {
                 if (CurrentAssemblyVersions[AssemblyVersionType.AssemblyInformationalVersion] != ProjectVersion.Empty)
                     m_assemblyVersionsUpdateInfo[AssemblyVersionType.AssemblyInformationalVersion] = true;
             }
@@ -270,7 +297,8 @@ namespace BuildAutoIncrement {
         /// <returns>
         ///   <c>true</c> if version type is marked for update.
         /// </returns>
-        public bool IsMarkedForUpdate(AssemblyVersionType versionType) {
+        public bool IsMarkedForUpdate(AssemblyVersionType versionType)
+        {
             Debug.Assert(versionType != AssemblyVersionType.All);
             return (bool)m_assemblyVersionsUpdateInfo[versionType];
         }
@@ -284,13 +312,17 @@ namespace BuildAutoIncrement {
         /// <param name="numberingOptions">
         ///   Numbering options.
         /// </param>
-        public bool Save(AssemblyVersionType versionTypeToSave, string newVersion) {
-            foreach (VersionStream vs in m_versionStreams) {
-                try {
+        public bool Save(AssemblyVersionType versionTypeToSave, string newVersion)
+        {
+            foreach (VersionStream vs in m_versionStreams)
+            {
+                try
+                {
                     vs.SaveVersion(versionTypeToSave, newVersion);
                 }
-                catch (Exception) {
-                    MessageBox.Show(s_txtCannotSaveFile + Environment.NewLine +  vs.Filename, s_txtSaveErrorTitle);
+                catch (Exception)
+                {
+                    MessageBox.Show(s_txtCannotSaveFile + Environment.NewLine + vs.Filename, s_txtSaveErrorTitle);
                     return false;
                 }
             }
@@ -306,36 +338,38 @@ namespace BuildAutoIncrement {
         /// <returns>
         ///   A 32-bit signed integer indicating the lexical relationship between the two comparands.
         /// </returns>
-        public int CompareTo(string projectName) {
+        public int CompareTo(string projectName)
+        {
             return string.Compare(ProjectName, projectName, true);
         }
 
         /// <summary>
         ///   Type constructor. Initializes localized strings.
         /// </summary>
-        static ProjectInfo() {
+        static ProjectInfo()
+        {
             ResourceManager resources = new System.Resources.ResourceManager("BuildAutoIncrement.Resources.Shared", typeof(ResourceAccessor).Assembly);
             Debug.Assert(resources != null);
-            
-            s_txtSaveErrorTitle          = resources.GetString("Save Error");
-            s_txtCannotSaveFile          = resources.GetString("Cannot save file");
-            
+
+            s_txtSaveErrorTitle = resources.GetString("Save Error");
+            s_txtCannotSaveFile = resources.GetString("Cannot save file");
+
             Debug.Assert(s_txtSaveErrorTitle != null);
             Debug.Assert(s_txtCannotSaveFile != null);
         }
 
-		/// <summary>
-		///   Next version AssemblyVersion.
-		/// </summary>
-        private AssemblyVersions             m_toBecomeAssemblyVersions;
+        /// <summary>
+        ///   Next version AssemblyVersion.
+        /// </summary>
+        private AssemblyVersions m_toBecomeAssemblyVersions;
         /// <summary>
         ///   List of all version streams attached to this project.
         /// </summary>
-        private ArrayList                   m_versionStreams;
+        private ArrayList m_versionStreams;
         /// <summary>
         ///   Flags indicating which assembly versions require version increment.
         /// </summary>
-        private IDictionary                 m_assemblyVersionsUpdateInfo;
+        private IDictionary m_assemblyVersionsUpdateInfo;
 
         private static readonly string s_txtSaveErrorTitle;
         private static readonly string s_txtCannotSaveFile;

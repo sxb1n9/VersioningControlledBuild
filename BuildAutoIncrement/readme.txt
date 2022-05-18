@@ -1,1 +1,0 @@
-﻿See http://www.codeproject.com/Articles/5851/Versioning-Controlled-Build for an excellent article about using this add-in.

@@ -26,23 +26,20 @@
 using EnvDTE;
 
 #if !FX1_1
-using EnvDTE80;
-using DTE = EnvDTE80.DTE2;
 #endif
 
-using System;
-using System.Drawing;
 using System.Collections;
-using System.ComponentModel;
 using System.IO;
 using System.Windows.Forms;
 
-namespace BuildAutoIncrement {
-	/// <summary>
-	/// Dialog displayed before application is actually run, hirarchically 
-	/// displaying the list of unsaved documents and their corresponding projects.
-	/// </summary>
-	public class PromptUnsavedDocumentsDialog : System.Windows.Forms.Form {
+namespace BuildAutoIncrement
+{
+    /// <summary>
+    /// Dialog displayed before application is actually run, hirarchically 
+    /// displaying the list of unsaved documents and their corresponding projects.
+    /// </summary>
+    public class PromptUnsavedDocumentsDialog : System.Windows.Forms.Form
+    {
 
         #region Controls
         private System.Windows.Forms.Label label1;
@@ -51,27 +48,29 @@ namespace BuildAutoIncrement {
         private System.Windows.Forms.Button m_buttonCancel;
         private System.Windows.Forms.ListBox m_listBoxUnsavedDocuments;
         #endregion // Controls
-        
+
         /// <summary>
-		/// Required designer variable.
-		/// </summary>
-		private System.ComponentModel.Container components = null;
+        /// Required designer variable.
+        /// </summary>
+        private System.ComponentModel.Container components = null;
 
         #region Constructors
         /// <summary>
         ///   Hides empty constructor.
         /// </summary>
-        private PromptUnsavedDocumentsDialog(){
+        private PromptUnsavedDocumentsDialog()
+        {
             InitializeComponent();
         }
-        
+
         /// <summary>
         ///   Creates a dialog.
         /// </summary>
         /// <param name="unsavedDocuments">
         ///   Array of unsaved <c>Document</c> objects.
         /// </param>
-        private PromptUnsavedDocumentsDialog(IList unsavedDocuments) : this() {
+        private PromptUnsavedDocumentsDialog(IList unsavedDocuments) : this()
+        {
             FillListBox(unsavedDocuments);
         }
 
@@ -81,9 +80,12 @@ namespace BuildAutoIncrement {
         /// <summary>
         /// Clean up any resources being used.
         /// </summary>
-        protected override void Dispose(bool disposing) {
-            if (disposing) {
-                if (components != null) {
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                if (components != null)
+                {
                     components.Dispose();
                 }
             }
@@ -97,9 +99,11 @@ namespace BuildAutoIncrement {
         /// projects and parent solution names.
         /// </summary>
         /// <param name="unsavedDocuments"></param>
-        private void FillListBox(IList unsavedDocuments) {
+        private void FillListBox(IList unsavedDocuments)
+        {
             m_listBoxUnsavedDocuments.BeginUpdate();
-            foreach (Document document in unsavedDocuments) {
+            foreach (Document document in unsavedDocuments)
+            {
                 AddDocumentItem(document);
             }
             m_listBoxUnsavedDocuments.EndUpdate();
@@ -111,20 +115,24 @@ namespace BuildAutoIncrement {
         /// and solution name.
         /// </summary>
         /// <param name="document"></param>
-        private void AddDocumentItem(Document document) {
+        private void AddDocumentItem(Document document)
+        {
+            Microsoft.VisualStudio.Shell.ThreadHelper.ThrowIfNotOnUIThread();
             Project project = document.ProjectItem.ContainingProject;
             string projectName = project.Name;
             Solution solution = project.DTE.Solution;
             SolutionLBItem newSolutionLBItem = new SolutionLBItem(solution);
-            if (m_listBoxUnsavedDocuments.FindStringExact(newSolutionLBItem.ToString()) == -1) {
+            if (m_listBoxUnsavedDocuments.FindStringExact(newSolutionLBItem.ToString()) == -1)
+            {
                 m_listBoxUnsavedDocuments.Items.Add(newSolutionLBItem);
             }
             ProjectLBItem newProjectLBItem = new ProjectLBItem(project);
             int index = m_listBoxUnsavedDocuments.FindStringExact(newProjectLBItem.ToString());
-            if (index == -1) {
+            if (index == -1)
+            {
                 index = m_listBoxUnsavedDocuments.Items.Add(newProjectLBItem);
             }
-            m_listBoxUnsavedDocuments.Items.Insert(index+1, new DocumentLBItem(document));
+            m_listBoxUnsavedDocuments.Items.Insert(index + 1, new DocumentLBItem(document));
         }
 
         #endregion // Private methods
@@ -136,14 +144,19 @@ namespace BuildAutoIncrement {
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void m_buttonYes_Click(object sender, System.EventArgs e) {
-            foreach (object item in m_listBoxUnsavedDocuments.SelectedItems) {
-                if (item is DocumentLBItem) {
+        private void m_buttonYes_Click(object sender, System.EventArgs e)
+        {
+            Microsoft.VisualStudio.Shell.ThreadHelper.ThrowIfNotOnUIThread();
+            foreach (object item in m_listBoxUnsavedDocuments.SelectedItems)
+            {
+                if (item is DocumentLBItem)
+                {
                     DocumentLBItem docItem = (DocumentLBItem)item;
                     docItem.Value.Save(docItem.Value.FullName);
                 }
-                    // this is probably superflous
-                else if (item is ProjectLBItem) {
+                // this is probably superflous
+                else if (item is ProjectLBItem)
+                {
                     ProjectLBItem projectItem = (ProjectLBItem)item;
                     projectItem.Value.Save(projectItem.Value.FullName);
                 }
@@ -156,9 +169,11 @@ namespace BuildAutoIncrement {
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void PromptUnsavedDocumentsDialog_Load(object sender, System.EventArgs e) {
+        private void PromptUnsavedDocumentsDialog_Load(object sender, System.EventArgs e)
+        {
             // selects all items in the listbox
-            for (int i = 0; i < m_listBoxUnsavedDocuments.Items.Count; i++) {
+            for (int i = 0; i < m_listBoxUnsavedDocuments.Items.Count; i++)
+            {
                 m_listBoxUnsavedDocuments.SetSelected(i, true);
             }
         }
@@ -168,19 +183,20 @@ namespace BuildAutoIncrement {
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void m_buttonNo_Click(object sender, System.EventArgs e) {
+        private void m_buttonNo_Click(object sender, System.EventArgs e)
+        {
             this.Close();
         }
 
         #endregion
 
-		#region Windows Form Designer generated code
-		/// <summary>
-		/// Required method for Designer support - do not modify
-		/// the contents of this method with the code editor.
-		/// </summary>
-		private void InitializeComponent()
-		{
+        #region Windows Form Designer generated code
+        /// <summary>
+        /// Required method for Designer support - do not modify
+        /// the contents of this method with the code editor.
+        /// </summary>
+        private void InitializeComponent()
+        {
             this.label1 = new System.Windows.Forms.Label();
             this.m_listBoxUnsavedDocuments = new System.Windows.Forms.ListBox();
             this.m_buttonYes = new System.Windows.Forms.Button();
@@ -255,61 +271,75 @@ namespace BuildAutoIncrement {
             this.ResumeLayout(false);
 
         }
-		#endregion
+        #endregion
 
         #region Helper classes
 
-        private class DocumentLBItem {
-            public DocumentLBItem(Document document) {
+        private class DocumentLBItem
+        {
+            public DocumentLBItem(Document document)
+            {
                 m_document = document;
             }
 
-            public override string ToString() {
+            public override string ToString()
+            {
                 return "    " + m_document.Name;
             }
 
-            public Document Value {
+            public Document Value
+            {
                 get { return m_document; }
             }
 
             private Document m_document;
         }
 
-        private class ProjectLBItem {
-            public ProjectLBItem(Project project) {
+        private class ProjectLBItem
+        {
+            public ProjectLBItem(Project project)
+            {
                 m_project = project;
             }
 
-            public override string ToString() {
+            public override string ToString()
+            {
+                Microsoft.VisualStudio.Shell.ThreadHelper.ThrowIfNotOnUIThread();
                 return "  " + m_project.Name;
             }
 
-            public Project Value {
+            public Project Value
+            {
                 get { return m_project; }
             }
 
             private Project m_project;
         }
 
-        private class SolutionLBItem {
-            public SolutionLBItem(Solution solution) {
+        private class SolutionLBItem
+        {
+            public SolutionLBItem(Solution solution)
+            {
                 m_solution = solution;
             }
 
-            public override string ToString() {
+            public override string ToString()
+            {
                 return Path.GetFileName(m_solution.FullName);
             }
 
-            public Solution Value {
+            public Solution Value
+            {
                 get { return m_solution; }
             }
 
             private Solution m_solution;
         }
-        
+
         #endregion
 
-        public static DialogResult Show(IWin32Window owner, IList unsavedDocuments) {
+        public static DialogResult Show(IWin32Window owner, IList unsavedDocuments)
+        {
             PromptUnsavedDocumentsDialog pudd = new PromptUnsavedDocumentsDialog(unsavedDocuments);
             pudd.StartPosition = FormStartPosition.CenterParent;
             return pudd.ShowDialog(owner);

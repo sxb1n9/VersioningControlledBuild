@@ -24,82 +24,94 @@
  * 3. This notice may not be removed or altered from any source distribution.
  */
 using EnvDTE;
-using System;
 using System.Collections;
 using System.Diagnostics;
 
-namespace BuildAutoIncrement {
+namespace BuildAutoIncrement
+{
 	/// <summary>
 	///   Class responsible for unloading and reloading setup projects.
 	///   Unloading is necessary to avoid popup dialogs when version and codes
 	///   are modified.
 	/// </summary>
-	public sealed class SetupProjectsLoader {
+	public sealed class SetupProjectsLoader
+	{
 
-        /// <summary>
-        ///   Creates loader object.
-        /// </summary>
-        /// <param name="devEnvApplication">
-        ///   Development environment object.
-        /// </param>
-		public SetupProjectsLoader(DTE devEnvApplication) {
-            Debug.Assert(devEnvApplication != null);
-            m_devEnvApplication = devEnvApplication;
+		/// <summary>
+		///   Creates loader object.
+		/// </summary>
+		/// <param name="devEnvApplication">
+		///   Development environment object.
+		/// </param>
+		public SetupProjectsLoader(DTE devEnvApplication)
+		{
+			Debug.Assert(devEnvApplication != null);
+			m_devEnvApplication = devEnvApplication;
 		}
 
-        /// <summary>
-        ///   Unloads projects provided.
-        /// </summary>
-        /// <param name="projectInfos">
-        ///   Array of <c>ProjectInfo</c> objects to unload.
-        /// </param>
-        public void UnloadSetupProjects(ProjectInfo[] projectInfos) {
+		/// <summary>
+		///   Unloads projects provided.
+		/// </summary>
+		/// <param name="projectInfos">
+		///   Array of <c>ProjectInfo</c> objects to unload.
+		/// </param>
+		public void UnloadSetupProjects(ProjectInfo[] projectInfos)
+		{
+            Microsoft.VisualStudio.Shell.ThreadHelper.ThrowIfNotOnUIThread();
             FindAndSelectSetupProjects(projectInfos);
-            if (m_selectedSetupProjects.Count > 0) {
-                m_devEnvApplication.MainWindow.Activate();
-                // Solution Explorer window must be active to allow unloading project
-                Window solutionExplorer = m_devEnvApplication.Windows.Item(EnvDTE.Constants.vsWindowKindSolutionExplorer);
-                solutionExplorer.Activate();
-                m_devEnvApplication.ExecuteCommand("Project.UnloadProject", "");
-            }
-        }
+			if (m_selectedSetupProjects.Count > 0)
+			{
+				m_devEnvApplication.MainWindow.Activate();
+				// Solution Explorer window must be active to allow unloading project
+				Window solutionExplorer = m_devEnvApplication.Windows.Item(EnvDTE.Constants.vsWindowKindSolutionExplorer);
+				solutionExplorer.Activate();
+				m_devEnvApplication.ExecuteCommand("Project.UnloadProject", "");
+			}
+		}
 
-        /// <summary>
-        ///   Reloads projects previously unloaded.
-        /// </summary>
-        public void ReloadSetupProjects() {
-            if (m_selectedSetupProjects.Count > 0) {
-                SolutionExplorerSelector ses = new SolutionExplorerSelector(m_devEnvApplication);
-                foreach (ProjectInfo setupProject in m_selectedSetupProjects) {
-                    ses.SelectItem(setupProject, null);
-                }
-                m_devEnvApplication.MainWindow.Activate();
-                // Solution Explorer window must be active to allow reloading project
-                Window solutionExplorer = m_devEnvApplication.Windows.Item(EnvDTE.Constants.vsWindowKindSolutionExplorer);
-                solutionExplorer.Activate();
-                m_devEnvApplication.ExecuteCommand("Project.ReloadProject", "");
-            }
-        }
+		/// <summary>
+		///   Reloads projects previously unloaded.
+		/// </summary>
+		public void ReloadSetupProjects()
+		{
+            Microsoft.VisualStudio.Shell.ThreadHelper.ThrowIfNotOnUIThread();
+            if (m_selectedSetupProjects.Count > 0)
+			{
+				SolutionExplorerSelector ses = new SolutionExplorerSelector(m_devEnvApplication);
+				foreach (ProjectInfo setupProject in m_selectedSetupProjects)
+				{
+					ses.SelectItem(setupProject, null);
+				}
+				m_devEnvApplication.MainWindow.Activate();
+				// Solution Explorer window must be active to allow reloading project
+				Window solutionExplorer = m_devEnvApplication.Windows.Item(EnvDTE.Constants.vsWindowKindSolutionExplorer);
+				solutionExplorer.Activate();
+				m_devEnvApplication.ExecuteCommand("Project.ReloadProject", "");
+			}
+		}
 
-        /// <summary>
-        ///   Selects projects in Solution explorer window.
-        /// </summary>
-        /// <param name="projectInfos">
-        ///   Array of <c>ProjectInfo</c> objects to select.
-        /// </param>
-        private void FindAndSelectSetupProjects(ProjectInfo[] projectInfos) {
-            m_selectedSetupProjects = new ArrayList();
-            SolutionExplorerSelector ses = new SolutionExplorerSelector(m_devEnvApplication);
-            foreach (ProjectInfo pi in projectInfos) {
-                if (pi.ProjectTypeInfo.ProjectType == ProjectType.SetupProject) {
-                    ses.SelectItem(pi, null);
-                    m_selectedSetupProjects.Add(pi);
-                }
-            }
-        }
+		/// <summary>
+		///   Selects projects in Solution explorer window.
+		/// </summary>
+		/// <param name="projectInfos">
+		///   Array of <c>ProjectInfo</c> objects to select.
+		/// </param>
+		private void FindAndSelectSetupProjects(ProjectInfo[] projectInfos)
+		{
+			m_selectedSetupProjects = new ArrayList();
+			SolutionExplorerSelector ses = new SolutionExplorerSelector(m_devEnvApplication);
+			foreach (ProjectInfo pi in projectInfos)
+			{
+				if (pi.ProjectTypeInfo.ProjectType == ProjectType.SetupProject)
+				{
+					ses.SelectItem(pi, null);
+					m_selectedSetupProjects.Add(pi);
+				}
+			}
+		}
 
-        private IList m_selectedSetupProjects;
+		private IList m_selectedSetupProjects;
 
-        private DTE   m_devEnvApplication;
+		private DTE m_devEnvApplication;
 	}
 }

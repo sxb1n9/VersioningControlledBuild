@@ -27,22 +27,24 @@ using System;
 using System.Collections;
 using System.Diagnostics;
 
-namespace BuildAutoIncrement {
-  /// <summary>
-  ///   Interface implemented by solution browsers.
-  /// </summary>
-  public interface ISolutionBrowser : IDisposable {
+namespace BuildAutoIncrement
+{
+    /// <summary>
+    ///   Interface implemented by solution browsers.
+    /// </summary>
+    public interface ISolutionBrowser : IDisposable
+    {
 
         /// <summary>
         ///   Gets active solution name.
         /// </summary>
         string SolutionName { get; }
-        
+
         /// <summary>
         ///   Gets active solution file name.
         /// </summary>
         string SolutionFilename { get; }
-        
+
         /// <summary>
         ///   Gets an array of projects for which versions should be updated.
         /// </summary>
@@ -83,23 +85,25 @@ namespace BuildAutoIncrement {
         /// </summary>
         void SaveVersions();
 
-  }
+    }
 
     /// <summary>
     ///   Base class for all solution browsers. Implements <c>ISolutionBrowser</c>
     ///   interface.
     /// </summary>
-    public abstract class SolutionBrowser : ISolutionBrowser, IDisposable {
+    public abstract class SolutionBrowser : ISolutionBrowser, IDisposable
+    {
 
         #region Constructor
 
         /// <summary>
         ///   Creates an empty instance of <c>SolutionBrowser</c> object.
         /// </summary>
-        private SolutionBrowser() {
-            m_allProjects           = new ProjectsSortedArrayList();
-            m_updateSummary         = new UpdateSummary();
-            m_projectFilter         = ProjectFilter.PassAll;
+        private SolutionBrowser()
+        {
+            m_allProjects = new ProjectsSortedArrayList();
+            m_updateSummary = new UpdateSummary();
+            m_projectFilter = ProjectFilter.PassAll;
             Debug.Assert(m_allProjects != null);
             Debug.Assert(m_updateSummary != null);
         }
@@ -110,21 +114,25 @@ namespace BuildAutoIncrement {
         /// <param name="configuration">
         ///   Configuration to be used.
         /// </param>
-        protected SolutionBrowser(VcbConfiguration configuration) : this() {
+        protected SolutionBrowser(VcbConfiguration configuration) : this()
+        {
             Debug.Assert(configuration != null && configuration.NumberingOptions != null);
             SetNumberingOptions(configuration.NumberingOptions);
         }
 
-        ~SolutionBrowser() {
+        ~SolutionBrowser()
+        {
             Dispose(false);
         }
 
-        public void Dispose() {
+        public void Dispose()
+        {
             Dispose(true);
             GC.SuppressFinalize(this);
         }
 
-        protected virtual void Dispose(bool disposing) {
+        protected virtual void Dispose(bool disposing)
+        {
         }
 
         #endregion // Constructor
@@ -134,8 +142,10 @@ namespace BuildAutoIncrement {
         /// <summary>
         ///   Gets a list of <c>ProjectInfo</c> objects currently displayed.
         /// </summary>
-        public ProjectInfoList ProjectInfoList {
-            get {
+        public ProjectInfoList ProjectInfoList
+        {
+            get
+            {
                 if (m_filteredProjects == null)
                     UpdateFilteredProjectsList();
                 return m_filteredProjects;
@@ -146,11 +156,15 @@ namespace BuildAutoIncrement {
         ///   Gets an array of <c>ProjectInfo</c> objects for which version 
         ///   should be updated.
         /// </summary>
-        public ProjectInfo[] ProjectsToUpdate {
-            get {
+        public ProjectInfo[] ProjectsToUpdate
+        {
+            get
+            {
                 ArrayList projectsToUpdate = new ArrayList();
-                foreach (ProjectInfo projectInfo in ProjectInfoList) {
-                    if (m_newVersionProvider.ShouldUpdate(projectInfo, AssemblyVersionsUpdateMask, ProjectInfoList.HighestToBeAssemblyVersions.HighestProjectVersion)) {
+                foreach (ProjectInfo projectInfo in ProjectInfoList)
+                {
+                    if (m_newVersionProvider.ShouldUpdate(projectInfo, AssemblyVersionsUpdateMask, ProjectInfoList.HighestToBeAssemblyVersions.HighestProjectVersion))
+                    {
                         projectsToUpdate.Add(projectInfo);
                     }
                 }
@@ -161,8 +175,10 @@ namespace BuildAutoIncrement {
         /// <summary>
         ///   Gets <c>UpdateSummary</c> with update info.
         /// </summary>
-        public UpdateSummary UpdateSummary { 
-            get {
+        public UpdateSummary UpdateSummary
+        {
+            get
+            {
                 Debug.Assert(m_updateSummary != null);
                 return m_updateSummary;
             }
@@ -178,7 +194,8 @@ namespace BuildAutoIncrement {
         /// <param name="configuration">
         ///   Configuration to apply.
         /// </param>
-        public void ApplyConfiguration(VcbConfiguration configuration) {
+        public void ApplyConfiguration(VcbConfiguration configuration)
+        {
             Debug.Assert(m_allProjects != null);
             Debug.Assert(configuration != null && configuration.NumberingOptions != null);
             SetNumberingOptions(configuration.NumberingOptions);
@@ -191,7 +208,8 @@ namespace BuildAutoIncrement {
         /// <param name="filter">
         ///   Filter to apply.
         /// </param>
-        public void ApplyFilter(IProjectFilter filter) {
+        public void ApplyFilter(IProjectFilter filter)
+        {
             Debug.Assert(filter != null);
             m_projectFilter = filter;
             m_filteredProjects = null;
@@ -201,14 +219,20 @@ namespace BuildAutoIncrement {
         ///   Save versions of project marked for update. New version is 
         ///   generated by <c>NewVersionProvider</c>.
         /// </summary>
-        public void SaveVersions() {
+        public void SaveVersions()
+        {
             ProjectVersion highestVersion = HighestVersion;
-            foreach (ProjectInfo projectInfo in ProjectsToUpdate) {
-                foreach (AssemblyVersionType at in projectInfo.CurrentAssemblyVersions.GetValidVersionTypes()) {
-                    if ((AssemblyVersionsUpdateMask & at) == at) {
+            foreach (ProjectInfo projectInfo in ProjectsToUpdate)
+            {
+                foreach (AssemblyVersionType at in projectInfo.CurrentAssemblyVersions.GetValidVersionTypes())
+                {
+                    if ((AssemblyVersionsUpdateMask & at) == at)
+                    {
                         string newVersion = m_newVersionProvider.ProvideNewVersion(projectInfo, at, highestVersion);
-                        if (newVersion != projectInfo.CurrentAssemblyVersions[at].ToString()) {
-                            if (projectInfo.Save(at, newVersion)) {
+                        if (newVersion != projectInfo.CurrentAssemblyVersions[at].ToString())
+                        {
+                            if (projectInfo.Save(at, newVersion))
+                            {
                                 m_updateSummary.SetUpdated(projectInfo, at, newVersion);
                             }
                         }
@@ -230,7 +254,7 @@ namespace BuildAutoIncrement {
         protected abstract void PreProcess();
 
         protected abstract void PostProcess();
-        
+
         #endregion // Abstract members
 
         #region Private properties
@@ -238,8 +262,10 @@ namespace BuildAutoIncrement {
         /// <summary>
         ///   Gets the mask for <c>AssemblyVersionType</c> object.
         /// </summary>
-        private AssemblyVersionType AssemblyVersionsUpdateMask {
-            get {
+        private AssemblyVersionType AssemblyVersionsUpdateMask
+        {
+            get
+            {
                 Debug.Assert(m_numberingOptions != null);
                 return m_numberingOptions.ApplyToAllTypes ? AssemblyVersionType.All : m_numberingOptions.DefaultVersionType;
             }
@@ -248,10 +274,13 @@ namespace BuildAutoIncrement {
         /// <summary>
         ///   Gets highest version according to configuration settings.
         /// </summary>
-        private ProjectVersion HighestVersion {
-            get {
+        private ProjectVersion HighestVersion
+        {
+            get
+            {
                 Debug.Assert(m_numberingOptions != null);
-                if (m_numberingOptions.ApplyToAllTypes) {
+                if (m_numberingOptions.ApplyToAllTypes)
+                {
                     if (m_numberingOptions.BatchCommandIncrementScheme == BatchCommandIncrementScheme.IncrementModifiedOnlyAndSynchronize)
                         return ProjectInfoList.HighestProposedAssemblyVersions.HighestProjectVersion;
                     return ProjectInfoList.HighestToBeAssemblyVersions.HighestProjectVersion;
@@ -273,11 +302,14 @@ namespace BuildAutoIncrement {
         /// </param>
         /// <returns>
         /// </returns>
-        private ICollection RecurseSubProjects(IList projects) {
+        private ICollection RecurseSubProjects(IList projects)
+        {
             ArrayList subProjects = new ArrayList(projects.Count);
-            foreach (ProjectInfo pi in projects) {
+            foreach (ProjectInfo pi in projects)
+            {
                 ICollection rs = RecurseSubProjects(pi.SubProjects);
-                if (ShouldDisplay(pi.ProjectTypeInfo.ProjectType, rs.Count)) {
+                if (ShouldDisplay(pi.ProjectTypeInfo.ProjectType, rs.Count))
+                {
                     subProjects.Add(pi);
                     subProjects.AddRange(rs);
                 }
@@ -291,10 +323,12 @@ namespace BuildAutoIncrement {
         /// <param name="projectType"></param>
         /// <param name="subProjectsCount"></param>
         /// <returns></returns>
-        private bool ShouldDisplay(ProjectType projectType, int subProjectsCount) {
+        private bool ShouldDisplay(ProjectType projectType, int subProjectsCount)
+        {
             if ((projectType != ProjectType.VirtualFolder) && (projectType != ProjectType.SolutionFolder))
                 return true;
-            if (subProjectsCount > 0 || ConfigurationPersister.Instance.Configuration.DisplayOptions.ShowEmptyFolders) {
+            if (subProjectsCount > 0 || ConfigurationPersister.Instance.Configuration.DisplayOptions.ShowEmptyFolders)
+            {
                 return true;
             }
             return false;
@@ -304,13 +338,16 @@ namespace BuildAutoIncrement {
         ///   Updates the list of filtered projects, optionally marking "forced"
         ///   projects for update.
         /// </summary>
-        private void UpdateFilteredProjectsList() {
+        private void UpdateFilteredProjectsList()
+        {
             Debug.Assert(m_newVersionProvider != null);
             ArrayList projects = new ArrayList(RecurseSubProjects(m_allProjects));
             ProjectInfo[] projectInfos = (ProjectInfo[])projects.ToArray(typeof(ProjectInfo));
             // check which projects are in the list of "forced" projects
-            foreach (ProjectInfo projectInfo in projectInfos) {
-                if (Array.IndexOf(m_projectFilter.ProjectsToForce, projectInfo.ProjectName) != -1) {
+            foreach (ProjectInfo projectInfo in projectInfos)
+            {
+                if (Array.IndexOf(m_projectFilter.ProjectsToForce, projectInfo.ProjectName) != -1)
+                {
                     projectInfo.MarkAssemblyVersionsForUpdate(AssemblyVersionType.All);
                 }
             }
@@ -319,7 +356,8 @@ namespace BuildAutoIncrement {
             m_updateSummary.AddRange(m_filteredProjects.ProjectInfos);
         }
 
-        private void SetNumberingOptions(NumberingOptions options) {
+        private void SetNumberingOptions(NumberingOptions options)
+        {
             Debug.Assert(options != null);
             m_numberingOptions = options;
             m_newVersionProvider = new NewVersionProvider(m_numberingOptions);
@@ -332,29 +370,29 @@ namespace BuildAutoIncrement {
         /// <summary>
         ///   Collection of <c>ProjectInfo</c> objects for the current solution.
         /// </summary>
-        protected ProjectsSortedArrayList   m_allProjects;
+        protected ProjectsSortedArrayList m_allProjects;
         /// <summary>
         ///   Collection of <c>ProjectInfo</c> objects currently displayed.
         /// </summary>
-        protected ProjectInfoList           m_filteredProjects;
+        protected ProjectInfoList m_filteredProjects;
         /// <summary>
         ///   Object responsible to checkout items under source control.
         /// </summary>
-        protected ISourceSafeCheckout       m_sourceSafeCheckOut;
+        protected ISourceSafeCheckout m_sourceSafeCheckOut;
         /// <summary>
         ///   Object responsible to provide a new version.
         /// </summary>
-        protected NewVersionProvider        m_newVersionProvider;
+        protected NewVersionProvider m_newVersionProvider;
         /// <summary>
         ///   Configuration used.
         /// </summary>
-        protected NumberingOptions          m_numberingOptions;
+        protected NumberingOptions m_numberingOptions;
 
-        private IProjectFilter              m_projectFilter;
+        private IProjectFilter m_projectFilter;
         /// <summary>
         ///   Collection with update information.
         /// </summary>
-        private UpdateSummary               m_updateSummary;
+        private UpdateSummary m_updateSummary;
 
         #endregion // Protected fields
 

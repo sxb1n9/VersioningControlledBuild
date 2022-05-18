@@ -24,22 +24,27 @@
  */
 using System;
 
-namespace BuildAutoIncrement {
+namespace BuildAutoIncrement
+{
 
     [Serializable]
-    public class ClickOnceOptions {
+    public class ClickOnceOptions
+    {
 
-        public ClickOnceOptions() {
+        public ClickOnceOptions()
+        {
             m_applyVersionToPublishVersion = false;
             m_applyVersionToMinimumRequiredVersion = false;
         }
 
-        public bool ApplyVersionToPublishVersion {
+        public bool ApplyVersionToPublishVersion
+        {
             get { return m_applyVersionToPublishVersion; }
             set { m_applyVersionToPublishVersion = value; }
         }
 
-        public bool ApplyVersionToMinimumRequiredVersion {
+        public bool ApplyVersionToMinimumRequiredVersion
+        {
             get { return m_applyVersionToMinimumRequiredVersion; }
             set { m_applyVersionToMinimumRequiredVersion = value; }
         }

@@ -22,30 +22,29 @@
  *    misrepresented as being the original software.
  * 3. This notice may not be removed or altered from any source distribution.
  */
-using System;
 
 namespace BuildAutoIncrement
 {
-  /// <summary>
-  ///   Structure with general constants used throughout the application.
-  /// </summary>
-  public struct Constants
-  {
-
-    public const string ProgramTitle = "Versioning Controlled Build";
-    public const string CommandBarName = "Versioning Controlled Build";
-    public const string MenuName = "&VCB";
-
-    public struct Commands
+    /// <summary>
+    ///   Structure with general constants used throughout the application.
+    /// </summary>
+    public struct Constants
     {
-      public const string GUI = "GUI";
-      public const string Build = "Build";
-      public const string Rebuild = "Rebuild";
-      public const string Save = "Save";
-      public const string PrintVersions = "PrintVersions";
-      public const string ExportVersions = "ExportVersions";
-      public const string Configure = "Configure";
-      public const string About = "About";
+
+        public const string ProgramTitle = "Versioning Controlled Build";
+        public const string CommandBarName = "Versioning Controlled Build";
+        public const string MenuName = "&VCB";
+
+        public struct Commands
+        {
+            public const string GUI = "GUI";
+            public const string Build = "Build";
+            public const string Rebuild = "Rebuild";
+            public const string Save = "Save";
+            public const string PrintVersions = "PrintVersions";
+            public const string ExportVersions = "ExportVersions";
+            public const string Configure = "Configure";
+            public const string About = "About";
+        }
     }
-  }
 }

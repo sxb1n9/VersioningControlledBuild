@@ -25,27 +25,33 @@
 using System;
 using System.Windows.Forms;
 
-namespace BuildAutoIncrement {
-	/// <summary>
-	///   Exports projects list to file.
-	/// </summary>
-	public abstract class ListExporterToFile : ListExporter {
+namespace BuildAutoIncrement
+{
+    /// <summary>
+    ///   Exports projects list to file.
+    /// </summary>
+    public abstract class ListExporterToFile : ListExporter
+    {
 
         /// <summary>
         ///   Initializes <c>ListExporterToFile</c> instance.
         /// </summary>
-		public ListExporterToFile() {
+		public ListExporterToFile()
+        {
             m_separator = string.Empty;
-		}
+        }
 
         /// <summary>
         ///   Sets separator between columns (important for CSV only)
         /// </summary>
-        public string Separator {
-            get {
+        public string Separator
+        {
+            get
+            {
                 return m_separator;
             }
-            set {
+            set
+            {
                 m_separator = value;
             }
         }
@@ -63,18 +69,22 @@ namespace BuildAutoIncrement {
         /// <param name="projectInfoList">
         ///   List of filtered projects.
         /// </param>
-        public void Export(string solutionName, string solutionFilename, ProjectInfoList projectInfoList) {
+        public void Export(string solutionName, string solutionFilename, ProjectInfoList projectInfoList)
+        {
             m_solutionName = solutionName;
             m_projectInfoList = projectInfoList;
             m_exportDateTime = DateTime.Now;
             SaveFileDialog sfd = new SaveFileDialog();
             sfd.FileName = CreateExportFilename(solutionFilename);
             sfd.Filter = ExportFileFilter;
-            if (sfd.ShowDialog() == DialogResult.OK) {
-                try {
+            if (sfd.ShowDialog() == DialogResult.OK)
+            {
+                try
+                {
                     DoSave(sfd.FileName);
                 }
-                catch (Exception e) {
+                catch (Exception e)
+                {
                     MessageBox.Show(string.Format("Failed to save the file.{0}{0}{1}", Environment.NewLine, e.Message), "File Export", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
@@ -89,7 +99,8 @@ namespace BuildAutoIncrement {
         /// <returns>
         ///   Output file name.
         /// </returns>
-        private string CreateExportFilename(string solutionFilename) {
+        private string CreateExportFilename(string solutionFilename)
+        {
             return solutionFilename.Replace(".sln", ExportFileExtension);
         }
 

@@ -26,32 +26,40 @@ using Microsoft.Win32;
 using System;
 using System.Diagnostics;
 using System.IO;
-using System.Text;
 
-namespace BuildAutoIncrement {
-	/// <summary>
-	///   Provides path to IIS root. Implemented as a singleton.
-	/// </summary>
-	public sealed class InetRootLocator {
+namespace BuildAutoIncrement
+{
+    /// <summary>
+    ///   Provides path to IIS root. Implemented as a singleton.
+    /// </summary>
+    public sealed class InetRootLocator
+    {
 
         private static InetRootLocator m_instance = null;
 
-		private InetRootLocator() {
+        private InetRootLocator()
+        {
             m_pathWwwRoot = null;
-            try {
-                using (RegistryKey rk = Registry.LocalMachine.OpenSubKey(InetStpPathKey)) {
-                    if (rk != null) {
+            try
+            {
+                using (RegistryKey rk = Registry.LocalMachine.OpenSubKey(InetStpPathKey))
+                {
+                    if (rk != null)
+                    {
                         string pathWwwRoot = (string)rk.GetValue(PathSubKey);
-                        if (Directory.Exists(pathWwwRoot)) {
+                        if (Directory.Exists(pathWwwRoot))
+                        {
                             m_pathWwwRoot = pathWwwRoot;
                         }
-                        else {
+                        else
+                        {
                             Debug.Assert(false, string.Format("IIS WWW root folder {0} does not exist", pathWwwRoot));
                         }
                     }
                 }
             }
-            catch (Exception exception) {
+            catch (Exception exception)
+            {
                 Trace.WriteLine(exception.ToString());
             }
         }
@@ -59,8 +67,10 @@ namespace BuildAutoIncrement {
         /// <summary>
         ///   Gets the only instance of <c>InetRootLocator</c> class.
         /// </summary>
-        public static InetRootLocator Instance {
-            get {
+        public static InetRootLocator Instance
+        {
+            get
+            {
                 if (m_instance == null)
                     m_instance = new InetRootLocator();
                 return m_instance;
@@ -76,7 +86,8 @@ namespace BuildAutoIncrement {
         /// <returns>
         ///   Full path to the file.
         /// </returns>
-        public string GetLocalPath(string address) {
+        public string GetLocalPath(string address)
+        {
             Debug.Assert(address.StartsWith(Http));
             Debug.Assert(IsIisAvailable);
             if (!address.StartsWith(Localhost))
@@ -90,8 +101,10 @@ namespace BuildAutoIncrement {
         /// <summary>
         ///   Gets flag indicating if IIS is installed and its WWW root is available.
         /// </summary>
-        public bool IsIisAvailable {
-            get {
+        public bool IsIisAvailable
+        {
+            get
+            {
                 return PathWwwRoot.Length > 0;
             }
         }
@@ -99,8 +112,10 @@ namespace BuildAutoIncrement {
         /// <summary>
         ///   Gets path to the local WWW root path or empty string if not available.
         /// </summary>
-        public string PathWwwRoot {
-            get {
+        public string PathWwwRoot
+        {
+            get
+            {
                 return (m_pathWwwRoot != null) ? m_pathWwwRoot : string.Empty;
             }
         }
@@ -109,10 +124,10 @@ namespace BuildAutoIncrement {
 
         private const string InetStpPathKey = "SOFTWARE\\Microsoft\\InetStp";
 
-        private const string PathSubKey     = "PathWWWRoot";
+        private const string PathSubKey = "PathWWWRoot";
 
-        public  const string Http           = "http://";
+        public const string Http = "http://";
 
-        public  const string Localhost      = "http://localhost/";
+        public const string Localhost = "http://localhost/";
     }
 }

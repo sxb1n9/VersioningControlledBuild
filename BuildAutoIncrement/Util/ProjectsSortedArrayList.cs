@@ -22,26 +22,30 @@
  *    misrepresented as being the original software.
  * 3. This notice may not be removed or altered from any source distribution.
  */
-using System;
 using System.Collections;
-using System.Diagnostics;
 
-namespace BuildAutoIncrement {
-	/// <summary>
-	///   Sorted list of <c>ProjectInfo</c> objects. Used to assure that 
-	///   projects are displayed in the same order as in Solution Explorer 
-	///   window of Visual Studio.
-	/// </summary>
-    public sealed class ProjectsSortedArrayList : ArrayList {
+namespace BuildAutoIncrement
+{
+    /// <summary>
+    ///   Sorted list of <c>ProjectInfo</c> objects. Used to assure that 
+    ///   projects are displayed in the same order as in Solution Explorer 
+    ///   window of Visual Studio.
+    /// </summary>
+    public sealed class ProjectsSortedArrayList : ArrayList
+    {
 
-        private class ProjectComparer : IComparer {
+        private class ProjectComparer : IComparer
+        {
 
-            int IComparer.Compare(object obj1, object obj2) {
+            int IComparer.Compare(object obj1, object obj2)
+            {
                 return Compare((ProjectInfo)obj1, (ProjectInfo)obj2);
             }
 
-            public int Compare(ProjectInfo pi1, ProjectInfo pi2) {
-                if (pi1.ProjectTypeInfo.ProjectType != pi2.ProjectTypeInfo.ProjectType) {
+            public int Compare(ProjectInfo pi1, ProjectInfo pi2)
+            {
+                if (pi1.ProjectTypeInfo.ProjectType != pi2.ProjectTypeInfo.ProjectType)
+                {
                     int firstTypePriority = ProjectTypeCompare(pi1.ProjectTypeInfo.ProjectType);
                     if (firstTypePriority != 0)
                         return firstTypePriority;
@@ -54,28 +58,33 @@ namespace BuildAutoIncrement {
                 return string.Compare(projectName1, projectName2);
             }
 
-            private int ProjectTypeCompare(ProjectType projectType) {
-                switch (projectType) {
-                case ProjectType.SolutionFolder:
-                    return -1;
-                case ProjectType.SetupProject:
-                    return +1;
+            private int ProjectTypeCompare(ProjectType projectType)
+            {
+                switch (projectType)
+                {
+                    case ProjectType.SolutionFolder:
+                        return -1;
+                    case ProjectType.SetupProject:
+                        return +1;
                 }
                 return 0;
             }
         }
 
-        public void Add(ProjectInfo pi) {
+        public void Add(ProjectInfo pi)
+        {
             base.Add(pi);
             base.Sort(m_projectComparer);
         }
 
-        private new int Add(object o) {
+        private new int Add(object o)
+        {
             Add((ProjectInfo)o);
             return base.IndexOf(o);
         }
 
-        public override void AddRange(ICollection c) {
+        public override void AddRange(ICollection c)
+        {
             base.AddRange(c);
             base.Sort(m_projectComparer);
         }

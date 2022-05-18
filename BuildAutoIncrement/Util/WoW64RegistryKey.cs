@@ -1,8 +1,8 @@
 ﻿using System;
+using System.ComponentModel;
+using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Text;
-using System.Diagnostics;
-using System.ComponentModel;
 
 namespace BuildAutoIncrement
 {
@@ -99,19 +99,23 @@ namespace BuildAutoIncrement
 
         #endregion // Structures
 
-        ~WoW64RegistryKey() {
+        ~WoW64RegistryKey()
+        {
             Dispose(false);
         }
 
         #region IDisposable Members
 
-        public void Dispose() {
+        public void Dispose()
+        {
             Dispose(true);
             GC.SuppressFinalize(this);
         }
 
-        protected virtual void Dispose(bool disposing) {
-            if (!m_disposed) {
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!m_disposed)
+            {
                 Close();
                 m_disposed = true;
             }
@@ -119,7 +123,8 @@ namespace BuildAutoIncrement
 
         #endregion
 
-        public void Open(UIntPtr rootKey, string keyPath) {
+        public void Open(UIntPtr rootKey, string keyPath)
+        {
             Debug.Assert(rootKey == HKEY_LOCAL_MACHINE || rootKey == HKEY_CURRENT_USER);
 
             int samDesired = (int)(RegistryAccess.KEY_READ);
@@ -145,7 +150,8 @@ namespace BuildAutoIncrement
             return keyBuffer.ToString();
         }
 
-        public void Close() {
+        public void Close()
+        {
             RegCloseKey(m_hKey);
         }
 
